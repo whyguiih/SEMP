@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient">
 
-    <!-- Logo SENAI (lembre-se de ter o arquivo senai_logo.png na pasta drawable) -->
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="200dp"
@@ -19,7 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Cardzinho de Login -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardLogin"
         android:layout_width="match_parent"
@@ -39,14 +37,12 @@
             android:orientation="vertical"
             android:padding="32dp">
 
-            <!-- Título Login Bicolor (Feito 100% no XML) -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="24dp"
                 android:orientation="horizontal">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -55,7 +51,6 @@
                     android:textColor="#1B4F9B"
                     android:textSize="32sp"
                     android:textStyle="bold" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -66,7 +61,6 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Campo de Usuário -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,11 +75,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="#000000"
-                android:fontFamily="@font/neo_sans"
+                android:fontFamily="@font/neo_sans_regular"
                 android:inputType="text"
                 android:textColor="#000000" />
 
-            <!-- Campo de Senha -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -100,11 +93,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"
                 android:backgroundTint="#000000"
-                android:fontFamily="@font/neo_sans"
+                android:fontFamily="@font/neo_sans_regular"
                 android:inputType="textPassword"
                 android:textColor="#000000" />
 
-            <!-- Botão Entrar -->
             <Button
                 android:id="@+id/btnEntrar"
                 android:layout_width="match_parent"
@@ -121,7 +113,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Footer Copyright -->
     <TextView
         android:id="@+id/tvFooter"
         android:layout_width="match_parent"
