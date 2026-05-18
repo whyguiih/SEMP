@@ -2,7 +2,6 @@ package com.example.semp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -10,9 +9,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import java.sql.DriverManager
-import java.sql.SQLException
-import kotlin.concurrent.thread
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,74 +39,51 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Chama a nova função conectada na API
             realizarLogin(usuario, senha)
         }
     }
 
     private fun realizarLogin(usuarioInput: String, senhaInput: String) {
-        thread {
-            // ATENÇÃO AQUI: Se você estiver usando o EMULADOR do Android Studio,
-            // mude o IP 192.168.0.117 para 10.0.2.2 (que é o IP padrão que o emulador usa para acessar o PC).
-            // Se estiver testando no SEU CELULAR FÍSICO via Wi-Fi, mantenha o 192.168.0.117.
+        val request = LoginRequest(usuarioInput, senhaInput)
 
-            // Adicionados parâmetros de SSL, fuso horário e recuperação de chave pública (essenciais)
-            val url = "jdbc:mysql://192.168.0.131:3306/db_estoque?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
-            val dbUsuario = "root"
-            val dbPassword = ""
+        // O Retrofit gerencia a chamada de rede de forma assíncrona automaticamente
+        RetrofitClient.api.fazerLogin(request).enqueue(object : Callback<LoginResponse> {
 
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver")
-                val conexao = DriverManager.getConnection(url, dbUsuario, dbPassword)
+            // Se conseguiu comunicar com a API
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                val loginResponse = response.body()
 
-                val sql = "SELECT * FROM tb_usuarios WHERE usuario = ? AND senha = ?"
-                val ps = conexao.prepareStatement(sql)
-                ps.setString(1, usuarioInput)
-                ps.setString(2, senhaInput)
+                if (response.isSuccessful && loginResponse != null) {
+                    if (loginResponse.sucesso) {
+                        // Salva os dados na sessão (Companion Object)
+                        loginResponse.usuario?.let { setUsuario(it) }
+                        loginResponse.nivel_conta?.let { setStatus(it.toString()) }
+                        loginResponse.unidade?.let { setUnidade(it) }
 
-                val rs = ps.executeQuery()
+                        Toast.makeText(this@MainActivity, loginResponse.mensagem, Toast.LENGTH_SHORT).show()
 
-                if (rs.next()) {
-                    setUsuario(usuarioInput)
-                    val nivelConta = rs.getInt("nivel_conta")
-                    setStatus(nivelConta.toString())
-                    val unidade = rs.getString("unidade")
-                    setUnidade(unidade ?: "")
-
-                    runOnUiThread {
-                        Toast.makeText(this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, EstoqueActivity::class.java)
+                        val intent = Intent(this@MainActivity, EstoqueActivity::class.java)
                         startActivity(intent)
                         finish()
+                    } else {
+                        // Usuário ou senha incorretos
+                        Toast.makeText(this@MainActivity, loginResponse.mensagem, Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    runOnUiThread {
-                        Toast.makeText(this, "Usuário ou senha incorretos!", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                rs.close()
-                ps.close()
-                conexao.close()
-
-            } catch (e: ClassNotFoundException) {
-                Log.e("BANCO_ERRO", "Driver não encontrado", e)
-                runOnUiThread {
-                    Toast.makeText(this, "Driver JDBC não encontrado.", Toast.LENGTH_LONG).show()
-                }
-            } catch (e: SQLException) {
-                Log.e("BANCO_ERRO", "Erro de SQL/Conexão", e)
-                runOnUiThread {
-                    Toast.makeText(this, "Erro de conexão: Verifique o PC/Rede. Detalhe: ${e.message}", Toast.LENGTH_LONG).show()
-                }
-            } catch (e: Exception) {
-                Log.e("BANCO_ERRO", "Erro geral", e)
-                runOnUiThread {
-                    Toast.makeText(this, "Erro inesperado: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity, "Erro na resposta do servidor.", Toast.LENGTH_SHORT).show()
                 }
             }
-        }
+
+            // Se falhou por falta de internet, IP errado, ou API fora do ar
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "Erro de conexão: Verifique o servidor", Toast.LENGTH_LONG).show()
+                t.printStackTrace()
+            }
+        })
     }
 
+    // Seu bloco companion foi mantido intacto!
     companion object {
         private var nomeUsuario: String? = null
         private var statusSecondario: String? = null
