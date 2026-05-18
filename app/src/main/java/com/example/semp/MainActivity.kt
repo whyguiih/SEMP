@@ -2,6 +2,7 @@ package com.example.semp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -9,10 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import java.sql.Connection
 import java.sql.DriverManager
-import java.sql.PreparedStatement
-import java.sql.ResultSet
 import java.sql.SQLException
 import kotlin.concurrent.thread
 
@@ -20,11 +18,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Ativa o layout edge-to-edge
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        // Ajusta o padding para não ficar sob as barras de status e navegação
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -50,8 +46,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun realizarLogin(usuarioInput: String, senhaInput: String) {
         thread {
-            // Verifique se o IP do servidor está correto e acessível pelo Android
-            val url = "jdbc:mysql://192.168.0.117:3306/db_estoque"
+            // ATENÇÃO AQUI: Se você estiver usando o EMULADOR do Android Studio,
+            // mude o IP 192.168.0.117 para 10.0.2.2 (que é o IP padrão que o emulador usa para acessar o PC).
+            // Se estiver testando no SEU CELULAR FÍSICO via Wi-Fi, mantenha o 192.168.0.117.
+
+            // Adicionados parâmetros de SSL, fuso horário e recuperação de chave pública (essenciais)
+            val url = "jdbc:mysql://192.168.0.131:3306/db_estoque?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
             val dbUsuario = "root"
             val dbPassword = ""
 
@@ -67,38 +67,43 @@ class MainActivity : AppCompatActivity() {
                 val rs = ps.executeQuery()
 
                 if (rs.next()) {
-                    // Salva os dados na sessão (Companion Object)
                     setUsuario(usuarioInput)
                     val nivelConta = rs.getInt("nivel_conta")
                     setStatus(nivelConta.toString())
                     val unidade = rs.getString("unidade")
-                    setUnidade(unidade)
+                    setUnidade(unidade ?: "")
 
-                    // Se o login der certo, vai para a próxima página
                     runOnUiThread {
                         Toast.makeText(this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, EstoqueActivity::class.java)
                         startActivity(intent)
-                        finish() // Fecha a tela de login para não voltar ao apertar o botão "voltar"
+                        finish()
                     }
                 } else {
-                    // Se der errado, mostra a mensagem de erro
                     runOnUiThread {
                         Toast.makeText(this, "Usuário ou senha incorretos!", Toast.LENGTH_SHORT).show()
                     }
                 }
+
                 rs.close()
                 ps.close()
                 conexao.close()
+
             } catch (e: ClassNotFoundException) {
+                Log.e("BANCO_ERRO", "Driver não encontrado", e)
                 runOnUiThread {
                     Toast.makeText(this, "Driver JDBC não encontrado.", Toast.LENGTH_LONG).show()
                 }
             } catch (e: SQLException) {
+                Log.e("BANCO_ERRO", "Erro de SQL/Conexão", e)
                 runOnUiThread {
-                    Toast.makeText(this, "Erro de conexão com o banco: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Erro de conexão: Verifique o PC/Rede. Detalhe: ${e.message}", Toast.LENGTH_LONG).show()
                 }
-                e.printStackTrace()
+            } catch (e: Exception) {
+                Log.e("BANCO_ERRO", "Erro geral", e)
+                runOnUiThread {
+                    Toast.makeText(this, "Erro inesperado: ${e.message}", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
