@@ -6,6 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,12 +22,19 @@ class EstoqueActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_estoque)
 
-        // Mapeando componentes
         drawerLayout = findViewById(R.id.drawerLayout)
         btnMenu = findViewById(R.id.btnMenu)
         recyclerViewEstoque = findViewById(R.id.recyclerViewEstoque)
 
-        // Clicou no "S", aparece/some o menu lateral
+        // Evita invasão das barras de Status e Navegação do Android de forma dinâmica
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainContentLayout)) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // Aplica padding para que os elementos internos respeitem o espaço das barras
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+        // Controle do Menu Lateral
         btnMenu.setOnClickListener {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START)
@@ -34,34 +43,29 @@ class EstoqueActivity : AppCompatActivity() {
             }
         }
 
-        // Lógica dos botões de dentro do menu lateral
         findViewById<TextView>(R.id.menuItemEstoque).setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
         findViewById<TextView>(R.id.menuItemSair).setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
-            // Fecha todas as telas e volta pro Login
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
             finish()
         }
 
-        // Configurando a Lista do Estoque
+        // Configuração da Lista
         recyclerViewEstoque.layoutManager = LinearLayoutManager(this)
 
-        // Criei esses dados mockados só para você ver os bloquinhos funcionando.
-        // Aqui é onde sua ApiService vai injetar os dados puxados do db.sql!
         val listaMock = listOf(
-            ItemEstoque("Parafuso Sextavado 10mm", "Qtd: 150", "Prateleira A"),
-            ItemEstoque("Porca Borboleta", "Qtd: 300", "Prateleira B"),
-            ItemEstoque("Chave Philips Média", "Qtd: 25", "Prateleira C")
+            ItemEstoque("Parafuso Sextavado 10mm", "Qtd: 150", "Prateleira A", android.R.drawable.ic_menu_manage),
+            ItemEstoque("Porca Borboleta", "Qtd: 300", "Prateleira B", android.R.drawable.ic_menu_gallery),
+            ItemEstoque("Chave Philips Média", "Qtd: 25", "Prateleira C", android.R.drawable.ic_menu_compass)
         )
 
         recyclerViewEstoque.adapter = EstoqueAdapter(listaMock)
     }
 
-    // Tratativa para fechar o menu no botão de voltar do celular, em vez de fechar o app
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
