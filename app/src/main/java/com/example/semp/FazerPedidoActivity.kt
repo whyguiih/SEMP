@@ -13,6 +13,9 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Calendar
 
 class FazerPedidoActivity : AppCompatActivity() {
@@ -39,7 +42,6 @@ class FazerPedidoActivity : AppCompatActivity() {
         btnMenu.setOnClickListener { drawerLayout.openDrawer(GravityCompat.START) }
         configurarNavegacaoMenu()
 
-        // Substitui o JDateChooser do código da sua colega por um DatePickerDialog nativo
         etData.setOnClickListener {
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)
@@ -47,7 +49,7 @@ class FazerPedidoActivity : AppCompatActivity() {
             val day = calendar.get(Calendar.DAY_OF_MONTH)
 
             DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-                val dataFormatada = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                val dataFormatada = "$selectedYear-${selectedMonth + 1}-$selectedDay" // Formato SQL (YYYY-MM-DD)
                 etData.setText(dataFormatada)
             }, year, month, day).show()
         }
@@ -56,28 +58,37 @@ class FazerPedidoActivity : AppCompatActivity() {
             val nome = etNome.text.toString()
             val email = etEmail.text.toString()
             val data = etData.text.toString()
-            val unidade = MainActivity.getUnidade() // Puxa a unidade do seu Companion Object
+            val unidade = MainActivity.getUnidade()
 
             if (nome.isEmpty() || email.isEmpty() || data.isEmpty()) {
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // O código original fazia o INSERT INTO direto aqui.
-            // No Android, você passará esses dados para o Retrofit, igual fez no Login.
-            enviarPedidoParaAPI(nome, email, unidade, data)
+            enviarPedidoParaAPI(nome, email, unidade, data, etNome, etEmail, etData)
         }
     }
 
-    private fun enviarPedidoParaAPI(nome: String, email: String, unidade: String, data: String) {
-        // TODO: Chamar RetrofitClient.api.fazerPedido(PedidoRequest(...)).enqueue(...)
-        Toast.makeText(this, "Dados do pedido prontos para a API: $nome, Unidade: $unidade", Toast.LENGTH_LONG).show()
+    private fun enviarPedidoParaAPI(nome: String, email: String, unidade: String, data: String, etNome: EditText, etEmail: EditText, etData: EditText) {
+        val request = PedidoRequest(nome, email, unidade, data)
 
-        // Simula o JOptionPane de sucesso original
-        Toast.makeText(this, "Dados inseridos com sucesso!", Toast.LENGTH_SHORT).show()
-        etNomePedido.text.clear()
-        etEmailPedido.text.clear()
-        etDataPedido.text.clear()
+        RetrofitClient.api.fazerPedido(request).enqueue(object : Callback<GenericResponse> {
+            override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
+                val body = response.body()
+                if (response.isSuccessful && body != null && body.sucesso) {
+                    Toast.makeText(this@FazerPedidoActivity, "Dados inseridos com sucesso!", Toast.LENGTH_SHORT).show()
+                    etNome.text.clear()
+                    etEmail.text.clear()
+                    etData.text.clear()
+                } else {
+                    Toast.makeText(this@FazerPedidoActivity, body?.mensagem ?: "Erro ao registrar o pedido", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
+                Toast.makeText(this@FazerPedidoActivity, "Erro de conexão: ${t.message}", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun configurarNavegacaoMenu() {

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
@@ -11,6 +12,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class EstoqueActivity : AppCompatActivity() {
 
@@ -26,15 +30,12 @@ class EstoqueActivity : AppCompatActivity() {
         btnMenu = findViewById(R.id.btnMenu)
         recyclerViewEstoque = findViewById(R.id.recyclerViewEstoque)
 
-        // Evita invasão das barras de Status e Navegação do Android de forma dinâmica
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainContentLayout)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Aplica padding para que os elementos internos respeitem o espaço das barras
             view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Controle do Menu Lateral
         btnMenu.setOnClickListener {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START)
@@ -43,27 +44,49 @@ class EstoqueActivity : AppCompatActivity() {
             }
         }
 
+        configurarNavegacaoMenu()
+
+        recyclerViewEstoque.layoutManager = LinearLayoutManager(this)
+
+        // Busca os dados da API
+        buscarProdutosAPI()
+    }
+
+    private fun buscarProdutosAPI() {
+        RetrofitClient.api.getProdutos().enqueue(object : Callback<List<Produto>> {
+            override fun onResponse(call: Call<List<Produto>>, response: Response<List<Produto>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val produtosDaApi = response.body()!!
+                    recyclerViewEstoque.adapter = EstoqueAdapter(produtosDaApi)
+                } else {
+                    Toast.makeText(this@EstoqueActivity, "Erro ao buscar produtos", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<Produto>>, t: Throwable) {
+                Toast.makeText(this@EstoqueActivity, "Erro de conexão: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun configurarNavegacaoMenu() {
         findViewById<TextView>(R.id.menuItemEstoque).setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
-
+        findViewById<TextView>(R.id.menuItemCarrinho).setOnClickListener {
+            startActivity(Intent(this, CarrinhoActivity::class.java))
+            finish()
+        }
+        findViewById<TextView>(R.id.menuItemPedido).setOnClickListener {
+            startActivity(Intent(this, FazerPedidoActivity::class.java))
+            finish()
+        }
         findViewById<TextView>(R.id.menuItemSair).setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
             finish()
         }
-
-        // Configuração da Lista
-        recyclerViewEstoque.layoutManager = LinearLayoutManager(this)
-
-        val listaMock = listOf(
-            ItemEstoque("Parafuso Sextavado 10mm", "Qtd: 150", "Prateleira A", android.R.drawable.ic_menu_manage),
-            ItemEstoque("Porca Borboleta", "Qtd: 300", "Prateleira B", android.R.drawable.ic_menu_gallery),
-            ItemEstoque("Chave Philips Média", "Qtd: 25", "Prateleira C", android.R.drawable.ic_menu_compass)
-        )
-
-        recyclerViewEstoque.adapter = EstoqueAdapter(listaMock)
     }
 
     override fun onBackPressed() {

@@ -12,6 +12,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CarrinhoActivity : AppCompatActivity() {
 
@@ -37,21 +40,26 @@ class CarrinhoActivity : AppCompatActivity() {
 
         configurarNavegacaoMenu()
 
-        // Configuração da Lista do Carrinho
         recyclerViewCarrinho.layoutManager = LinearLayoutManager(this)
 
-        // TODO: Futuramente, chame a API com Retrofit aqui, como você fez no Login!
-        // WHERE carrinho = '1'
         buscarItensCarrinhoAPI()
     }
 
     private fun buscarItensCarrinhoAPI() {
-        // Simulação dos dados que viriam da API baseados na query do carrinho.kt
-        val listaMockCarrinho = listOf(
-            ItemEstoque("Parafuso Sextavado 10mm", "Qtd: 50", "No Carrinho", android.R.drawable.ic_menu_manage)
-        )
-        // Reutilizamos o mesmo Adapter do Estoque por enquanto
-        recyclerViewCarrinho.adapter = EstoqueAdapter(listaMockCarrinho)
+        RetrofitClient.api.getCarrinho().enqueue(object : Callback<List<Produto>> {
+            override fun onResponse(call: Call<List<Produto>>, response: Response<List<Produto>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val itensCarrinho = response.body()!!
+                    recyclerViewCarrinho.adapter = EstoqueAdapter(itensCarrinho)
+                } else {
+                    Toast.makeText(this@CarrinhoActivity, "Erro ao carregar carrinho", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<Produto>>, t: Throwable) {
+                Toast.makeText(this@CarrinhoActivity, "Erro de conexão: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun configurarNavegacaoMenu() {

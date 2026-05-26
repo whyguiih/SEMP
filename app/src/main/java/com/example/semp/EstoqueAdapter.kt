@@ -7,15 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-// Adicionado o campo 'imagemRes' para vincular imagens ao modelo de dados
-data class ItemEstoque(
-    val nome: String,
-    val quantidade: String,
-    val detalhe: String,
-    val imagemRes: Int
-)
-
-class EstoqueAdapter(private val itens: List<ItemEstoque>) :
+class EstoqueAdapter(private val itens: List<Produto>) :
     RecyclerView.Adapter<EstoqueAdapter.EstoqueViewHolder>() {
 
     class EstoqueViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,12 +26,12 @@ class EstoqueAdapter(private val itens: List<ItemEstoque>) :
     override fun onBindViewHolder(holder: EstoqueViewHolder, position: Int) {
         val item = itens[position]
 
-        holder.tvNomeProduto.text = item.nome
-        holder.tvQuantidade.text = item.quantidade
-        holder.tvDetalhe.text = item.detalhe
+        holder.tvNomeProduto.text = item.nome ?: "Sem Nome"
+        holder.tvQuantidade.text = "Qtd: ${item.quant ?: "0"}"
+        holder.tvDetalhe.text = item.descricao ?: "Sem detalhes disponíveis"
 
-        // Define a imagem do produto vinda da sua fonte de dados
-        holder.ivProduto.setImageResource(item.imagemRes)
+        // Define um ícone padrão, já que a imagem vem do banco por URL ou Null
+        holder.ivProduto.setImageResource(android.R.drawable.ic_menu_gallery)
     }
 
     override fun getItemCount(): Int = itens.size
