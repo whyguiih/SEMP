@@ -49,14 +49,14 @@
                     android:text="Log"
                     android:textColor="#1B4F9B"
                     android:textSize="32sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/neo_sans_bold_italic" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="in"
                     android:textColor="#E25A27"
                     android:textSize="32sp"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/neo_sans_bold_italic" />
             </LinearLayout>
 
             <TextView
@@ -64,7 +64,8 @@
                 android:layout_height="wrap_content"
                 android:text="Usuário"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:fontFamily="@font/neo_sans_regular" />
 
             <EditText
                 android:id="@+id/etUsuario"
@@ -73,14 +74,16 @@
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="#000000"
                 android:inputType="text"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:fontFamily="@font/neo_sans_regular" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Senha"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:fontFamily="@font/neo_sans_regular" />
 
             <EditText
                 android:id="@+id/etSenha"
@@ -89,7 +92,8 @@
                 android:layout_marginBottom="32dp"
                 android:backgroundTint="#000000"
                 android:inputType="textPassword"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:fontFamily="@font/neo_sans_regular" />
 
             <Button
                 android:id="@+id/btnEntrar"
@@ -99,7 +103,7 @@
                 android:text="Entrar"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/neo_sans" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -112,6 +116,7 @@
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fontFamily="@font/neo_sans_italic" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
