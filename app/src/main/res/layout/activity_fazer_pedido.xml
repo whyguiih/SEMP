@@ -124,4 +124,71 @@
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:id="@+id/navigationMenu"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#88000000"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:fitsSystemWindows="true">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/senai_logo"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="32dp"/>
+
+        <TextView
+            android:id="@+id/menuItemEstoque"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Visualizar Estoque"
+            android:fontFamily="@font/neo_sans_medium"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:padding="12dp"
+            android:background="?attr/selectableItemBackground"/>
+
+        <TextView
+            android:id="@+id/menuItemCarrinho"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Meu Carrinho"
+            android:fontFamily="@font/neo_sans_medium"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:padding="12dp"
+            android:background="?attr/selectableItemBackground"/>
+
+        <TextView
+            android:id="@+id/menuItemPedido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fazer Pedido"
+            android:fontFamily="@font/neo_sans_medium"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:padding="12dp"
+            android:background="?attr/selectableItemBackground"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/menuItemSair"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sair"
+            android:fontFamily="@font/neo_sans_bold_italic"
+            android:textSize="18sp"
+            android:textColor="#ef5e31"
+            android:padding="12dp"
+            android:background="?attr/selectableItemBackground"/>
+    </LinearLayout>
+
 </androidx.drawerlayout.widget.DrawerLayout>
