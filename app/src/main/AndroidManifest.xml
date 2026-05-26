@@ -15,27 +15,18 @@
         android:theme="@style/Theme.SEMP"
         android:usesCleartextTraffic="true">
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+        <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".EstoqueActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".CarrinhoActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".FazerPedidoActivity"
-            android:exported="false" />
-
+        <activity android:name=".EstoqueActivity" android:exported="false" />
+        <activity android:name=".CarrinhoActivity" android:exported="false" />
+        <activity android:name=".FazerPedidoActivity" android:exported="false" />
+        <activity android:name=".ConfigEstoqueActivity" android:exported="false" />
+        <activity android:name=".AutorizarPedidosActivity" android:exported="false" />
+        <activity android:name=".CadastrarUsuarioActivity" android:exported="false" />
     </application>
-
 </manifest>
