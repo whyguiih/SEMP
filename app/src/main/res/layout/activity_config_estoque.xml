@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ATUALIZAR PRODUTO"
-                    android:textColor="#FFFF00"
+                    android:textColor="#1a4b9f"
                     android:textStyle="bold"
                     android:fontFamily="@font/neo_sans_medium"/>
 
@@ -74,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="ID do Registro"
-                    android:background="@android:color/white"
+                    android:background="@drawable/bg_input_glass"
                     android:padding="8dp"
                     android:layout_marginTop="8dp"/>
 
@@ -83,7 +83,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Coluna (ex: nome, quant)"
-                    android:background="@android:color/white"
+                    android:background="@drawable/bg_input_glass"
                     android:padding="8dp"
                     android:layout_marginTop="8dp"/>
 
@@ -92,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Novo Valor"
-                    android:background="@android:color/white"
+                    android:background="@drawable/bg_input_glass"
                     android:padding="8dp"
                     android:layout_marginTop="8dp"/>
 
@@ -101,7 +101,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Atualizar"
-                    android:backgroundTint="#ef5e31"
+                    android:backgroundTint="#1a4b9f"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/neo_sans_bold_italic"/>
 
@@ -115,7 +115,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DELETAR PRODUTO"
-                    android:textColor="#FF0000"
+                    android:textColor="#ef5e31"
                     android:textStyle="bold"
                     android:fontFamily="@font/neo_sans_medium"/>
 
@@ -124,7 +124,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Código do Produto"
-                    android:background="@android:color/white"
+                    android:background="@drawable/bg_input_glass"
                     android:padding="8dp"
                     android:layout_marginTop="8dp"/>
 
@@ -133,7 +133,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Deletar"
-                    android:backgroundTint="#A00000"
+                    android:backgroundTint="#ef5e31"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/neo_sans_bold_italic"/>
             </LinearLayout>
@@ -154,9 +154,9 @@
         <TextView android:id="@+id/menuItemEstoque" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Visualizar Estoque" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
         <TextView android:id="@+id/menuItemCarrinho" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Meu Carrinho" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
         <TextView android:id="@+id/menuItemPedido" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Fazer Pedido" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
-        <TextView android:id="@+id/menuItemConfigEstoque" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Configurar Estoque" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#FFFF00" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
-        <TextView android:id="@+id/menuItemAutorizar" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Autorizar Pedidos" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#FFFF00" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
-        <TextView android:id="@+id/menuItemCadastrar" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cadastrar Usuário" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#FFFF00" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+        <TextView android:id="@+id/menuItemConfigEstoque" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Configurar Estoque" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#1a4b9f" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+        <TextView android:id="@+id/menuItemAutorizar" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Autorizar Pedidos" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#1a4b9f" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+        <TextView android:id="@+id/menuItemCadastrar" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cadastrar Usuário" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#1a4b9f" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
         <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
         <TextView android:id="@+id/menuItemSair" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Sair" android:fontFamily="@font/neo_sans_bold_italic" android:textSize="18sp" android:textColor="#ef5e31" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
     </LinearLayout>
