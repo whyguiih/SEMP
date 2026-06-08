@@ -8,17 +8,22 @@ import androidx.appcompat.app.AppCompatActivity
 class ProdutoDetalheActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Você pode criar um layout 'activity_produto_detalhe.xml' simples para esta tela
-        // Como exemplo rápido, usaremos o setContentView genérico,
-        // mas você deve criar o XML para esta tela ficar bonita.
-        setContentView(R.layout.activity_carrinho) // Trocando provisoriamente apenas para compilar, crie o layout correto depois
+        setContentView(R.layout.activity_produto_detalhe) // Aponta para o XML correto
 
+        // Botão de voltar
+        val btnVoltar = findViewById<ImageView>(R.id.btnVoltar)
+        btnVoltar.setOnClickListener {
+            finish() // Fecha esta tela e volta para a anterior (Estoque ou Carrinho)
+        }
+
+        // Recupera os dados enviados pela tela de Estoque
         val nome = intent.getStringExtra("PRODUTO_NOME") ?: "Produto Desconhecido"
-        val desc = intent.getStringExtra("PRODUTO_DESC") ?: "Sem descrição"
+        val desc = intent.getStringExtra("PRODUTO_DESC") ?: "Sem descrição disponível."
+        val qtd = intent.getStringExtra("PRODUTO_QTD") ?: "0"
 
-        // Aqui você vincularia com os TextViews do seu activity_produto_detalhe.xml
-        // Exemplo:
-        // findViewById<TextView>(R.id.tvNomeDetalhe).text = nome
-        // findViewById<TextView>(R.id.tvDescDetalhe).text = desc
+        // Preenche as informações na tela
+        findViewById<TextView>(R.id.tvNomeDetalhe).text = nome
+        findViewById<TextView>(R.id.tvDescDetalhe).text = desc
+        findViewById<TextView>(R.id.tvQtdDetalhe).text = "Quantidade em estoque: $qtd"
     }
 }

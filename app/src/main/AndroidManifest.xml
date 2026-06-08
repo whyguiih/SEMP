@@ -28,5 +28,7 @@
         <activity android:name=".ConfigEstoqueActivity" android:exported="false" />
         <activity android:name=".AutorizarPedidosActivity" android:exported="false" />
         <activity android:name=".CadastrarUsuarioActivity" android:exported="false" />
+
+        <activity android:name=".ProdutoDetalheActivity" android:exported="false" />
     </application>
 </manifest>
