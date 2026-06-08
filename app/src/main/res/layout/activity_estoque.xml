@@ -15,10 +15,35 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_gradient">
 
-        <LinearLayout android:id="@+id/headerLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical" app:layout_constraintTop_toTopOf="parent">
-            <ImageView android:id="@+id/btnMenu" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/senai_s" android:padding="4dp" android:background="?attr/selectableItemBackgroundBorderless" android:clickable="true" android:focusable="true"/>
-            <EditText android:id="@+id/etPesquisa" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginHorizontal="24dp" android:layout_marginTop="8dp" android:background="@drawable/bg_input_glass" android:hint="Pesquisar produto..." android:padding="8dp" android:drawableStart="@android:drawable/ic_menu_search" android:drawablePadding="8dp" app:layout_constraintTop_toBottomOf="@id/headerLayout"/>
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/btnMenu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/senai_s"
+            android:padding="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <EditText
+            android:id="@+id/etPesquisa"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/bg_input_glass"
+            android:hint="Pesquisar produto..."
+            android:padding="8dp"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="8dp"
+            app:layout_constraintTop_toTopOf="@id/btnMenu"
+            app:layout_constraintBottom_toBottomOf="@id/btnMenu"
+            app:layout_constraintStart_toEndOf="@id/btnMenu"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/containerCard"
@@ -28,7 +53,7 @@
             app:cardBackgroundColor="#4DFFFFFF"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:layout_constraintTop_toBottomOf="@id/headerLayout"
+            app:layout_constraintTop_toBottomOf="@id/etPesquisa"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -41,74 +66,41 @@
                 android:clipToPadding="false" />
 
         </androidx.cardview.widget.CardView>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/navigationMenu"
+    <ScrollView
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#88000000"
-        android:orientation="vertical"
-        android:padding="24dp"
         android:fitsSystemWindows="true">
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/senai_logo"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dp"/>
-
-        <TextView
-            android:id="@+id/menuItemEstoque"
+        <LinearLayout
+            android:id="@+id/navigationMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Visualizar Estoque"
-            android:fontFamily="@font/neo_sans_medium"
-            android:textSize="18sp"
-            android:textColor="#ffffff"
-            android:padding="12dp"
-            android:background="?attr/selectableItemBackground"/>
+            android:orientation="vertical"
+            android:padding="24dp">
 
-        <TextView
-            android:id="@+id/menuItemCarrinho"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Meu Carrinho"
-            android:fontFamily="@font/neo_sans_medium"
-            android:textSize="18sp"
-            android:textColor="#ffffff"
-            android:padding="12dp"
-            android:background="?attr/selectableItemBackground"/>
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/senai_logo"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="32dp"/>
 
-        <TextView
-            android:id="@+id/menuItemPedido"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Fazer Pedido"
-            android:fontFamily="@font/neo_sans_medium"
-            android:textSize="18sp"
-            android:textColor="#ffffff"
-            android:padding="12dp"
-            android:background="?attr/selectableItemBackground"/>
+            <TextView android:id="@+id/menuItemEstoque" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Estoque" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+            <TextView android:id="@+id/menuItemCarrinho" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Carrinho" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+            <TextView android:id="@+id/menuItemPedido" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Fazer Pedido" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+            <TextView android:id="@+id/menuItemVisualizarPedido" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Visualizar Pedidos" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+            <TextView android:id="@+id/menuItemEmprestimo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Empréstimo" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+            <TextView android:id="@+id/menuItemAutorizar" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Autorizar Pedidos" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+            <TextView android:id="@+id/menuItemConfigEstoque" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Configuração Estoque" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+            <TextView android:id="@+id/menuItemConfigAcesso" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Configuração de Acesso" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            <View android:layout_width="match_parent" android:layout_height="32dp"/>
 
-        <TextView
-            android:id="@+id/menuItemSair"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sair"
-            android:fontFamily="@font/neo_sans_bold_italic"
-            android:textSize="18sp"
-            android:textColor="#ef5e31"
-            android:padding="12dp"
-            android:background="?attr/selectableItemBackground"/>
-    </LinearLayout>
-
+            <TextView android:id="@+id/menuItemSair" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Sair" android:fontFamily="@font/neo_sans_bold_italic" android:textSize="18sp" android:textColor="#ef5e31" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+        </LinearLayout>
+    </ScrollView>
 </androidx.drawerlayout.widget.DrawerLayout>

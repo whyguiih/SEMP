@@ -7,8 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class EstoqueAdapter(private val itens: List<Produto>) :
-    RecyclerView.Adapter<EstoqueAdapter.EstoqueViewHolder>() {
+class EstoqueAdapter(
+    private val itens: List<Produto>,
+    private val onItemClick: ((Produto) -> Unit)? = null // Callback de clique adicionado
+) : RecyclerView.Adapter<EstoqueAdapter.EstoqueViewHolder>() {
 
     class EstoqueViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvNomeProduto: TextView = view.findViewById(R.id.tvNomeProduto)
@@ -29,9 +31,12 @@ class EstoqueAdapter(private val itens: List<Produto>) :
         holder.tvNomeProduto.text = item.nome ?: "Sem Nome"
         holder.tvQuantidade.text = "Qtd: ${item.quant ?: "0"}"
         holder.tvDetalhe.text = item.descricao ?: "Sem detalhes disponíveis"
-
-        // Define um ícone padrão, já que a imagem vem do banco por URL ou Null
         holder.ivProduto.setImageResource(android.R.drawable.ic_menu_gallery)
+
+        // Aciona o clique e passa o produto adiante
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(item)
+        }
     }
 
     override fun getItemCount(): Int = itens.size

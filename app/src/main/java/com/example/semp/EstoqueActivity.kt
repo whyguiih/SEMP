@@ -23,52 +23,51 @@ import retrofit2.Response
 class EstoqueActivity : AppCompatActivity() {
 
     private var drawerLayout: DrawerLayout? = null
-    private var listaOriginalProdutos: List<Produto> = listOf() // Armazena original para a busca
+    private var listaOriginalProdutos: List<Produto> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        try {
-            setContentView(R.layout.activity_estoque)
+        setContentView(R.layout.activity_estoque)
 
-            drawerLayout = findViewById(R.id.drawerLayout)
-            val btnMenu = findViewById<ImageView>(R.id.btnMenu)
-            val etPesquisa = findViewById<EditText>(R.id.etPesquisa)
-            val recyclerViewEstoque = findViewById<RecyclerView>(R.id.recyclerViewEstoque)
+        drawerLayout = findViewById(R.id.drawerLayout)
+        val btnMenu = findViewById<ImageView>(R.id.btnMenu)
+        val etPesquisa = findViewById<EditText>(R.id.etPesquisa)
+        val recyclerViewEstoque = findViewById<RecyclerView>(R.id.recyclerViewEstoque)
 
-            findViewById<View>(R.id.mainContentLayout)?.let { mainView ->
-                ViewCompat.setOnApplyWindowInsetsListener(mainView) { view, insets ->
-                    val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                    view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-                    insets
+        findViewById<View>(R.id.mainContentLayout)?.let { mainView ->
+            ViewCompat.setOnApplyWindowInsetsListener(mainView) { view, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
+        }
+
+        btnMenu?.setOnClickListener {
+            drawerLayout?.let {
+                if (it.isDrawerOpen(GravityCompat.START)) it.closeDrawer(GravityCompat.START)
+                else it.openDrawer(GravityCompat.START)
+            }
+        }
+
+        configurarNavegacaoMenu()
+
+        recyclerViewEstoque?.layoutManager = LinearLayoutManager(this)
+        buscarProdutosAPI(recyclerViewEstoque)
+
+        etPesquisa?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                val termo = s.toString().lowercase()
+                val filtrados = listaOriginalProdutos.filter {
+                    it.nome?.lowercase()?.contains(termo) == true || it.codigo?.lowercase()?.contains(termo) == true
+                }
+                // Adicionando evento de clique também na lista filtrada
+                recyclerViewEstoque?.adapter = EstoqueAdapter(filtrados) { produto ->
+                    abrirDetalhesProduto(produto)
                 }
             }
-
-            btnMenu?.setOnClickListener {
-                drawerLayout?.let {
-                    if (it.isDrawerOpen(GravityCompat.START)) it.closeDrawer(GravityCompat.START)
-                    else it.openDrawer(GravityCompat.START)
-                }
-            }
-
-            configurarNavegacaoMenu()
-
-            recyclerViewEstoque?.layoutManager = LinearLayoutManager(this)
-            buscarProdutosAPI(recyclerViewEstoque)
-
-            // BARRA DE PESQUISA EM TEMPO REAL
-            etPesquisa?.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    val termo = s.toString().lowercase()
-                    val filtrados = listaOriginalProdutos.filter {
-                        it.nome?.lowercase()?.contains(termo) == true || it.codigo?.lowercase()?.contains(termo) == true
-                    }
-                    recyclerViewEstoque?.adapter = EstoqueAdapter(filtrados)
-                }
-            })
-
-        } catch (e: Exception) { e.printStackTrace() }
+        })
     }
 
     private fun buscarProdutosAPI(recyclerView: RecyclerView?) {
@@ -78,7 +77,11 @@ class EstoqueActivity : AppCompatActivity() {
                 if (isDestroyed || isFinishing) return
                 if (response.isSuccessful && response.body() != null) {
                     listaOriginalProdutos = response.body()!!
-                    recyclerView.adapter = EstoqueAdapter(listaOriginalProdutos)
+
+                    // Adicionando a navegação via lambda no clique do produto
+                    recyclerView.adapter = EstoqueAdapter(listaOriginalProdutos) { produto ->
+                        abrirDetalhesProduto(produto)
+                    }
                 }
             }
             override fun onFailure(call: Call<List<Produto>>, t: Throwable) {
@@ -87,24 +90,44 @@ class EstoqueActivity : AppCompatActivity() {
         })
     }
 
+    private fun abrirDetalhesProduto(produto: Produto) {
+        val intent = Intent(this, ProdutoDetalheActivity::class.java)
+        intent.putExtra("PRODUTO_NOME", produto.nome)
+        intent.putExtra("PRODUTO_DESC", produto.descricao)
+        intent.putExtra("PRODUTO_QTD", produto.quant)
+        startActivity(intent)
+    }
+
     private fun configurarNavegacaoMenu() {
         val nivel = MainActivity.getNivelConta()
 
-        val btnConfig = findViewById<TextView>(R.id.menuItemConfigEstoque)
+        // Mapeando botões do menu completo
+        val btnConfigEstoque = findViewById<TextView>(R.id.menuItemConfigEstoque)
         val btnAutorizar = findViewById<TextView>(R.id.menuItemAutorizar)
-        val btnCadastrar = findViewById<TextView>(R.id.menuItemCadastrar)
+        val btnConfigAcesso = findViewById<TextView>(R.id.menuItemConfigAcesso)
+        val btnEmprestimo = findViewById<TextView>(R.id.menuItemEmprestimo)
+        val btnVisualizarPedido = findViewById<TextView>(R.id.menuItemVisualizarPedido)
 
-        // LÓGICA DE DIFERENCIAÇÃO: 0 (Comum), 1 (Admin), 2 (Compras)
-        btnConfig?.visibility = if (nivel == "1" || nivel == "2") View.VISIBLE else View.GONE
+        // Controle de visibilidade com base no nível (Regras já existentes + adaptações)
+        btnConfigEstoque?.visibility = if (nivel == "1" || nivel == "2") View.VISIBLE else View.GONE
         btnAutorizar?.visibility = if (nivel == "2") View.VISIBLE else View.GONE
-        btnCadastrar?.visibility = if (nivel == "1") View.VISIBLE else View.GONE
+        btnConfigAcesso?.visibility = if (nivel == "1") View.VISIBLE else View.GONE
+        // Mantenho Empréstimos e Visualizar Pedidos disponíveis, oculte se quiser restringir.
 
-        findViewById<TextView>(R.id.menuItemEstoque)?.setOnClickListener { startActivity(Intent(this, EstoqueActivity::class.java)); finish() }
+        findViewById<TextView>(R.id.menuItemEstoque)?.setOnClickListener { drawerLayout?.closeDrawer(GravityCompat.START) } // Já está na tela
         findViewById<TextView>(R.id.menuItemCarrinho)?.setOnClickListener { startActivity(Intent(this, CarrinhoActivity::class.java)); finish() }
         findViewById<TextView>(R.id.menuItemPedido)?.setOnClickListener { startActivity(Intent(this, FazerPedidoActivity::class.java)); finish() }
-        btnConfig?.setOnClickListener { startActivity(Intent(this, ConfigEstoqueActivity::class.java)); finish() }
+
+        btnConfigEstoque?.setOnClickListener { startActivity(Intent(this, ConfigEstoqueActivity::class.java)); finish() }
         btnAutorizar?.setOnClickListener { startActivity(Intent(this, AutorizarPedidosActivity::class.java)); finish() }
-        btnCadastrar?.setOnClickListener { startActivity(Intent(this, CadastrarUsuarioActivity::class.java)); finish() }
-        findViewById<TextView>(R.id.menuItemSair)?.setOnClickListener { startActivity(Intent(this, MainActivity::class.java).apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP }); finish() }
+        btnConfigAcesso?.setOnClickListener { startActivity(Intent(this, CadastrarUsuarioActivity::class.java)); finish() }
+
+        // Rotas para páginas em desenvolvimento ou não providas ainda:
+        btnEmprestimo?.setOnClickListener { Toast.makeText(this, "Página de Empréstimo em breve", Toast.LENGTH_SHORT).show() }
+        btnVisualizarPedido?.setOnClickListener { Toast.makeText(this, "Visualização de Pedidos em breve", Toast.LENGTH_SHORT).show() }
+
+        findViewById<TextView>(R.id.menuItemSair)?.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java).apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP }); finish()
+        }
     }
 }
