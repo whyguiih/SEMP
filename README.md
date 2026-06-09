@@ -1,6 +1,6 @@
 <div align="center">
 
-#SEMP
+# SEMP
 **Sistema de Estoque Multiplataforma**
 <p align="center">
   <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android" />
