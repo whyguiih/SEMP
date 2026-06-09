@@ -54,10 +54,10 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
-                app:cardCornerRadius="16dp"
-                app:cardBackgroundColor="#4DFFFFFF"
+                app:cardCornerRadius="24dp"
+                app:cardBackgroundColor="#1AFFFFFF"
                 app:cardElevation="0dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="24dp">
                 <ImageView
                     android:id="@+id/ivProdutoFoto"
                     android:layout_width="match_parent"
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nome do Produto"
                 android:textColor="#FFFFFF"
-                android:textSize="26sp"
+                android:textSize="28sp"
                 android:fontFamily="@font/neo_sans_bold_italic"/>
 
             <TextView
@@ -80,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Código: ---"
-                android:textColor="#CCCCCC"
+                android:textColor="#E6FFFFFF"
                 android:textSize="16sp"
                 android:fontFamily="@font/neo_sans_medium"
                 android:layout_marginBottom="16dp"/>
@@ -103,16 +103,16 @@
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:fontFamily="@font/neo_sans_medium"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="24dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Descrição"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:fontFamily="@font/neo_sans_bold_italic"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="8dp"/>
 
             <TextView
                 android:id="@+id/tvDescDetalhe"
@@ -122,16 +122,16 @@
                 android:textColor="#E0E0E0"
                 android:textSize="16sp"
                 android:fontFamily="@font/neo_sans_regular"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="16dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Descrição Detalhada"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:fontFamily="@font/neo_sans_bold_italic"
-                android:layout_marginBottom="4dp"/>
+                android:layout_marginBottom="8dp"/>
 
             <TextView
                 android:id="@+id/tvDescDetalhadaDetalhe"
@@ -151,13 +151,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:background="#99000000"
+        android:background="#B3000000"
         android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="50dp"
             android:orientation="horizontal"
             android:background="@drawable/bg_input_glass"
             android:gravity="center"
@@ -165,7 +165,7 @@
 
             <TextView
                 android:id="@+id/btnDiminuirQtd"
-                android:layout_width="40dp"
+                android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:text="-"
                 android:textColor="#FFFFFF"
@@ -178,7 +178,7 @@
 
             <TextView
                 android:id="@+id/tvQuantidadeSelecionada"
-                android:layout_width="40dp"
+                android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:text="1"
                 android:textColor="#FFFFFF"
@@ -188,7 +188,7 @@
 
             <TextView
                 android:id="@+id/btnAumentarQtd"
-                android:layout_width="40dp"
+                android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:text="+"
                 android:textColor="#FFFFFF"
@@ -203,12 +203,13 @@
         <Button
             android:id="@+id/btnAdicionarCarrinho"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="56dp"
             android:layout_weight="1"
             android:text="Adicionar ao Carrinho"
             android:textColor="#FFFFFF"
             android:fontFamily="@font/neo_sans_bold_italic"
             android:backgroundTint="#E25A27"
+            app:cornerRadius="12dp"
             android:textAllCaps="false"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

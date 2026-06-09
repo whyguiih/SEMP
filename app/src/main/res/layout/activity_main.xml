@@ -18,103 +18,102 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardLogin"
+    <LinearLayout
+        android:id="@+id/glassContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        app:cardBackgroundColor="#80FFFFFF"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
+        android:background="@drawable/bg_glass"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="32dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Log"
-                    android:textColor="#1B4F9B"
-                    android:textSize="32sp"
-                    android:fontFamily="@font/neo_sans_bold_italic" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="in"
-                    android:textColor="#E25A27"
-                    android:textSize="32sp"
-                    android:fontFamily="@font/neo_sans_bold_italic" />
-            </LinearLayout>
-
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="32dp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Usuário"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                android:fontFamily="@font/neo_sans_regular" />
-
-            <EditText
-                android:id="@+id/etUsuario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:backgroundTint="#000000"
-                android:inputType="text"
-                android:textColor="#000000"
-                android:fontFamily="@font/neo_sans_regular" />
-
+                android:text="Log"
+                android:textColor="#1B4F9B"
+                android:textSize="36sp"
+                android:fontFamily="@font/neo_sans_bold_italic" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Senha"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                android:fontFamily="@font/neo_sans_regular" />
-
-            <EditText
-                android:id="@+id/etSenha"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:backgroundTint="#000000"
-                android:inputType="textPassword"
-                android:textColor="#000000"
-                android:fontFamily="@font/neo_sans_regular" />
-
-            <Button
-                android:id="@+id/btnLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#1B4F9B"
-                android:text="Entrar"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:fontFamily="@font/neo_sans" />
+                android:text="in"
+                android:textColor="#E25A27"
+                android:textSize="36sp"
+                android:fontFamily="@font/neo_sans_bold_italic" />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Usuário"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/neo_sans_regular" />
+
+        <EditText
+            android:id="@+id/etUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_input_glass"
+            android:paddingHorizontal="16dp"
+            android:inputType="text"
+            android:textColor="#000000"
+            android:fontFamily="@font/neo_sans_regular" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Senha"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/neo_sans_regular" />
+
+        <EditText
+            android:id="@+id/etSenha"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_input_glass"
+            android:paddingHorizontal="16dp"
+            android:inputType="textPassword"
+            android:textColor="#000000"
+            android:fontFamily="@font/neo_sans_regular" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:backgroundTint="#1B4F9B"
+            app:cornerRadius="12dp"
+            android:text="Entrar"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:fontFamily="@font/neo_sans" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvFooter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:text="Copyright © 2026. Todos os direitos reservados."
         android:textAlignment="center"
-        android:textColor="#FFFFFF"
+        android:textColor="#CCFFFFFF"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:fontFamily="@font/neo_sans_italic" />
