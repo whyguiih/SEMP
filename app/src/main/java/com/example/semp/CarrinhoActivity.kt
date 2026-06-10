@@ -26,13 +26,13 @@ class CarrinhoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_carrinho)
 
-        // Inicializa os IDs mapeados perfeitamente do novo XML
         drawerLayout = findViewById(R.id.drawerLayoutCarrinho)
         val btnMenu = findViewById<ImageView>(R.id.btnMenu)
-        val recyclerViewCarrinho = findViewById<RecyclerView>(R.id.recyclerViewCarrinho)
         val btnFinalizarPedido = findViewById<Button>(R.id.btnFinalizarPedido)
 
-        // LISTENER DE TELA (Evita invasão do topo e base do celular)
+        val recyclerViewCarrinho = findViewById<RecyclerView>(R.id.recyclerViewCarrinho)
+        recyclerViewCarrinho?.layoutManager = LinearLayoutManager(this)
+
         findViewById<View>(R.id.mainContentLayout)?.let { mainView ->
             ViewCompat.setOnApplyWindowInsetsListener(mainView) { view, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -43,15 +43,17 @@ class CarrinhoActivity : AppCompatActivity() {
 
         btnMenu?.setOnClickListener { drawerLayout?.openDrawer(GravityCompat.START) }
 
-        // Redireciona o botão inferior para a página de Fazer Pedido
         btnFinalizarPedido?.setOnClickListener {
-            val intent = Intent(this@CarrinhoActivity, FazerPedidoActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this@CarrinhoActivity, FazerPedidoActivity::class.java))
         }
 
         configurarNavegacaoMenu()
+    }
 
-        recyclerViewCarrinho?.layoutManager = LinearLayoutManager(this)
+    // ISSO FAZ O CARRINHO SE ATUALIZAR SOZINHO ASSIM QUE VOCÊ VOLTA DA TELA DE EDIÇÃO!
+    override fun onResume() {
+        super.onResume()
+        val recyclerViewCarrinho = findViewById<RecyclerView>(R.id.recyclerViewCarrinho)
         buscarItensCarrinhoAPI(recyclerViewCarrinho)
     }
 
@@ -67,11 +69,10 @@ class CarrinhoActivity : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     val itensCarrinho = response.body()!!
 
-                    // CONTROLADOR DE ESTADO VISUAL DO CARRINHO
                     if (itensCarrinho.isEmpty()) {
                         recyclerView.visibility = View.GONE
                         tvCarrinhoVazio?.visibility = View.VISIBLE
-                        btnFinalizarPedido?.visibility = View.GONE // Oculta o botão se não houver itens
+                        btnFinalizarPedido?.visibility = View.GONE
                     } else {
                         recyclerView.visibility = View.VISIBLE
                         tvCarrinhoVazio?.visibility = View.GONE
@@ -84,6 +85,10 @@ class CarrinhoActivity : AppCompatActivity() {
                             intent.putExtra("PRODUTO_CODIGO", produto.codigo)
                             intent.putExtra("PRODUTO_DESC", produto.descricao)
                             intent.putExtra("PRODUTO_QTD", produto.quant)
+
+                            // ENVIA A QUANTIDADE ATUAL DAQUELE PRODUTO NO CARRINHO
+                            intent.putExtra("PRODUTO_QTD_CARRINHO", produto.carrinho ?: 1)
+
                             startActivity(intent)
                         }
                     }
@@ -108,8 +113,6 @@ class CarrinhoActivity : AppCompatActivity() {
         val btnConfigEstoque = findViewById<TextView>(R.id.menuItemConfigEstoque)
         val btnAutorizar = findViewById<TextView>(R.id.menuItemAutorizar)
         val btnConfigAcesso = findViewById<TextView>(R.id.menuItemConfigAcesso)
-        val btnEmprestimo = findViewById<TextView>(R.id.menuItemEmprestimo)
-        val btnVisualizarPedido = findViewById<TextView>(R.id.menuItemVisualizarPedido)
 
         btnConfigEstoque?.visibility = if (nivel == "1" || nivel == "2") View.VISIBLE else View.GONE
         btnAutorizar?.visibility = if (nivel == "2") View.VISIBLE else View.GONE
@@ -121,9 +124,6 @@ class CarrinhoActivity : AppCompatActivity() {
         btnConfigEstoque?.setOnClickListener { startActivity(Intent(this@CarrinhoActivity, ConfigEstoqueActivity::class.java)); finish() }
         btnAutorizar?.setOnClickListener { startActivity(Intent(this@CarrinhoActivity, AutorizarPedidosActivity::class.java)); finish() }
         btnConfigAcesso?.setOnClickListener { startActivity(Intent(this@CarrinhoActivity, CadastrarUsuarioActivity::class.java)); finish() }
-
-        btnEmprestimo?.setOnClickListener { Toast.makeText(this, "Empréstimo em breve", Toast.LENGTH_SHORT).show() }
-        btnVisualizarPedido?.setOnClickListener { Toast.makeText(this, "Visualizar Pedidos em breve", Toast.LENGTH_SHORT).show() }
 
         findViewById<TextView>(R.id.menuItemSair)?.setOnClickListener {
             val intent = Intent(this@CarrinhoActivity, MainActivity::class.java)
