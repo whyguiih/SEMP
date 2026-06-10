@@ -98,14 +98,16 @@ class AutorizarPedidosActivity : AppCompatActivity() {
         btnAutorizar?.visibility = if (nivel == "2") View.VISIBLE else View.GONE
         btnCadastrar?.visibility = if (nivel == "1") View.VISIBLE else View.GONE
 
-        findViewById<TextView>(R.id.menuItemEstoque)?.setOnClickListener { startActivity(Intent(this, EstoqueActivity::class.java)); finish() }
-        findViewById<TextView>(R.id.menuItemCarrinho)?.setOnClickListener { startActivity(Intent(this, CarrinhoActivity::class.java)); finish() }
-        findViewById<TextView>(R.id.menuItemPedido)?.setOnClickListener { startActivity(Intent(this, FazerPedidoActivity::class.java)); finish() }
-        btnConfig?.setOnClickListener { startActivity(Intent(this, ConfigEstoqueActivity::class.java)); finish() }
+        // Correção de segurança de contexto implementada: this@AutorizarPedidosActivity
+        findViewById<TextView>(R.id.menuItemEstoque)?.setOnClickListener { startActivity(Intent(this@AutorizarPedidosActivity, EstoqueActivity::class.java)); finish() }
+        findViewById<TextView>(R.id.menuItemCarrinho)?.setOnClickListener { startActivity(Intent(this@AutorizarPedidosActivity, CarrinhoActivity::class.java)); finish() }
+        findViewById<TextView>(R.id.menuItemPedido)?.setOnClickListener { startActivity(Intent(this@AutorizarPedidosActivity, FazerPedidoActivity::class.java)); finish() }
+        btnConfig?.setOnClickListener { startActivity(Intent(this@AutorizarPedidosActivity, ConfigEstoqueActivity::class.java)); finish() }
         btnAutorizar?.setOnClickListener { drawerLayout?.closeDrawer(GravityCompat.START) }
-        btnCadastrar?.setOnClickListener { startActivity(Intent(this, CadastrarUsuarioActivity::class.java)); finish() }
+        btnCadastrar?.setOnClickListener { startActivity(Intent(this@AutorizarPedidosActivity, CadastrarUsuarioActivity::class.java)); finish() }
+
         findViewById<TextView>(R.id.menuItemSair)?.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java).apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP })
+            startActivity(Intent(this@AutorizarPedidosActivity, MainActivity::class.java).apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP })
             finish()
         }
     }
