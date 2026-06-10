@@ -92,7 +92,9 @@ class EstoqueActivity : AppCompatActivity() {
 
     private fun abrirDetalhesProduto(produto: Produto) {
         val intent = Intent(this, ProdutoDetalheActivity::class.java)
+        intent.putExtra("PRODUTO_ID", produto.id_estoque ?: "") // Essencial para vincular ao carrinho no Banco
         intent.putExtra("PRODUTO_NOME", produto.nome)
+        intent.putExtra("PRODUTO_CODIGO", produto.codigo)
         intent.putExtra("PRODUTO_DESC", produto.descricao)
         intent.putExtra("PRODUTO_QTD", produto.quant)
         startActivity(intent)
@@ -101,29 +103,24 @@ class EstoqueActivity : AppCompatActivity() {
     private fun configurarNavegacaoMenu() {
         val nivel = MainActivity.getNivelConta()
 
-        // Mapeando botões do menu completo
         val btnConfigEstoque = findViewById<TextView>(R.id.menuItemConfigEstoque)
         val btnAutorizar = findViewById<TextView>(R.id.menuItemAutorizar)
         val btnConfigAcesso = findViewById<TextView>(R.id.menuItemConfigAcesso)
         val btnEmprestimo = findViewById<TextView>(R.id.menuItemEmprestimo)
         val btnVisualizarPedido = findViewById<TextView>(R.id.menuItemVisualizarPedido)
 
-        // Controle de visibilidade com base no nível (Regras já existentes + adaptações)
         btnConfigEstoque?.visibility = if (nivel == "1" || nivel == "2") View.VISIBLE else View.GONE
         btnAutorizar?.visibility = if (nivel == "2") View.VISIBLE else View.GONE
         btnConfigAcesso?.visibility = if (nivel == "1") View.VISIBLE else View.GONE
-        // Mantenho Empréstimos e Visualizar Pedidos disponíveis, oculte se quiser restringir.
 
-        findViewById<TextView>(R.id.menuItemEstoque)?.setOnClickListener { drawerLayout?.closeDrawer(GravityCompat.START) } // Já está na tela
+        findViewById<TextView>(R.id.menuItemEstoque)?.setOnClickListener { drawerLayout?.closeDrawer(GravityCompat.START) }
         findViewById<TextView>(R.id.menuItemCarrinho)?.setOnClickListener { startActivity(Intent(this, CarrinhoActivity::class.java)); finish() }
-        findViewById<TextView>(R.id.menuItemPedido)?.setOnClickListener { startActivity(Intent(this, FazerPedidoActivity::class.java)); finish() }
 
         btnConfigEstoque?.setOnClickListener { startActivity(Intent(this, ConfigEstoqueActivity::class.java)); finish() }
         btnAutorizar?.setOnClickListener { startActivity(Intent(this, AutorizarPedidosActivity::class.java)); finish() }
         btnConfigAcesso?.setOnClickListener { startActivity(Intent(this, CadastrarUsuarioActivity::class.java)); finish() }
 
-        // Rotas para páginas em desenvolvimento ou não providas ainda:
-        btnEmprestimo?.setOnClickListener { Toast.makeText(this, "Página de Empréstimo em breve", Toast.LENGTH_SHORT).show() }
+        btnEmprestimo?.setOnClickListener { Toast.makeText(this, "Empréstimo em breve", Toast.LENGTH_SHORT).show() }
         btnVisualizarPedido?.setOnClickListener { Toast.makeText(this, "Visualização de Pedidos em breve", Toast.LENGTH_SHORT).show() }
 
         findViewById<TextView>(R.id.menuItemSair)?.setOnClickListener {

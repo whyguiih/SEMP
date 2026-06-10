@@ -1,119 +1,130 @@
-package com.example.semp
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:id="@+id/drawerLayoutCarrinho"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true">
 
-import android.content.Intent
-import android.os.Bundle
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+<androidx.constraintlayout.widget.ConstraintLayout
+android:id="@+id/mainContentLayout"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/bg_gradient">
 
-class CarrinhoActivity : AppCompatActivity() {
+<LinearLayout
+android:id="@+id/headerLayout"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="horizontal"
+android:padding="16dp"
+android:gravity="center_vertical"
+app:layout_constraintTop_toTopOf="parent">
 
-    private var drawerLayout: DrawerLayout? = null
+<ImageView
+android:id="@+id/btnMenu"
+android:layout_width="48dp"
+android:layout_height="48dp"
+android:src="@drawable/senai_s"
+android:padding="4dp"
+android:background="?attr/selectableItemBackgroundBorderless"
+android:clickable="true"
+android:focusable="true"/>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_carrinho)
+<TextView
+android:layout_width="0dp"
+android:layout_height="wrap_content"
+android:layout_weight="1"
+android:text="Meu Carrinho"
+android:textColor="@android:color/white"
+android:fontFamily="@font/neo_sans_bold_italic"
+android:textSize="26sp"
+android:gravity="center"
+android:layout_marginEnd="48dp"/>
+</LinearLayout>
 
-        drawerLayout = findViewById(R.id.drawerLayoutCarrinho) ?: findViewById(R.id.drawerLayout)
-        val btnMenu = findViewById<ImageView>(R.id.btnMenu)
-        val recyclerViewCarrinho = findViewById<RecyclerView>(R.id.recyclerViewCarrinho)
+<androidx.cardview.widget.CardView
+android:id="@+id/cardViewCarrinhoContainer"
+android:layout_width="0dp"
+android:layout_height="0dp"
+android:layout_margin="24dp"
+app:cardBackgroundColor="#4DFFFFFF"
+app:cardCornerRadius="16dp"
+app:cardElevation="0dp"
+app:layout_constraintTop_toBottomOf="@id/headerLayout"
+app:layout_constraintBottom_toTopOf="@id/btnFinalizarPedido"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintEnd_toEndOf="parent">
 
-        findViewById<View>(R.id.mainContentLayout)?.let { mainView ->
-            ViewCompat.setOnApplyWindowInsetsListener(mainView) { view, insets ->
-                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-                insets
-            }
-        }
+<androidx.recyclerview.widget.RecyclerView
+android:id="@+id/recyclerViewCarrinho"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:padding="16dp"
+android:clipToPadding="false" />
 
-        btnMenu?.setOnClickListener { drawerLayout?.openDrawer(GravityCompat.START) }
+<TextView
+android:id="@+id/tvCarrinhoVazio"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_gravity="center"
+android:text="Seu carrinho está vazio."
+android:textSize="18sp"
+android:textColor="#ffffff"
+android:visibility="gone"
+android:fontFamily="@font/neo_sans_medium"/>
+</androidx.cardview.widget.CardView>
 
-        configurarNavegacaoMenu()
+<Button
+android:id="@+id/btnFinalizarPedido"
+android:layout_width="0dp"
+android:layout_height="54dp"
+android:layout_marginHorizontal="24dp"
+android:layout_marginBottom="24dp"
+android:backgroundTint="#1B4F9B"
+android:text="Finalizar Pedido"
+android:textColor="#FFFFFF"
+android:textSize="18sp"
+android:fontFamily="@font/neo_sans_bold_italic"
+app:layout_constraintBottom_toBottomOf="parent"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintEnd_toEndOf="parent" />
 
-        recyclerViewCarrinho?.layoutManager = LinearLayoutManager(this)
-        buscarItensCarrinhoAPI(recyclerViewCarrinho)
-    }
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-    private fun buscarItensCarrinhoAPI(recyclerView: RecyclerView?) {
-        if (recyclerView == null) return
-        val tvCarrinhoVazio = findViewById<TextView>(R.id.tvCarrinhoVazio)
+<ScrollView
+android:layout_width="280dp"
+android:layout_height="match_parent"
+android:layout_gravity="start"
+android:background="#88000000"
+android:fitsSystemWindows="true">
 
-        RetrofitClient.api.getCarrinho().enqueue(object : Callback<List<Produto>> {
-            override fun onResponse(call: Call<List<Produto>>, response: Response<List<Produto>>) {
-                if (isDestroyed || isFinishing) return
+<LinearLayout
+android:id="@+id/navigationMenu"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:padding="24dp">
 
-                if (response.isSuccessful && response.body() != null) {
-                    val itensCarrinho = response.body()!!
+<ImageView
+android:layout_width="100dp"
+android:layout_height="100dp"
+android:src="@drawable/senai_logo"
+android:layout_gravity="center_horizontal"
+android:layout_marginBottom="32dp"/>
 
-                    // LÓGICA DO CARRINHO VAZIO
-                    if (itensCarrinho.isEmpty()) {
-                        recyclerView.visibility = View.GONE
-                        tvCarrinhoVazio?.visibility = View.VISIBLE
-                    } else {
-                        recyclerView.visibility = View.VISIBLE
-                        tvCarrinhoVazio?.visibility = View.GONE
+<TextView android:id="@+id/menuItemEstoque" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Estoque" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+<TextView android:id="@+id/menuItemCarrinho" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Carrinho" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+<TextView android:id="@+id/menuItemVisualizarPedido" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Visualizar Pedidos" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+<TextView android:id="@+id/menuItemEmprestimo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Empréstimo" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+<TextView android:id="@+id/menuItemAutorizar" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Autorizar Pedidos" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+<TextView android:id="@+id/menuItemConfigEstoque" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Configuração Estoque" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+<TextView android:id="@+id/menuItemConfigAcesso" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Configuração de Acesso" android:fontFamily="@font/neo_sans_medium" android:textSize="18sp" android:textColor="#ffffff" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
 
-                        recyclerView.adapter = EstoqueAdapter(itensCarrinho) { produto ->
-                            val intent = Intent(this@CarrinhoActivity, ProdutoDetalheActivity::class.java)
-                            intent.putExtra("PRODUTO_NOME", produto.nome)
-                            startActivity(intent)
-                        }
-                    }
-                } else {
-                    recyclerView.visibility = View.GONE
-                    tvCarrinhoVazio?.visibility = View.VISIBLE
-                }
-            }
+<View android:layout_width="match_parent" android:layout_height="32dp"/>
 
-            override fun onFailure(call: Call<List<Produto>>, t: Throwable) {
-                if (!isDestroyed && !isFinishing) {
-                    Toast.makeText(this@CarrinhoActivity, "Sem conexão", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-    }
-
-    private fun configurarNavegacaoMenu() {
-        val nivel = MainActivity.getNivelConta()
-
-        val btnConfigEstoque = findViewById<TextView>(R.id.menuItemConfigEstoque)
-        val btnAutorizar = findViewById<TextView>(R.id.menuItemAutorizar)
-        val btnConfigAcesso = findViewById<TextView>(R.id.menuItemConfigAcesso)
-        val btnEmprestimo = findViewById<TextView>(R.id.menuItemEmprestimo)
-        val btnVisualizarPedido = findViewById<TextView>(R.id.menuItemVisualizarPedido)
-
-        // Verificação de segurança (Se foi colocado o menu completo no XML do Carrinho igual feito no de Estoque)
-        btnConfigEstoque?.visibility = if (nivel == "1" || nivel == "2") View.VISIBLE else View.GONE
-        btnAutorizar?.visibility = if (nivel == "2") View.VISIBLE else View.GONE
-        btnConfigAcesso?.visibility = if (nivel == "1") View.VISIBLE else View.GONE
-
-        findViewById<TextView>(R.id.menuItemEstoque)?.setOnClickListener { startActivity(Intent(this, EstoqueActivity::class.java)); finish() }
-        findViewById<TextView>(R.id.menuItemCarrinho)?.setOnClickListener { drawerLayout?.closeDrawer(GravityCompat.START) } // Já na tela
-        findViewById<TextView>(R.id.menuItemPedido)?.setOnClickListener { startActivity(Intent(this, FazerPedidoActivity::class.java)); finish() }
-
-        btnConfigEstoque?.setOnClickListener { startActivity(Intent(this, ConfigEstoqueActivity::class.java)); finish() }
-        btnAutorizar?.setOnClickListener { startActivity(Intent(this, AutorizarPedidosActivity::class.java)); finish() }
-        btnConfigAcesso?.setOnClickListener { startActivity(Intent(this, CadastrarUsuarioActivity::class.java)); finish() }
-
-        btnEmprestimo?.setOnClickListener { Toast.makeText(this, "Empréstimo em breve", Toast.LENGTH_SHORT).show() }
-        btnVisualizarPedido?.setOnClickListener { Toast.makeText(this, "Visualizar Pedidos em breve", Toast.LENGTH_SHORT).show() }
-
-        findViewById<TextView>(R.id.menuItemSair)?.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            finish()
-        }
-    }
-}
+<TextView android:id="@+id/menuItemSair" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Sair" android:fontFamily="@font/neo_sans_bold_italic" android:textSize="18sp" android:textColor="#ef5e31" android:padding="12dp" android:background="?attr/selectableItemBackground"/>
+</LinearLayout>
+</ScrollView>
+</androidx.drawerlayout.widget.DrawerLayout>
