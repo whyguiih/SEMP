@@ -92,7 +92,7 @@ class EstoqueActivity : AppCompatActivity() {
 
     private fun abrirDetalhesProduto(produto: Produto) {
         val intent = Intent(this, ProdutoDetalheActivity::class.java)
-        intent.putExtra("PRODUTO_ID", produto.id_estoque ?: "") // Essencial para vincular ao carrinho no Banco
+        intent.putExtra("PRODUTO_ID", produto.id_estoque.toString() ?: "") // Essencial para vincular ao carrinho no Banco
         intent.putExtra("PRODUTO_NOME", produto.nome)
         intent.putExtra("PRODUTO_CODIGO", produto.codigo)
         intent.putExtra("PRODUTO_DESC", produto.descricao)

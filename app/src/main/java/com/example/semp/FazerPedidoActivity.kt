@@ -103,22 +103,31 @@ class FazerPedidoActivity : AppCompatActivity() {
     }
 
     private fun configurarNavegacaoMenu() {
-        findViewById<TextView>(R.id.menuItemEstoque)?.setOnClickListener {
-            startActivity(Intent(this, EstoqueActivity::class.java))
-            finish()
-        }
-        findViewById<TextView>(R.id.menuItemCarrinho)?.setOnClickListener {
-            startActivity(Intent(this, CarrinhoActivity::class.java))
-            finish()
-        }
-        findViewById<TextView>(R.id.menuItemPedido)?.setOnClickListener {
-            drawerLayout?.closeDrawer(GravityCompat.START)
-        }
+        val nivel = MainActivity.getNivelConta()
+
+        val btnConfigEstoque = findViewById<TextView>(R.id.menuItemConfigEstoque)
+        val btnAutorizar = findViewById<TextView>(R.id.menuItemAutorizar)
+        val btnConfigAcesso = findViewById<TextView>(R.id.menuItemConfigAcesso)
+        val btnEmprestimo = findViewById<TextView>(R.id.menuItemEmprestimo)
+        val btnVisualizarPedido = findViewById<TextView>(R.id.menuItemVisualizarPedido)
+
+        // Limita o acesso dependendo da conta do usuário
+        btnConfigEstoque?.visibility = if (nivel == "1" || nivel == "2") View.VISIBLE else View.GONE
+        btnAutorizar?.visibility = if (nivel == "2") View.VISIBLE else View.GONE
+        btnConfigAcesso?.visibility = if (nivel == "1") View.VISIBLE else View.GONE
+
+        findViewById<TextView>(R.id.menuItemEstoque)?.setOnClickListener { startActivity(Intent(this, EstoqueActivity::class.java)); finish() }
+        findViewById<TextView>(R.id.menuItemCarrinho)?.setOnClickListener { startActivity(Intent(this, CarrinhoActivity::class.java)); finish() }
+
+        btnConfigEstoque?.setOnClickListener { startActivity(Intent(this, ConfigEstoqueActivity::class.java)); finish() }
+        btnAutorizar?.setOnClickListener { startActivity(Intent(this, AutorizarPedidosActivity::class.java)); finish() }
+        btnConfigAcesso?.setOnClickListener { startActivity(Intent(this, CadastrarUsuarioActivity::class.java)); finish() }
+
+        btnEmprestimo?.setOnClickListener { Toast.makeText(this, "Empréstimo em breve", Toast.LENGTH_SHORT).show() }
+        btnVisualizarPedido?.setOnClickListener { Toast.makeText(this, "Visualização de Pedidos em breve", Toast.LENGTH_SHORT).show() }
+
         findViewById<TextView>(R.id.menuItemSair)?.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            finish()
+            startActivity(Intent(this, MainActivity::class.java).apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TOP }); finish()
         }
     }
 }
