@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainContentLayoutDetalhe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient">
+
+    <LinearLayout
+        android:id="@+id/headerDetalhe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnVoltar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/senai_s"
+            android:padding="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Produto"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/neo_sans_bold_italic"
+            android:textSize="22sp"
+            android:gravity="center"
+            android:layout_marginEnd="48dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/headerDetalhe"
+        app:layout_constraintBottom_toTopOf="@id/bottomBarAcoes">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                app:cardCornerRadius="24dp"
+                app:cardBackgroundColor="#1AFFFFFF"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="24dp">
+                <ImageView
+                    android:id="@+id/ivProdutoFoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_gallery" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvNomeDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome do Produto"
+                android:textColor="#FFFFFF"
+                android:textSize="28sp"
+                android:fontFamily="@font/neo_sans_bold_italic"/>
+
+            <TextView
+                android:id="@+id/tvCodigoDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Código: ---"
+                android:textColor="#E6FFFFFF"
+                android:textSize="16sp"
+                android:fontFamily="@font/neo_sans_medium"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tvEstoqueDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Estoque disponível: 0"
+                android:textColor="#E25A27"
+                android:textSize="18sp"
+                android:fontFamily="@font/neo_sans_bold_italic"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvCorDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cor: ---"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:fontFamily="@font/neo_sans_medium"
+                android:layout_marginBottom="24dp"/>
+
+            <TextView
+                android:id="@+id/tvMarcaRefDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Marca/Ref: ---"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/tvUniNatalDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Unidade Natal: ---"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_marginBottom="24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Descrição"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:fontFamily="@font/neo_sans_bold_italic"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvDescDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Descrição básica do produto..."
+                android:textColor="#E0E0E0"
+                android:textSize="16sp"
+                android:fontFamily="@font/neo_sans_regular"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Descrição Detalhada"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:fontFamily="@font/neo_sans_bold_italic"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tvDescDetalhadaDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Detalhes completos aparecerão aqui..."
+                android:textColor="#E0E0E0"
+                android:textSize="16sp"
+                android:fontFamily="@font/neo_sans_regular"
+                android:layout_marginBottom="24dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/bottomBarAcoes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="#B3000000"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_input_glass"
+            android:gravity="center"
+            android:layout_marginEnd="16dp">
+
+            <TextView
+                android:id="@+id/btnDiminuirQtd"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:text="-"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <EditText
+                android:id="@+id/tvQuantidadeSelecionada"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:text="1"
+                android:inputType="number"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@null"/>
+            <TextView
+                android:id="@+id/btnAumentarQtd"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:text="+"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnAdicionarCarrinho"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="Adicionar ao Carrinho"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/neo_sans_bold_italic"
+            android:backgroundTint="#E25A27"
+            app:cornerRadius="12dp"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

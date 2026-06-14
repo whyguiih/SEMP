@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/tvNomeProduto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/nome_do_produto"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#333333" />
+
+    <TextView
+        android:id="@+id/tvCodigoDetalhe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cod_000"
+        android:textSize="14sp"
+        android:textColor="#777777" />
+
+</LinearLayout>

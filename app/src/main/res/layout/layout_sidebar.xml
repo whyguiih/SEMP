@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="#1A1A24"
+    android:orientation="vertical"
+    android:paddingTop="48dp"
+    android:paddingBottom="24dp"
+    android:elevation="8dp">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/senai_logo"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="32dp"/>
+
+    <TextView android:id="@+id/menuItemEstoque" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="📦  Estoque" android:textSize="16sp" android:textColor="#FFFFFF" android:padding="16dp" android:background="?attr/selectableItemBackground"/>
+    <TextView android:id="@+id/menuItemCarrinho" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="🛒  Carrinho" android:textSize="16sp" android:textColor="#FFFFFF" android:padding="16dp" android:background="?attr/selectableItemBackground"/>
+    <TextView android:id="@+id/menuItemVisualizarPedido" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="📋  Meus Pedidos" android:textSize="16sp" android:textColor="#FFFFFF" android:padding="16dp" android:background="?attr/selectableItemBackground"/>
+
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#33FFFFFF" android:layout_marginVertical="8dp"/>
+
+    <TextView android:id="@+id/menuItemConfigEstoque" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="⚙️  Cadastrar Produto" android:textSize="16sp" android:textColor="#FFD700" android:padding="16dp" android:background="?attr/selectableItemBackground"/>
+    <TextView android:id="@+id/menuItemAutorizar" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="✅  Autorizar Pedidos" android:textSize="16sp" android:textColor="#FFD700" android:padding="16dp" android:background="?attr/selectableItemBackground"/>
+    <TextView android:id="@+id/menuItemConfigAcesso" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="👥  Cadastrar Usuário" android:textSize="16sp" android:textColor="#FFD700" android:padding="16dp" android:background="?attr/selectableItemBackground"/>
+
+    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
+
+    <TextView android:id="@+id/menuItemSair" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="🚪  Sair do Sistema" android:textStyle="bold" android:textSize="16sp" android:textColor="#FF5252" android:padding="16dp" android:background="?attr/selectableItemBackground"/>
+</LinearLayout>

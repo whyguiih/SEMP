@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayoutConfig"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainContentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#1A4B9F"> <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnMenu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/senai_s"
+            android:padding="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
+    </LinearLayout>
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            app:layout_constraintTop_toBottomOf="@id/headerLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#33FFFFFF"
+                android:elevation="8dp"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <Button
+                    android:id="@+id/btnVoltarCadastro"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="⬅️ VOLTAR PARA CADASTRO"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#33FFFFFF"
+                    android:layout_marginBottom="24dp"
+                    app:cornerRadius="8dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ATUALIZAR PRODUTO"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"
+                    android:minHeight="48dp"/>
+
+                <AutoCompleteTextView
+                    android:id="@+id/etNomeAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:hint="Nome do Produto (Selecione na lista)"
+                    android:minHeight="48dp"
+                    android:completionThreshold="1"
+                    android:popupBackground="#E6FFFFFF"
+                    android:paddingHorizontal="8dp"/>
+
+                <EditText
+                    android:id="@+id/etIdAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="ID do Produto"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:inputType="number"
+                    android:enabled="false"
+                    android:minHeight="48dp"/>
+
+                <EditText
+                    android:id="@+id/etCodigoAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:hint="Novo Código"
+                    android:minHeight="48dp"/>
+
+                <EditText
+                    android:id="@+id/etDescricaoAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:hint="Nova Descrição"
+                    android:minHeight="48dp"/>
+
+                <EditText
+                    android:id="@+id/etQuantidadeAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nova Quantidade"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:inputType="number"
+                    android:minHeight="48dp"/>
+
+                <EditText
+                    android:id="@+id/etUnidadeAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:hint="Nova Unidade Natal"
+                    android:minHeight="48dp"/>
+
+                <EditText
+                    android:id="@+id/etUniAtualAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:hint="Nova Unidade Atual"
+                    android:minHeight="48dp"
+                    android:layout_marginBottom="12dp"/>
+
+                <EditText
+                    android:id="@+id/etCorAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:hint="Nova Cor"
+                    android:minHeight="48dp"
+                    android:layout_marginBottom="12dp"/>
+
+                <EditText
+                    android:id="@+id/etMarcaAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:hint="Nova Marca/Referência"
+                    android:minHeight="48dp"
+                    android:layout_marginBottom="12dp"/>
+
+                <EditText
+                    android:id="@+id/etDescDetalhadaAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:hint="Nova Descrição Detalhada"
+                    android:gravity="top|start"
+                    android:minHeight="48dp"
+                    android:layout_marginBottom="12dp"
+                    android:inputType="textMultiLine"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <Button
+                        android:id="@+id/btnSelecionarFotoAlt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="📷 ALTERAR FOTO"
+                        android:backgroundTint="#33FFFFFF"
+                        android:textColor="#FFFFFF"
+                        app:cornerRadius="8dp"/>
+
+                    <ImageView
+                        android:id="@+id/ivPreviewFotoAlt"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="16dp"
+                        android:scaleType="centerCrop"
+                        android:background="#33FFFFFF"
+                        android:visibility="gone"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Atualizar"
+                    android:textColor="#1a4b9f"
+                    android:backgroundTint="#FFFFFF"
+                    app:cornerRadius="12dp"
+                    android:textStyle="bold"
+                    android:minHeight="48dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#4DFFFFFF"
+                    android:layout_marginVertical="24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DELETAR PRODUTO"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <AutoCompleteTextView
+                    android:id="@+id/etNomeDeletar"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Nome do Produto (Selecione na lista)"
+                    android:textColorHint="#E0E0E0"
+                    android:textColor="#FFFFFF"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:completionThreshold="1"
+                    android:popupBackground="#E6FFFFFF"/>
+
+                <Button
+                    android:id="@+id/btnDeletar"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="Deletar"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#ef5e31"
+                    app:cornerRadius="12dp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include layout="@layout/layout_sidebar" />
+</androidx.drawerlayout.widget.DrawerLayout>
