@@ -1,71 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    android:background="@drawable/bg_input_glass"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="16dp"
+    android:layout_margin="8dp"
+    android:background="#333344">
 
     <TextView
-        android:id="@+id/tvNomeEmprestimo"
+        android:id="@+id/tvPedidoNome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nome do Solicitante"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/neo_sans_bold_italic"
-        android:layout_marginBottom="4dp"/>
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/tvUnidadeEmprestimo"
+        android:id="@+id/tvPedidoUnidade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unidade"
-        android:textColor="#E6FFFFFF"
-        android:textSize="14sp"
-        android:fontFamily="@font/neo_sans_medium"/>
+        android:textColor="#CCC"
+        android:textSize="14sp"/>
 
     <TextView
-        android:id="@+id/tvDataEmprestimo"
+        android:id="@+id/tvPedidoProdutos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Data"
-        android:textColor="#E6FFFFFF"
-        android:textSize="14sp"
-        android:fontFamily="@font/neo_sans_medium"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="#FFD700"
+        android:textStyle="italic"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tvPedidoPrioridade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF5252"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tvPedidoMotivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#AAA"
+        android:layout_marginTop="4dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
         <Button
-            android:id="@+id/btnAprovar"
+            android:id="@+id/btnAutorizar"
             android:layout_width="0dp"
-            android:layout_height="48dp"
             android:layout_weight="1"
-            android:text="Aprovar"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#1a4b9f"
-            android:layout_marginEnd="8dp"
-            app:cornerRadius="12dp"
-            android:fontFamily="@font/neo_sans_bold_italic"/>
-
+            android:layout_height="wrap_content"
+            android:text="Autorizar"
+            android:backgroundTint="#4CAF50"/>
         <Button
             android:id="@+id/btnRecusar"
             android:layout_width="0dp"
-            android:layout_height="48dp"
             android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:text="Recusar"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#ef5e31"
-            android:layout_marginStart="8dp"
-            app:cornerRadius="12dp"
-            android:fontFamily="@font/neo_sans_bold_italic"/>
+            android:backgroundTint="#F44336"
+            android:layout_marginStart="8dp"/>
     </LinearLayout>
 </LinearLayout>

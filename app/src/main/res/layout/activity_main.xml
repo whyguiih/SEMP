@@ -108,14 +108,16 @@
 
     <TextView
         android:id="@+id/tvFooter"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:text="Copyright © 2026. Todos os direitos reservados."
-        android:textAlignment="center"
+        android:gravity="center"
         android:textColor="#CCFFFFFF"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:fontFamily="@font/neo_sans_italic" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,7 +12,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="12dp"
         app:cardBackgroundColor="#33FFFFFF"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp">
@@ -23,6 +23,13 @@
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_gallery" />
     </androidx.cardview.widget.CardView>
+
+    <CheckBox
+        android:id="@+id/cbSelecionarProduto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:buttonTint="#FFFFFF" />
 
     <LinearLayout
         android:layout_width="0dp"
