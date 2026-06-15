@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:adjustViewBounds="true"
+        android:contentDescription="Logotipo SENAI"
         android:src="@drawable/senai_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +72,8 @@
             android:background="@drawable/bg_input_glass"
             android:paddingHorizontal="16dp"
             android:inputType="text"
+            android:autofillHints="username"
+            android:imeOptions="actionNext"
             android:textColor="#000000"
             android:fontFamily="@font/neo_sans_regular" />
 
@@ -91,6 +94,8 @@
             android:background="@drawable/bg_input_glass"
             android:paddingHorizontal="16dp"
             android:inputType="textPassword"
+            android:autofillHints="password"
+            android:imeOptions="actionDone"
             android:textColor="#000000"
             android:fontFamily="@font/neo_sans_regular" />
 
@@ -111,7 +116,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="Copyright © 2026. Todos os direitos reservados."
+        android:text="Copyright © Threeeo 2026. Todos os direitos reservados."
         android:gravity="center"
         android:textColor="#CCFFFFFF"
         android:textSize="12sp"

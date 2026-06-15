@@ -2,6 +2,10 @@ package com.example.semp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +20,22 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
 
     private List<Produto> listaProdutos;
     private Context context;
+    // Cache de memória para evitar travamentos ao rolar a lista (Base64 é pesado)
+    private LruCache<String, Bitmap> memoryCache;
 
     public EstoqueAdapter(List<Produto> listaProdutos, Context context) {
         this.listaProdutos = listaProdutos;
         this.context = context;
+
+        // Configuração do tamanho do cache (1/8 da memória máxima disponível)
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 8;
+        memoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount() / 1024;
+            }
+        };
     }
 
     @NonNull
@@ -33,28 +49,35 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
     public void onBindViewHolder(@NonNull ProdutoViewHolder holder, int position) {
         Produto produto = listaProdutos.get(position);
 
-        holder.tvNome.setText(produto.nome);
-        holder.tvCodigo.setText("Cód: " + produto.codigo);
+        holder.tvNome.setText(produto.nome != null ? produto.nome : "Sem nome");
+        holder.tvCodigo.setText("Cód: " + (produto.codigo != null ? produto.codigo : "N/A"));
         holder.tvQuantidade.setText("Em Estoque: " + produto.quant);
 
-        // Carregar imagem se houver
+        // Otimização: Carregamento de imagem usando Cache
         if (produto.foto != null && !produto.foto.isEmpty()) {
-            try {
-                String base64Data = produto.foto;
-                if (base64Data.contains(",")) {
-                    base64Data = base64Data.split(",")[1];
+            Bitmap bitmapCached = memoryCache.get(String.valueOf(produto.id_estoque));
+            if (bitmapCached != null) {
+                holder.ivProduto.setImageBitmap(bitmapCached); // Usa do cache, muito rápido!
+            } else {
+                try {
+                    String base64Data = produto.foto;
+                    if (base64Data.contains(",")) {
+                        base64Data = base64Data.split(",")[1];
+                    }
+                    byte[] decodedString = Base64.decode(base64Data, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                    // Salva no cache para as próximas rolagens
+                    memoryCache.put(String.valueOf(produto.id_estoque), decodedByte);
+                    holder.ivProduto.setImageBitmap(decodedByte);
+                } catch (Exception e) {
+                    holder.ivProduto.setImageResource(android.R.drawable.ic_menu_gallery);
                 }
-                byte[] decodedString = android.util.Base64.decode(base64Data, android.util.Base64.DEFAULT);
-                android.graphics.Bitmap decodedByte = android.graphics.BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                holder.ivProduto.setImageBitmap(decodedByte);
-            } catch (Exception e) {
-                holder.ivProduto.setImageResource(android.R.drawable.ic_menu_gallery);
             }
         } else {
             holder.ivProduto.setImageResource(android.R.drawable.ic_menu_gallery);
         }
 
-        // AGORA TODO MUNDO VAI PARA A TELA DE DETALHES DO PRODUTO
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProdutoDetalheActivity.class);
             intent.putExtra("PRODUTO_ID", String.valueOf(produto.id_estoque));
@@ -73,7 +96,7 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
 
     @Override
     public int getItemCount() {
-        return listaProdutos.size();
+        return listaProdutos != null ? listaProdutos.size() : 0;
     }
 
     public static class ProdutoViewHolder extends RecyclerView.ViewHolder {
@@ -82,7 +105,6 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
 
         public ProdutoViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Linka com os novos IDs que criamos no arquivo item_estoque.xml
             tvNome = itemView.findViewById(R.id.tvNomeProduto);
             tvCodigo = itemView.findViewById(R.id.tvCodigoProduto);
             tvQuantidade = itemView.findViewById(R.id.tvQuantidade);

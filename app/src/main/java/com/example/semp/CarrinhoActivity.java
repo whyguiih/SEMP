@@ -1,6 +1,8 @@
 package com.example.semp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +18,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-// Importa todos os modelos (Produto, GenericResponse, etc)
 import com.example.semp.models.*;
+
+import java.util.HashMap;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,11 +30,15 @@ public class CarrinhoActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private java.util.List<Integer> idsSelecionadosParaPedido = new java.util.ArrayList<>();
+    private String usuarioSeguro = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carrinho);
+
+        SharedPreferences prefs = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
+        usuarioSeguro = prefs.getString("usuarioLogado", "");
 
         drawerLayout = findViewById(R.id.drawerLayoutCarrinho);
         ImageView btnMenu = findViewById(R.id.btnMenu);
@@ -54,7 +61,7 @@ public class CarrinhoActivity extends AppCompatActivity {
         });
 
         if (btnFinalizarPedido != null) {
-            btnFinalizarPedido.setEnabled(false); // Só habilita se selecionar algo
+            btnFinalizarPedido.setEnabled(false);
             btnFinalizarPedido.setOnClickListener(v -> {
                 Intent intent = new Intent(CarrinhoActivity.this, FazerPedidoActivity.class);
                 intent.putIntegerArrayListExtra("IDS_SELECIONADOS", new java.util.ArrayList<>(idsSelecionadosParaPedido));
@@ -77,14 +84,12 @@ public class CarrinhoActivity extends AppCompatActivity {
         TextView tvCarrinhoVazio = findViewById(R.id.tvCarrinhoVazio);
         Button btnFinalizarPedido = findViewById(R.id.btnFinalizarPedido);
 
-        // BUSCA PRIMEIRO TODOS OS PRODUTOS PARA TER OS DETALHES COMPLETOS
         RetrofitClient.getApi().getProdutos().enqueue(new Callback<List<Produto>>() {
             @Override
             public void onResponse(Call<List<Produto>> call, Response<List<Produto>> responseProd) {
                 List<Produto> todosProdutos = responseProd.body();
 
-                // DEPOIS BUSCA O CARRINHO
-                RetrofitClient.getApi().getCarrinho(MainActivity.usuarioLogado).enqueue(new Callback<List<Produto>>() {
+                RetrofitClient.getApi().getCarrinho(usuarioSeguro).enqueue(new Callback<List<Produto>>() {
                     @Override
                     public void onResponse(Call<List<Produto>> call, Response<List<Produto>> responseCarrinho) {
                         if (isDestroyed() || isFinishing()) return;
@@ -92,21 +97,26 @@ public class CarrinhoActivity extends AppCompatActivity {
                         if (responseCarrinho.isSuccessful() && responseCarrinho.body() != null) {
                             List<Produto> itensCarrinho = responseCarrinho.body();
 
-                            // MESCLAGEM: Preenche os dados faltantes do carrinho com os dados do estoque
+                            // OTIMIZAÇÃO: Uso de HashMap para evitar O(n*m) - Crucial para estoques grandes
                             if (todosProdutos != null) {
+                                HashMap<String, Produto> mapaProdutos = new HashMap<>();
+                                for (Produto p : todosProdutos) {
+                                    if (p.nome != null) mapaProdutos.put(p.nome.toLowerCase(), p);
+                                }
+
                                 for (Produto itemC : itensCarrinho) {
-                                    for (Produto p : todosProdutos) {
-                                        if (p.nome != null && p.nome.equalsIgnoreCase(itemC.nome)) {
-                                            itemC.id_estoque = p.id_estoque;
-                                            itemC.codigo = p.codigo;
-                                            itemC.descricao = p.descricao;
-                                            itemC.descricao_detalhada = p.descricao_detalhada;
-                                            itemC.cor = p.cor;
-                                            itemC.marca_ref = p.marca_ref;
-                                            itemC.uni_natal = p.uni_natal;
-                                            itemC.quant = p.quant; // Estoque total
-                                            itemC.foto = p.foto;
-                                            break;
+                                    if (itemC.nome != null) {
+                                        Produto pEstoque = mapaProdutos.get(itemC.nome.toLowerCase());
+                                        if (pEstoque != null) {
+                                            itemC.id_estoque = pEstoque.id_estoque;
+                                            itemC.codigo = pEstoque.codigo;
+                                            itemC.descricao = pEstoque.descricao;
+                                            itemC.descricao_detalhada = pEstoque.descricao_detalhada;
+                                            itemC.cor = pEstoque.cor;
+                                            itemC.marca_ref = pEstoque.marca_ref;
+                                            itemC.uni_natal = pEstoque.uni_natal;
+                                            itemC.quant = pEstoque.quant;
+                                            itemC.foto = pEstoque.foto;
                                         }
                                     }
                                 }
@@ -138,11 +148,8 @@ public class CarrinhoActivity extends AppCompatActivity {
                                         intent.putExtra("PRODUTO_MARCA", produto.marca_ref);
                                         intent.putExtra("PRODUTO_UNI_NATAL", produto.uni_natal);
                                         intent.putExtra("PRODUTO_FOTO", produto.foto != null ? produto.foto : "");
-                                        
-                                        int qtdNoCarrinho = 1;
-                                        if (produto.quantidade > 0) qtdNoCarrinho = produto.quantidade;
-                                        else if (produto.carrinho > 0) qtdNoCarrinho = produto.carrinho;
 
+                                        int qtdNoCarrinho = produto.quantidade > 0 ? produto.quantidade : (produto.carrinho > 0 ? produto.carrinho : 1);
                                         intent.putExtra("PRODUTO_QTD_CARRINHO", String.valueOf(qtdNoCarrinho));
                                         startActivity(intent);
                                     }
@@ -150,7 +157,7 @@ public class CarrinhoActivity extends AppCompatActivity {
                                     @Override
                                     public void onDeleteClick(Produto produto) {
                                         int qtdParaRemover = produto.quantidade > 0 ? produto.quantidade : produto.carrinho;
-                                        RetrofitClient.getApi().removerDoCarrinho(MainActivity.usuarioLogado, new CarrinhoRequest(produto.nome, qtdParaRemover)).enqueue(new Callback<GenericResponse>() {
+                                        RetrofitClient.getApi().removerDoCarrinho(usuarioSeguro, new CarrinhoRequest(produto.nome, qtdParaRemover)).enqueue(new Callback<GenericResponse>() {
                                             @Override
                                             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                                                 if(response.isSuccessful() && response.body() != null && response.body().sucesso) {
@@ -174,26 +181,18 @@ public class CarrinhoActivity extends AppCompatActivity {
                                     }
                                 }));
                             }
-                        } else {
-                            recyclerView.setVisibility(View.GONE);
-                            if (tvCarrinhoVazio != null) tvCarrinhoVazio.setVisibility(View.VISIBLE);
-                            if (btnFinalizarPedido != null) btnFinalizarPedido.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<List<Produto>> call, Throwable t) {
-                        if (!isDestroyed() && !isFinishing()) {
-                            Toast.makeText(CarrinhoActivity.this, "Sem conexão com o servidor", Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(CarrinhoActivity.this, "Erro ao buscar carrinho", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
             @Override
-            public void onFailure(Call<List<Produto>> call, Throwable t) {
-                // Se falhar buscar produtos, tenta buscar o carrinho mesmo incompleto
-            }
+            public void onFailure(Call<List<Produto>> call, Throwable t) {}
         });
     }
 

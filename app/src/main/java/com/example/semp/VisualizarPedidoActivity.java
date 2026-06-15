@@ -1,5 +1,7 @@
 package com.example.semp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -18,12 +20,19 @@ public class VisualizarPedidoActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private RecyclerView recyclerView;
 
+    // Variáveis seguras
+    private String nivelSeguro = "0";
+    private String unidadeSegura = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // AQUI ESTAVA O ERRO DE ABRIR A PÁGINA DE EMPRÉSTIMO!
-        // Tem que ser activity_visualizar_pedido
         setContentView(R.layout.activity_visualizar_pedido);
+
+        // Resgate pelo SharedPreferences
+        SharedPreferences prefs = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
+        nivelSeguro = prefs.getString("nivelContaAtual", "0");
+        unidadeSegura = prefs.getString("unidadeAtual", "");
 
         drawerLayout = findViewById(R.id.drawerLayout);
         ImageView btnMenu = findViewById(R.id.btnMenu);
@@ -41,11 +50,10 @@ public class VisualizarPedidoActivity extends AppCompatActivity {
     }
 
     private void carregarPedidos() {
-        // Agora busca todos os pedidos da unidade, conforme solicitado
         RetrofitClient.getApi().getMeusPedidos(
-                null, // Enviamos null no usuário para que a API retorne todos da unidade
-                MainActivity.nivelContaAtual,
-                MainActivity.unidadeAtual
+                null,
+                nivelSeguro,
+                unidadeSegura
         ).enqueue(new Callback<List<PedidosPendentes>>() {
             @Override
             public void onResponse(Call<List<PedidosPendentes>> call, Response<List<PedidosPendentes>> response) {

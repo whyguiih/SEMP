@@ -1,6 +1,8 @@
 package com.example.semp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,11 +24,16 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
 
     private int quantidadeSelecionada = 1;
     private int estoqueMaximo = 0;
+    private String usuarioSeguro = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produto_detalhe);
+
+        // SharedPreferences para prevenir erro caso minimize o app
+        SharedPreferences prefs = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
+        usuarioSeguro = prefs.getString("usuarioLogado", "");
 
         View mainView = findViewById(R.id.mainContentLayoutDetalhe);
         if (mainView != null) {
@@ -53,17 +60,8 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         String qtdEstoqueString = intent.getStringExtra("PRODUTO_QTD") != null ? intent.getStringExtra("PRODUTO_QTD") : "0";
         String qtdCarrinhoString = intent.getStringExtra("PRODUTO_QTD_CARRINHO") != null ? intent.getStringExtra("PRODUTO_QTD_CARRINHO") : "1";
 
-        try {
-            estoqueMaximo = Integer.parseInt(qtdEstoqueString);
-        } catch (NumberFormatException e) {
-            estoqueMaximo = 0;
-        }
-
-        try {
-            quantidadeSelecionada = Integer.parseInt(qtdCarrinhoString);
-        } catch (NumberFormatException e) {
-            quantidadeSelecionada = 1;
-        }
+        try { estoqueMaximo = Integer.parseInt(qtdEstoqueString); } catch (NumberFormatException e) { estoqueMaximo = 0; }
+        try { quantidadeSelecionada = Integer.parseInt(qtdCarrinhoString); } catch (NumberFormatException e) { quantidadeSelecionada = 1; }
 
         ((TextView) findViewById(R.id.tvNomeDetalhe)).setText(nome);
         ((TextView) findViewById(R.id.tvCodigoDetalhe)).setText("Código: " + codigo);
@@ -74,14 +72,11 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tvUniNatalDetalhe)).setText("Unidade Natal: " + uniNatal);
         ((TextView) findViewById(R.id.tvEstoqueDetalhe)).setText("Estoque disponível: " + estoqueMaximo);
 
-        // Carregar imagem se houver
         ImageView ivFoto = findViewById(R.id.ivProdutoFoto);
         if (ivFoto != null && !fotoBase64.isEmpty()) {
             try {
                 String pureBase64 = fotoBase64;
-                if (pureBase64.contains(",")) {
-                    pureBase64 = pureBase64.split(",")[1];
-                }
+                if (pureBase64.contains(",")) pureBase64 = pureBase64.split(",")[1];
                 byte[] decodedString = android.util.Base64.decode(pureBase64, android.util.Base64.DEFAULT);
                 android.graphics.Bitmap decodedByte = android.graphics.BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 ivFoto.setImageBitmap(decodedByte);
@@ -90,7 +85,6 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
             }
         }
 
-        // Referencia o EditText e os botões
         EditText tvQtdSelecionada = findViewById(R.id.tvQuantidadeSelecionada);
         TextView btnDiminuir = findViewById(R.id.btnDiminuirQtd);
         TextView btnAumentar = findViewById(R.id.btnAumentarQtd);
@@ -103,7 +97,6 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
             btnAdicionarCarrinho.setText("Fora de Estoque");
         } else {
             tvQtdSelecionada.setText(String.valueOf(quantidadeSelecionada));
-            // Se já tem quantidade no carrinho (veio do editar), muda o texto do botão
             if (intent.hasExtra("PRODUTO_QTD_CARRINHO")) {
                 btnAdicionarCarrinho.setText("Atualizar Carrinho");
             }
@@ -128,43 +121,38 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         });
 
         btnAdicionarCarrinho.setOnClickListener(v -> {
-            int qtdDigitada = lerQuantidadeDoCampo(tvQtdSelecionada);
-            quantidadeSelecionada = Math.min(qtdDigitada, estoqueMaximo);
-
-            String usuarioId = MainActivity.usuarioLogado;
-            if (usuarioId == null || usuarioId.isEmpty()) {
-                Toast.makeText(ProdutoDetalheActivity.this, "Erro: Usuário não está logado!", Toast.LENGTH_LONG).show();
+            if (usuarioSeguro == null || usuarioSeguro.isEmpty()) {
+                Toast.makeText(ProdutoDetalheActivity.this, "Erro: Faça o login novamente!", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            CarrinhoRequest request = new CarrinhoRequest(nome, quantidadeSelecionada);
+            int qtdDigitada = lerQuantidadeDoCampo(tvQtdSelecionada);
+            quantidadeSelecionada = Math.min(qtdDigitada, estoqueMaximo);
 
-            // Verificamos se viemos da tela de edição para decidir se 'resetamos' a quantidade ou somamos
+            btnAdicionarCarrinho.setEnabled(false);
+            btnAdicionarCarrinho.setText("Aguarde...");
+
+            CarrinhoRequest request = new CarrinhoRequest(nome, quantidadeSelecionada);
             boolean ehEdicao = getIntent().hasExtra("PRODUTO_QTD_CARRINHO");
 
             if (ehEdicao) {
-                // Se é edição, primeiro removemos o item para depois adicionar com a quantidade exata
-                // Isso contorna o comportamento da sua API que sempre SOMA (quantidade = quantidade + ?)
-                RetrofitClient.getApi().removerDoCarrinho(usuarioId, request).enqueue(new Callback<GenericResponse>() {
+                RetrofitClient.getApi().removerDoCarrinho(usuarioSeguro, request).enqueue(new Callback<GenericResponse>() {
                     @Override
                     public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                        // Após remover, adicionamos novamente com a nova quantidade desejada
-                        adicionarNovoAoCarrinho(usuarioId, request);
+                        adicionarNovoAoCarrinho(usuarioSeguro, request, btnAdicionarCarrinho);
                     }
-
                     @Override
                     public void onFailure(Call<GenericResponse> call, Throwable t) {
-                        adicionarNovoAoCarrinho(usuarioId, request);
+                        adicionarNovoAoCarrinho(usuarioSeguro, request, btnAdicionarCarrinho);
                     }
                 });
             } else {
-                // Se é uma adição nova (vinda do estoque), apenas adiciona normalmente (vai somar se já existir)
-                adicionarNovoAoCarrinho(usuarioId, request);
+                adicionarNovoAoCarrinho(usuarioSeguro, request, btnAdicionarCarrinho);
             }
         });
     }
 
-    private void adicionarNovoAoCarrinho(String usuarioId, CarrinhoRequest request) {
+    private void adicionarNovoAoCarrinho(String usuarioId, CarrinhoRequest request, Button btn) {
         RetrofitClient.getApi().adicionarAoCarrinho(usuarioId, request).enqueue(new Callback<GenericResponse>() {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
@@ -172,18 +160,21 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
                     Toast.makeText(ProdutoDetalheActivity.this, "Carrinho atualizado!", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
+                    btn.setEnabled(true);
+                    btn.setText("Tentar Novamente");
                     Toast.makeText(ProdutoDetalheActivity.this, "Erro ao atualizar carrinho", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<GenericResponse> call, Throwable t) {
+                btn.setEnabled(true);
+                btn.setText("Tentar Novamente");
                 Toast.makeText(ProdutoDetalheActivity.this, "Erro de conexão", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // Cria uma função auxiliar para evitar que o App quebre se o usuário apagar o número deixando o campo vazio
     private int lerQuantidadeDoCampo(EditText et) {
         try {
             return Integer.parseInt(et.getText().toString());

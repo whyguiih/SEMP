@@ -62,4 +62,3 @@ public interface ApiService {
             @Body CarrinhoRequest request
     );
 }
-

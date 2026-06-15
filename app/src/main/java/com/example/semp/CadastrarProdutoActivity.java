@@ -29,6 +29,7 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private String fotoBase64 = "";
     private ImageView ivPreview;
+    private Button btnSalvar;
 
     private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -54,10 +55,7 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
 
         Button btnAcessarAlterar = findViewById(R.id.btnAcessarAlterarEstoque);
         if (btnAcessarAlterar != null) {
-            btnAcessarAlterar.setOnClickListener(v -> {
-                Intent intent = new Intent(CadastrarProdutoActivity.this, ConfigEstoqueActivity.class);
-                startActivity(intent);
-            });
+            btnAcessarAlterar.setOnClickListener(v -> startActivity(new Intent(CadastrarProdutoActivity.this, ConfigEstoqueActivity.class)));
         }
 
         EditText etNome = findViewById(R.id.etCadNome);
@@ -69,7 +67,7 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
         EditText etMarca = findViewById(R.id.etCadMarca);
         EditText etCor = findViewById(R.id.etCadCor);
         EditText etDescDetalhada = findViewById(R.id.etCadDescDetalhada);
-        Button btnSalvar = findViewById(R.id.btnSalvarProduto);
+        btnSalvar = findViewById(R.id.btnSalvarProduto);
         Button btnSelecionarFoto = findViewById(R.id.btnSelecionarFoto);
         ivPreview = findViewById(R.id.ivPreviewFoto);
 
@@ -81,31 +79,30 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
         btnSalvar.setOnClickListener(v -> {
             String nome = etNome.getText().toString().trim();
             String codigo = etCodigo.getText().toString().trim();
-            String desc = etDescricao.getText().toString().trim();
-            String uniNatal = etUniNatal.getText().toString().trim();
-            String uniAtual = etUniAtual.getText().toString().trim();
-            String marca = etMarca.getText().toString().trim();
-            String cor = etCor.getText().toString().trim();
-            String descDetalhada = etDescDetalhada.getText().toString().trim();
-
-            int qtd = 0;
-            try {
-                qtd = Integer.parseInt(etQtd.getText().toString().trim());
-            } catch (NumberFormatException e) {
-                qtd = 0;
-            }
 
             if (nome.isEmpty() || codigo.isEmpty()) {
                 Toast.makeText(this, "Nome e Código são obrigatórios!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            ProdutoRequest request = new ProdutoRequest(nome, codigo, desc, qtd, uniNatal, marca, cor, descDetalhada, fotoBase64, uniAtual);
+            int qtd = 0;
+            try { qtd = Integer.parseInt(etQtd.getText().toString().trim()); } catch (Exception ignored) {}
+
+            btnSalvar.setEnabled(false); // Evitar duplo clique
+            btnSalvar.setText("Salvando...");
+
+            ProdutoRequest request = new ProdutoRequest(nome, codigo, etDescricao.getText().toString().trim(),
+                    qtd, etUniNatal.getText().toString().trim(), etMarca.getText().toString().trim(),
+                    etCor.getText().toString().trim(), etDescDetalhada.getText().toString().trim(),
+                    fotoBase64, etUniAtual.getText().toString().trim());
 
             RetrofitClient.getApi().cadastrarProduto(request).enqueue(new Callback<GenericResponse>() {
                 @Override
                 public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                    if (response.isSuccessful() && response.body() != null && response.body().sucesso) {
+                    btnSalvar.setEnabled(true);
+                    btnSalvar.setText("Salvar Produto");
+
+                    if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().sucesso)) {
                         Toast.makeText(CadastrarProdutoActivity.this, "Produto salvo com sucesso!", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
@@ -115,7 +112,9 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<GenericResponse> call, Throwable t) {
-                    Toast.makeText(CadastrarProdutoActivity.this, "Erro de Conexão com a API", Toast.LENGTH_SHORT).show();
+                    btnSalvar.setEnabled(true);
+                    btnSalvar.setText("Salvar Produto");
+                    Toast.makeText(CadastrarProdutoActivity.this, "Erro de Conexão", Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -125,16 +124,22 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            
-            // Redimensiona para não estourar o limite da API (Base64 grande pesa)
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, true);
-            
+
+            // OTIMIZAÇÃO: Manter o Aspect Ratio (Proporção real da imagem)
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            float ratio = (float) width / height;
+            int newWidth = 400; // Largura máxima desejada
+            int newHeight = (int) (newWidth / ratio);
+
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream); // Comprime qualidade 70% para a API
             byte[] byteArray = outputStream.toByteArray();
-            
+
             fotoBase64 = "data:image/jpeg;base64," + Base64.encodeToString(byteArray, Base64.NO_WRAP);
-            
+
             if (ivPreview != null) {
                 ivPreview.setImageBitmap(scaledBitmap);
                 ivPreview.setVisibility(View.VISIBLE);

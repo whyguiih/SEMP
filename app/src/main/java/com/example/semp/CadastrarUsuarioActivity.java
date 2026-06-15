@@ -9,6 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.semp.models.GenericResponse;
+import com.example.semp.models.UsuarioRequest;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class CadastrarUsuarioActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
 
@@ -33,27 +40,55 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
         btnSalvar.setOnClickListener(v -> {
             String user = etUsuario.getText().toString().trim();
             String senha = etSenha.getText().toString().trim();
-            String nivel = etNivel.getText().toString().trim();
+            String nivelStr = etNivel.getText().toString().trim();
             String unidade = etUnidade.getText().toString().trim();
 
-            if (user.isEmpty() || senha.isEmpty() || nivel.isEmpty() || unidade.isEmpty()) {
+            if (user.isEmpty() || senha.isEmpty() || nivelStr.isEmpty() || unidade.isEmpty()) {
                 Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             // BLINDAGEM DOS NÍVEIS
-            if (!nivel.equals("0") && !nivel.equals("1") && !nivel.equals("2") && !nivel.equals("3")) {
+            if (!nivelStr.equals("0") && !nivelStr.equals("1") && !nivelStr.equals("2") && !nivelStr.equals("3")) {
                 Toast.makeText(this, "Erro: O nível deve ser APENAS 0, 1, 2 ou 3.", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            // AQUI você chamará o RetrofitClient.getApi().cadastrarUsuario(...) futuramente
-            Toast.makeText(CadastrarUsuarioActivity.this, "Usuário cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-            etUsuario.setText("");
-            etSenha.setText("");
-            etNivel.setText("");
-            etUnidade.setText("");
-            // Não dê 'finish()' aqui, para o master poder cadastrar vários seguidos sem o app fechar!
+            // Bloqueia o botão para evitar duplicação de cadastro
+            btnSalvar.setEnabled(false);
+            btnSalvar.setText("Salvando...");
+
+            int nivel = Integer.parseInt(nivelStr);
+            UsuarioRequest request = new UsuarioRequest(user, senha, nivel, unidade);
+
+            // Chamada REAL para a API
+            RetrofitClient.getApi().cadastrarUsuario(request).enqueue(new Callback<GenericResponse>() {
+                @Override
+                public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                    btnSalvar.setEnabled(true);
+                    btnSalvar.setText("Salvar Usuário");
+
+                    if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().sucesso)) {
+                        Toast.makeText(CadastrarUsuarioActivity.this, "Usuário cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                        // Limpa os campos para o master poder cadastrar vários seguidos
+                        etUsuario.setText("");
+                        etSenha.setText("");
+                        etNivel.setText("");
+                        etUnidade.setText("");
+                        etUsuario.requestFocus();
+                    } else {
+                        String msgErro = (response.body() != null && response.body().mensagem != null) ? response.body().mensagem : "Erro ao cadastrar usuário.";
+                        Toast.makeText(CadastrarUsuarioActivity.this, msgErro, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GenericResponse> call, Throwable t) {
+                    btnSalvar.setEnabled(true);
+                    btnSalvar.setText("Salvar Usuário");
+                    Toast.makeText(CadastrarUsuarioActivity.this, "Erro de conexão ao servidor.", Toast.LENGTH_LONG).show();
+                }
+            });
         });
     }
 }

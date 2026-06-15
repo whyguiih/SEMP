@@ -27,6 +27,7 @@ public class EstoqueActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private List<Produto> listaOriginalProdutos = new ArrayList<>();
+    private RecyclerView recyclerViewEstoque;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class EstoqueActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawerLayout);
         ImageView btnMenu = findViewById(R.id.btnMenu);
         EditText etPesquisa = findViewById(R.id.etPesquisa);
-        RecyclerView recyclerViewEstoque = findViewById(R.id.recyclerViewEstoque);
+        recyclerViewEstoque = findViewById(R.id.recyclerViewEstoque);
 
         View mainView = findViewById(R.id.mainContentLayout);
         if (mainView != null) {
@@ -60,7 +61,7 @@ public class EstoqueActivity extends AppCompatActivity {
 
         if (recyclerViewEstoque != null) {
             recyclerViewEstoque.setLayoutManager(new LinearLayoutManager(this));
-            buscarProdutosAPI(recyclerViewEstoque);
+            buscarProdutosAPI();
         }
 
         if (etPesquisa != null) {
@@ -72,51 +73,51 @@ public class EstoqueActivity extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    String termo = s.toString().toLowerCase();
-                    List<Produto> filtrados = new ArrayList<>();
-                    for (Produto p : listaOriginalProdutos) {
-                        if ((p.nome != null && p.nome.toLowerCase().contains(termo)) ||
-                            (p.codigo != null && p.codigo.toLowerCase().contains(termo))) {
-                            filtrados.add(p);
-                        }
-                    }
-                    if (recyclerViewEstoque != null) {
-                        recyclerViewEstoque.setAdapter(new EstoqueAdapter(filtrados, EstoqueActivity.this));
-                    }
+                    filtrarLista(s.toString().trim());
                 }
             });
         }
     }
 
-    private void buscarProdutosAPI(RecyclerView recyclerView) {
+    private void filtrarLista(String textoPequisa) {
+        if (listaOriginalProdutos == null) return;
+
+        String termo = textoPequisa.toLowerCase();
+        List<Produto> filtrados = new ArrayList<>();
+
+        for (Produto p : listaOriginalProdutos) {
+            if ((p.nome != null && p.nome.toLowerCase().contains(termo)) ||
+                    (p.codigo != null && p.codigo.toLowerCase().contains(termo))) {
+                filtrados.add(p);
+            }
+        }
+
+        if (recyclerViewEstoque != null) {
+            recyclerViewEstoque.setAdapter(new EstoqueAdapter(filtrados, EstoqueActivity.this));
+        }
+    }
+
+    private void buscarProdutosAPI() {
         RetrofitClient.getApi().getProdutos().enqueue(new Callback<List<Produto>>() {
             @Override
             public void onResponse(Call<List<Produto>> call, Response<List<Produto>> response) {
                 if (isDestroyed() || isFinishing()) return;
-                
+
                 if (response.isSuccessful() && response.body() != null) {
                     listaOriginalProdutos = response.body();
-                    recyclerView.setAdapter(new EstoqueAdapter(listaOriginalProdutos, EstoqueActivity.this));
+                    recyclerViewEstoque.setAdapter(new EstoqueAdapter(listaOriginalProdutos, EstoqueActivity.this));
+                } else {
+                    Toast.makeText(EstoqueActivity.this, "Nenhum produto encontrado.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<Produto>> call, Throwable t) {
                 if (!isDestroyed() && !isFinishing()) {
-                    Toast.makeText(EstoqueActivity.this, "Erro ao buscar produtos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EstoqueActivity.this, "Erro de rede ao buscar produtos", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-    }
-
-    private void abrirDetalhesProduto(Produto produto) {
-        Intent intent = new Intent(this, ProdutoDetalheActivity.class);
-        intent.putExtra("PRODUTO_ID", produto.id_estoque != 0 ? String.valueOf(produto.id_estoque) : "");
-        intent.putExtra("PRODUTO_NOME", produto.nome);
-        intent.putExtra("PRODUTO_CODIGO", produto.codigo);
-        intent.putExtra("PRODUTO_DESC", produto.descricao);
-        intent.putExtra("PRODUTO_QTD", produto.quant);
-        startActivity(intent);
     }
 
     private void configurarNavegacaoMenu() {

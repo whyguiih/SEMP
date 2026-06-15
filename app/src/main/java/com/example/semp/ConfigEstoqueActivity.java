@@ -87,7 +87,6 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
         configurarNavegacaoMenu();
         carregarProdutosAPI();
 
-        // --- CAMPOS DE ENTRADA ---
         AutoCompleteTextView etNome = findViewById(R.id.etNomeAtualizar);
         EditText etId = findViewById(R.id.etIdAtualizar);
         EditText etCodigo = findViewById(R.id.etCodigoAtualizar);
@@ -98,13 +97,12 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
         EditText etCor = findViewById(R.id.etCorAtualizar);
         EditText etMarca = findViewById(R.id.etMarcaAtualizar);
         EditText etDescDetalhada = findViewById(R.id.etDescDetalhadaAtualizar);
-        
+
         Button btnSelecionarFoto = findViewById(R.id.btnSelecionarFotoAlt);
         ivPreview = findViewById(R.id.ivPreviewFotoAlt);
 
         AutoCompleteTextView etNomeDel = findViewById(R.id.etNomeDeletar);
 
-        // Lógica para puxar informações ao selecionar na lista
         if (etNome != null) {
             etNome.setOnItemClickListener((parent, view, position, id) -> {
                 String nomeSelecionado = (String) parent.getItemAtPosition(position);
@@ -129,9 +127,11 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
                 Integer novaQtd = null;
                 try {
                     if (!novaQtdStr.isEmpty()) novaQtd = Integer.parseInt(novaQtdStr);
-                } catch (Exception e) {}
+                } catch (Exception ignored) {}
 
-                // CRITICAL: Consolidating into ONE request to avoid API flood and "Processing" stuck state
+                btnAtualizar.setEnabled(false);
+                btnAtualizar.setText("Atualizando...");
+
                 UpdateProdutoRequest req = new UpdateProdutoRequest(
                         produtoSelecionado.id_estoque,
                         etNome.getText().toString().trim(),
@@ -146,14 +146,15 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
                         fotoBase64.isEmpty() ? null : fotoBase64
                 );
 
-                Toast.makeText(this, "Enviando alterações...", Toast.LENGTH_SHORT).show();
-
                 RetrofitClient.getApi().atualizarProduto(req).enqueue(new Callback<GenericResponse>() {
                     @Override
                     public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().sucesso) {
+                        btnAtualizar.setEnabled(true);
+                        btnAtualizar.setText("Atualizar Produto");
+
+                        if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().sucesso)) {
                             Toast.makeText(ConfigEstoqueActivity.this, "Produto atualizado com sucesso!", Toast.LENGTH_SHORT).show();
-                            fotoBase64 = ""; // Clear for next use
+                            fotoBase64 = "";
                             carregarProdutosAPI();
                         } else {
                             String erro = response.body() != null ? response.body().mensagem : "Erro no servidor";
@@ -163,6 +164,8 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<GenericResponse> call, Throwable t) {
+                        btnAtualizar.setEnabled(true);
+                        btnAtualizar.setText("Atualizar Produto");
                         Toast.makeText(ConfigEstoqueActivity.this, "Erro de conexão!", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -186,11 +189,17 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
                     return;
                 }
 
+                btnDeletar.setEnabled(false);
+                btnDeletar.setText("Deletando...");
+
                 DeleteProdutoRequest req = new DeleteProdutoRequest(codigoParaDeletar);
                 RetrofitClient.getApi().deletarProduto(req).enqueue(new Callback<GenericResponse>() {
                     @Override
                     public void onResponse(Call<GenericResponse> call, Response<GenericResponse> r) {
-                        if (r.isSuccessful() && r.body() != null && r.body().sucesso) {
+                        btnDeletar.setEnabled(true);
+                        btnDeletar.setText("Deletar Produto");
+
+                        if (r.isSuccessful() && r.body() != null && Boolean.TRUE.equals(r.body().sucesso)) {
                             Toast.makeText(ConfigEstoqueActivity.this, "Produto deletado!", Toast.LENGTH_SHORT).show();
                             carregarProdutosAPI();
                             etNomeDel.setText("");
@@ -200,6 +209,8 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(Call<GenericResponse> call, Throwable t) {
+                        btnDeletar.setEnabled(true);
+                        btnDeletar.setText("Deletar Produto");
                         Toast.makeText(ConfigEstoqueActivity.this, "Erro de conexão", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -211,16 +222,22 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            
-            // REDIMENSIONAMENTO AGRESSIVO: Para garantir que o Cloudflare aceite (limite de 1MB por request no Free tier)
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 250, 250, true);
-            
+
+            // OTIMIZAÇÃO: Mantendo a proporção da imagem (Aspect Ratio) sem achatá-la
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            float ratio = (float) width / height;
+            int newWidth = 400; // Tamanho ideal que respeita o limite da API (cerca de 1MB)
+            int newHeight = (int) (newWidth / ratio);
+
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 40, outputStream);
+            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream);
             byte[] byteArray = outputStream.toByteArray();
-            
+
             fotoBase64 = "data:image/jpeg;base64," + Base64.encodeToString(byteArray, Base64.NO_WRAP);
-            
+
             if (ivPreview != null) {
                 ivPreview.setImageBitmap(scaledBitmap);
                 ivPreview.setVisibility(View.VISIBLE);
@@ -270,7 +287,6 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
                 if (etMarca != null) etMarca.setText(p.marca_ref);
                 if (etDescDet != null) etDescDet.setText(p.descricao_detalhada);
 
-                // Mostrar prévia da foto atual se existir
                 if (p.foto != null && !p.foto.isEmpty()) {
                     try {
                         String pureBase64 = p.foto;

@@ -1,7 +1,11 @@
 package com.example.semp;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -11,10 +15,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.semp.models.GenericResponse;
 import com.example.semp.models.PedidoRequest;
-
-import java.util.Calendar;
+import com.google.gson.Gson;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,14 +30,23 @@ public class FazerPedidoActivity extends AppCompatActivity {
 
     private EditText etEmail, etDataReserva, etJustificativa, etNomeUsuario;
     private Spinner spinnerPrioridade;
+    private Button btnConfirmar;
     private List<Integer> listaIdsParaPedido = new ArrayList<>();
+
+    // Variáveis seguras da sessão
+    private String usuarioSeguro = "Usuario";
+    private String unidadeSegura = "Unidade Central";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fazer_pedido);
 
-        // Recebe os IDs selecionados do carrinho
+        // Busca dados da sessão de forma segura (previne NullPointerException)
+        SharedPreferences prefs = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
+        usuarioSeguro = prefs.getString("usuarioLogado", "Usuario");
+        unidadeSegura = prefs.getString("unidadeAtual", "Unidade Central");
+
         if (getIntent().hasExtra("IDS_SELECIONADOS")) {
             listaIdsParaPedido = getIntent().getIntegerArrayListExtra("IDS_SELECIONADOS");
         }
@@ -40,15 +56,13 @@ public class FazerPedidoActivity extends AppCompatActivity {
         etDataReserva = findViewById(R.id.etDataReserva);
         etJustificativa = findViewById(R.id.etJustificativa);
         spinnerPrioridade = findViewById(R.id.spinnerPrioridade);
-        Button btnConfirmar = findViewById(R.id.btnConfirmarEmprestimo);
+        btnConfirmar = findViewById(R.id.btnConfirmarEmprestimo);
         View btnVoltar = findViewById(R.id.btnVoltarCarrinho);
 
-        // Preenche o nome do usuário logado
         if (etNomeUsuario != null) {
-            etNomeUsuario.setText(MainActivity.usuarioLogado);
+            etNomeUsuario.setText(usuarioSeguro);
         }
 
-        // Configura o Spinner de Prioridades (Formatado conforme PHP/Banco de Dados)
         if (spinnerPrioridade != null) {
             String[] prioridades = {"Baixo", "Médio", "Alto"};
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, prioridades);
@@ -56,7 +70,6 @@ public class FazerPedidoActivity extends AppCompatActivity {
             spinnerPrioridade.setAdapter(adapter);
         }
 
-        // Configura o seletor de data (Agenda)
         if (etDataReserva != null) {
             etDataReserva.setOnClickListener(v -> abrirCalendario());
         }
@@ -65,82 +78,70 @@ public class FazerPedidoActivity extends AppCompatActivity {
             btnVoltar.setOnClickListener(v -> finish());
         }
 
-        btnConfirmar.setOnClickListener(v -> {
-            efetivarPedido();
-        });
-
-        // Removido carregarCarrinhoParaPedido() pois agora recebemos via Intent
+        btnConfirmar.setOnClickListener(v -> efetivarPedido());
     }
 
     private void abrirCalendario() {
         final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                (view, year1, monthOfYear, dayOfMonth) -> {
-                    String dataFormatada = year1 + "-" + String.format("%02d", (monthOfYear + 1)) + "-" + String.format("%02d", dayOfMonth);
+                (view, year, month, day) -> {
+                    String dataFormatada = year + "-" + String.format(Locale.getDefault(), "%02d", (month + 1)) + "-" + String.format(Locale.getDefault(), "%02d", day);
                     etDataReserva.setText(dataFormatada);
-                }, year, month, day);
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
-    }
-
-    private void carregarCarrinhoParaPedido() {
-        // Removido o conteúdo original pois a lista vem via Intent
     }
 
     private void efetivarPedido() {
         if (listaIdsParaPedido == null || listaIdsParaPedido.isEmpty()) {
-            Toast.makeText(this, "Nenhum produto selecionado!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nenhum produto selecionado no carrinho!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String email = etEmail.getText().toString().trim();
         String dataReserva = etDataReserva.getText().toString().trim();
         String justificativa = etJustificativa.getText().toString().trim();
-        
-        // Captura o valor e trata para o formato que a API Cloudflare Workers parece esperar
-        String itemSelecionado = spinnerPrioridade.getSelectedItem() != null ? spinnerPrioridade.getSelectedItem().toString() : "baixa";
-        String prioridade = itemSelecionado.toLowerCase();
 
-        if (email.isEmpty() || dataReserva.isEmpty()) {
-            Toast.makeText(this, "Preencha o e-mail e a data!", Toast.LENGTH_SHORT).show();
+        // Validações melhoradas
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Insira um e-mail válido");
+            etEmail.requestFocus();
             return;
         }
 
-        // 2. Cria o request seguindo EXATAMENTE a lógica do seu PHP
-        String dataPostagemComHora = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault()).format(new java.util.Date());
-        
-        // Prioridade exata do PHP: Baixo, Médio, Alto (Primeira letra maiúscula)
+        if (dataReserva.isEmpty()) {
+            etDataReserva.setError("Selecione uma data");
+            return;
+        }
+
+        // Bloqueia duplo clique
+        btnConfirmar.setEnabled(false);
+        btnConfirmar.setText("Enviando...");
+
+        String dataPostagemComHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
         String prioridadeOriginal = spinnerPrioridade.getSelectedItem() != null ? spinnerPrioridade.getSelectedItem().toString() : "Baixo";
-        
-        // No seu PHP o campo é 'remetente', 'email', 'unidade', 'data_reserva', 'produtos', 'prioridade', 'motivo', 'data_postagem'
+
         PedidoRequest request = new PedidoRequest(
-                MainActivity.usuarioLogado != null && !MainActivity.usuarioLogado.isEmpty() ? MainActivity.usuarioLogado : "Usuario",
+                usuarioSeguro,
                 email,
-                MainActivity.unidadeAtual != null && !MainActivity.unidadeAtual.isEmpty() ? MainActivity.unidadeAtual : "Unidade Central",
+                unidadeSegura,
                 dataReserva,
                 listaIdsParaPedido,
-                prioridadeOriginal, 
+                prioridadeOriginal,
                 justificativa.isEmpty() ? "Solicitação de Empréstimo" : justificativa,
                 dataPostagemComHora
         );
 
-        // LOG DE SEGURANÇA: Mostra o JSON completo para conferência manual se necessário
-        String jsonPedido = new com.google.gson.Gson().toJson(request);
-        android.util.Log.d("DEBUG_PEDIDO", "JSON_COMPLETO: " + jsonPedido);
-        android.util.Log.d("DEBUG_PEDIDO", "REMETENTE: " + MainActivity.usuarioLogado);
-        android.util.Log.d("DEBUG_PEDIDO", "EMAIL: " + email);
-        android.util.Log.d("DEBUG_PEDIDO", "PRIORIDADE: " + prioridadeOriginal);
-        android.util.Log.d("DEBUG_PEDIDO", "IDS: " + listaIdsParaPedido.toString());
+        Log.d("DEBUG_PEDIDO", "JSON_COMPLETO: " + new Gson().toJson(request));
 
         RetrofitClient.getApi().fazerPedido(request).enqueue(new Callback<GenericResponse>() {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().sucesso) {
-                    Toast.makeText(FazerPedidoActivity.this, "Pedido efetivado!", Toast.LENGTH_SHORT).show();
-                    finish();
+                btnConfirmar.setEnabled(true);
+                btnConfirmar.setText("Confirmar Pedido");
+
+                if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().sucesso)) {
+                    Toast.makeText(FazerPedidoActivity.this, "Pedido efetivado com sucesso!", Toast.LENGTH_SHORT).show();
+                    finish(); // Volta ao carrinho
                 } else {
                     String msg = "Erro no servidor.";
                     if (response.body() != null && response.body().mensagem != null) {
@@ -148,13 +149,12 @@ public class FazerPedidoActivity extends AppCompatActivity {
                     } else if (response.errorBody() != null) {
                         try {
                             String errorStr = response.errorBody().string();
-                            android.util.Log.e("DEBUG_PEDIDO", "ERRO_CORPO: " + errorStr);
                             if (errorStr.contains("check constraint failed")) {
-                                msg = "Erro de validação: Verifique se todos os campos estão preenchidos corretamente (E-mail, Data, Justificativa).";
+                                msg = "Verifique se todos os campos estão preenchidos corretamente.";
                             } else {
                                 msg = errorStr;
                             }
-                        } catch (Exception e) {}
+                        } catch (Exception ignored) {}
                     }
                     Toast.makeText(FazerPedidoActivity.this, "Erro: " + msg, Toast.LENGTH_LONG).show();
                 }
@@ -162,7 +162,9 @@ public class FazerPedidoActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<GenericResponse> call, Throwable t) {
-                Toast.makeText(FazerPedidoActivity.this, "Erro de conexão.", Toast.LENGTH_SHORT).show();
+                btnConfirmar.setEnabled(true);
+                btnConfirmar.setText("Confirmar Pedido");
+                Toast.makeText(FazerPedidoActivity.this, "Erro de conexão: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
