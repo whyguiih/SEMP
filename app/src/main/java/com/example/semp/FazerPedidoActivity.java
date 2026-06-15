@@ -118,7 +118,25 @@ public class FazerPedidoActivity extends AppCompatActivity {
         btnConfirmar.setText("Enviando...");
 
         String dataPostagemComHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-        String prioridadeOriginal = spinnerPrioridade.getSelectedItem() != null ? spinnerPrioridade.getSelectedItem().toString() : "Baixo";
+
+        // --- INÍCIO DA CORREÇÃO ---
+        String prioridadeSelecionada = spinnerPrioridade.getSelectedItem() != null ? spinnerPrioridade.getSelectedItem().toString() : "Baixo";
+        String prioridadeParaDB = "baixo"; // Valor padrão em minúsculo
+
+        // Converte o valor visual para o formato exigido pelo banco de dados
+        switch (prioridadeSelecionada) {
+            case "Alto":
+                prioridadeParaDB = "alto";
+                break;
+            case "Médio":
+                prioridadeParaDB = "intermediário";
+                break;
+            case "Baixo":
+            default:
+                prioridadeParaDB = "baixo";
+                break;
+        }
+        // --- FIM DA CORREÇÃO ---
 
         PedidoRequest request = new PedidoRequest(
                 usuarioSeguro,
@@ -126,7 +144,7 @@ public class FazerPedidoActivity extends AppCompatActivity {
                 unidadeSegura,
                 dataReserva,
                 listaIdsParaPedido,
-                prioridadeOriginal,
+                prioridadeParaDB, // <-- Usa a variável corrigida aqui
                 justificativa.isEmpty() ? "Solicitação de Empréstimo" : justificativa,
                 dataPostagemComHora
         );
