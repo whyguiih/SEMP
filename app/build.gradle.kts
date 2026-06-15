@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.continuacao"
+    namespace = "com.example.semp"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.continuacao"
+        applicationId = "com.example.semp"
         minSdk = 28
         targetSdk = 36
         versionCode = 1

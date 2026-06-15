@@ -1,0 +1,7 @@
+package com.example.semp.models;
+
+public class itensCarrinho {
+    public int id_estoque;
+    public String nome;
+    public int quant;
+}

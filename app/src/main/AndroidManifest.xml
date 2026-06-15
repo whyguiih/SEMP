@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.continuacao">
+    package="com.example.semp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -9,22 +9,22 @@
         android:icon="@mipmap/ic_launcher"
         android:label="Continuação"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:usesCleartextTraffic="true"> <activity android:name=".MainActivity" android:exported="true">
+        android:usesCleartextTraffic="true"> <activity android:name="com.example.semp.MainActivity" android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
 
-        <activity android:name=".EstoqueActivity" />
-        <activity android:name=".CarrinhoActivity" />
-        <activity android:name=".VisualizarPedidoActivity" />
-        <activity android:name=".CadastrarProdutoActivity" />
-        <activity android:name=".ProdutoDetalheActivity" />
-        <activity android:name=".FazerPedidoActivity" />
-        <activity android:name=".CadastrarUsuarioActivity" />
-        <activity android:name=".AutorizarPedidosActivity" />
-        <activity android:name=".ConfigEstoqueActivity" />
+        <activity android:name="com.example.semp.EstoqueActivity" />
+        <activity android:name="com.example.semp.CarrinhoActivity" />
+        <activity android:name="com.example.semp.VisualizarPedidoActivity" />
+        <activity android:name="com.example.semp.CadastrarProdutoActivity" />
+        <activity android:name="com.example.semp.ProdutoDetalheActivity" />
+        <activity android:name="com.example.semp.FazerPedidoActivity" />
+        <activity android:name="com.example.semp.CadastrarUsuarioActivity" />
+        <activity android:name="com.example.semp.AutorizarPedidosActivity" />
+        <activity android:name="com.example.semp.ConfigEstoqueActivity" />
 
     </application>
 </manifest>
