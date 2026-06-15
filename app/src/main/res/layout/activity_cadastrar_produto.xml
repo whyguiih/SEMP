@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawerLayoutCadastroProduto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,6 +23,10 @@
                 android:id="@+id/btnMenu"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/senai_s"
                 android:contentDescription="Menu" />
             <TextView
@@ -45,18 +50,19 @@
                 android:orientation="vertical"
                 android:layout_margin="24dp"
                 android:background="@drawable/bg_glass"
-                android:padding="24dp">
+                android:elevation="8dp"
+                android:padding="28dp">
 
                 <Button
                     android:id="@+id/btnAcessarAlterarEstoque"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="🔄 ALTERAR ESTOQUE EXISTENTE"
+                    android:layout_height="56dp"
+                    android:text="ALTERAR ESTOQUE EXISTENTE"
                     android:textColor="#FFFFFF"
                     android:fontFamily="@font/neo_sans_bold_italic"
                     android:backgroundTint="#33FFFFFF"
-                    android:layout_marginBottom="24dp"
-                    app:cornerRadius="8dp"/>
+                    android:layout_marginBottom="32dp"
+                    app:cornerRadius="50dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,103 +70,104 @@
                     android:text="Cadastrar Novo Produto"
                     android:textColor="#FFFFFF"
                     android:fontFamily="@font/neo_sans_medium"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="16dp"/>
+                    android:textSize="18sp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="24dp"/>
 
                 <EditText
                     android:id="@+id/etCadNome"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="52dp"
                     android:hint="Nome do Produto"
                     android:textColorHint="#88FFFFFF"
                     android:background="@drawable/bg_input_glass"
                     android:textColor="#FFFFFF"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginBottom="12dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
                     android:inputType="text"/>
 
                 <EditText
                     android:id="@+id/etCadCodigo"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="52dp"
                     android:hint="Código do Produto"
                     android:textColorHint="#88FFFFFF"
                     android:background="@drawable/bg_input_glass"
                     android:textColor="#FFFFFF"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginBottom="12dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
                     android:inputType="text"/>
 
                 <EditText
                     android:id="@+id/etCadDescricao"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="52dp"
                     android:hint="Descrição Curta"
                     android:textColorHint="#88FFFFFF"
                     android:background="@drawable/bg_input_glass"
                     android:textColor="#FFFFFF"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginBottom="12dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
                     android:inputType="text"/>
 
                 <EditText
                     android:id="@+id/etCadQtd"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="52dp"
                     android:hint="Quantidade Inicial"
                     android:textColorHint="#88FFFFFF"
                     android:background="@drawable/bg_input_glass"
                     android:textColor="#FFFFFF"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginBottom="12dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
                     android:inputType="number"/>
 
                 <EditText
                     android:id="@+id/etCadUniNatal"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="52dp"
                     android:hint="Unidade Natal"
                     android:textColorHint="#88FFFFFF"
                     android:background="@drawable/bg_input_glass"
                     android:textColor="#FFFFFF"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginBottom="12dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
                     android:inputType="text"/>
 
                 <EditText
                     android:id="@+id/etCadUniAtual"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="52dp"
                     android:hint="Unidade Atual"
                     android:textColorHint="#88FFFFFF"
                     android:background="@drawable/bg_input_glass"
                     android:textColor="#FFFFFF"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginBottom="12dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
                     android:inputType="text"/>
 
                 <EditText
                     android:id="@+id/etCadMarca"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="52dp"
                     android:hint="Marca / Referência"
                     android:textColorHint="#88FFFFFF"
                     android:background="@drawable/bg_input_glass"
                     android:textColor="#FFFFFF"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginBottom="12dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
                     android:inputType="text"/>
 
                 <EditText
                     android:id="@+id/etCadCor"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="52dp"
                     android:hint="Cor"
                     android:textColorHint="#88FFFFFF"
                     android:background="@drawable/bg_input_glass"
                     android:textColor="#FFFFFF"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginBottom="12dp"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
                     android:inputType="text"/>
 
                 <EditText
@@ -171,9 +178,9 @@
                     android:textColorHint="#88FFFFFF"
                     android:background="@drawable/bg_input_glass"
                     android:textColor="#FFFFFF"
-                    android:padding="16dp"
+                    android:padding="20dp"
                     android:gravity="top|start"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="24dp"
                     android:inputType="textMultiLine"/>
 
                 <LinearLayout
@@ -181,17 +188,17 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="24dp">
+                    android:layout_marginBottom="32dp">
 
                     <Button
                         android:id="@+id/btnSelecionarFoto"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="56dp"
                         android:layout_weight="1"
-                        android:text="📷 SELECIONAR FOTO"
+                        android:text="SELECIONAR FOTO"
                         android:backgroundTint="#33FFFFFF"
                         android:textColor="#FFFFFF"
-                        app:cornerRadius="8dp"/>
+                        app:cornerRadius="50dp"/>
 
                     <ImageView
                         android:id="@+id/ivPreviewFoto"
@@ -211,11 +218,18 @@
                     android:textColor="#FFFFFF"
                     android:fontFamily="@font/neo_sans_bold_italic"
                     android:backgroundTint="#ef5e31"
-                    app:cornerRadius="8dp"/>
+                    app:cornerRadius="50dp"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
 
-    <include layout="@layout/layout_sidebar" />
+    <ScrollView
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#B3000000"
+        android:fitsSystemWindows="true">
+        <include layout="@layout/layout_sidebar" />
+    </ScrollView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

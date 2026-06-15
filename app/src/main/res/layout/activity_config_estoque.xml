@@ -11,30 +11,44 @@
         android:id="@+id/mainContentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#1A4B9F"> <LinearLayout
-        android:id="@+id/headerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@drawable/bg_gradient">
 
-        <ImageView
-            android:id="@+id/btnMenu"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/senai_s"
-            android:padding="4dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"/>
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/btnMenu"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/senai_s"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Gerenciar Produto"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/neo_sans_bold_italic"
+                android:textSize="22sp"
+                android:gravity="center"
+                android:layout_marginEnd="48dp"/>
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="16dp"
+            android:layout_margin="24dp"
+            android:fillViewport="true"
             app:layout_constraintTop_toBottomOf="@id/headerLayout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,150 +57,176 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#33FFFFFF"
+                android:background="@drawable/bg_glass"
                 android:elevation="8dp"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:padding="28dp">
 
                 <Button
                     android:id="@+id/btnVoltarCadastro"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="⬅️ VOLTAR PARA CADASTRO"
+                    android:layout_height="56dp"
+                    android:text="VOLTAR PARA CADASTRO"
                     android:textColor="#FFFFFF"
+                    android:fontFamily="@font/neo_sans_bold_italic"
                     android:backgroundTint="#33FFFFFF"
-                    android:layout_marginBottom="24dp"
-                    app:cornerRadius="8dp"
-                    android:textStyle="bold"/>
+                    android:layout_marginBottom="32dp"
+                    app:cornerRadius="50dp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="ATUALIZAR PRODUTO"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp"
-                    android:minHeight="48dp"/>
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/neo_sans_medium"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"/>
 
                 <AutoCompleteTextView
                     android:id="@+id/etNomeAtualizar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="#E0E0E0"
+                    android:layout_height="52dp"
+                    android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
                     android:hint="Nome do Produto (Selecione na lista)"
-                    android:minHeight="48dp"
+                    android:background="@drawable/bg_input_glass"
                     android:completionThreshold="1"
                     android:popupBackground="#E6FFFFFF"
-                    android:paddingHorizontal="8dp"/>
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <EditText
                     android:id="@+id/etIdAtualizar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="52dp"
                     android:hint="ID do Produto"
-                    android:textColorHint="#E0E0E0"
-                    android:textColor="#FFFFFF"
+                    android:textColorHint="#99FFFFFF"
+                    android:textColor="#88FFFFFF"
                     android:inputType="number"
                     android:enabled="false"
-                    android:minHeight="48dp"/>
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <EditText
                     android:id="@+id/etCodigoAtualizar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="#E0E0E0"
+                    android:layout_height="52dp"
+                    android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
                     android:hint="Novo Código"
-                    android:minHeight="48dp"/>
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <EditText
                     android:id="@+id/etDescricaoAtualizar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="#E0E0E0"
+                    android:layout_height="52dp"
+                    android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
                     android:hint="Nova Descrição"
-                    android:minHeight="48dp"/>
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <EditText
                     android:id="@+id/etQuantidadeAtualizar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="52dp"
                     android:hint="Nova Quantidade"
-                    android:textColorHint="#E0E0E0"
+                    android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
                     android:inputType="number"
-                    android:minHeight="48dp"/>
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <EditText
                     android:id="@+id/etUnidadeAtualizar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="#E0E0E0"
+                    android:layout_height="52dp"
+                    android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
                     android:hint="Nova Unidade Natal"
-                    android:minHeight="48dp"/>
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <EditText
                     android:id="@+id/etUniAtualAtualizar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="#E0E0E0"
+                    android:layout_height="52dp"
+                    android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
                     android:hint="Nova Unidade Atual"
-                    android:minHeight="48dp"
-                    android:layout_marginBottom="12dp"/>
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <EditText
                     android:id="@+id/etCorAtualizar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="#E0E0E0"
+                    android:layout_height="52dp"
+                    android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
                     android:hint="Nova Cor"
-                    android:minHeight="48dp"
-                    android:layout_marginBottom="12dp"/>
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <EditText
                     android:id="@+id/etMarcaAtualizar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="#E0E0E0"
+                    android:layout_height="52dp"
+                    android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
                     android:hint="Nova Marca/Referência"
-                    android:minHeight="48dp"
-                    android:layout_marginBottom="12dp"/>
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <EditText
                     android:id="@+id/etDescDetalhadaAtualizar"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:textColorHint="#E0E0E0"
+                    android:layout_height="100dp"
+                    android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
                     android:hint="Nova Descrição Detalhada"
                     android:gravity="top|start"
-                    android:minHeight="48dp"
-                    android:layout_marginBottom="12dp"
-                    android:inputType="textMultiLine"/>
+                    android:background="@drawable/bg_input_glass"
+                    android:padding="20dp"
+                    android:layout_marginBottom="24dp"
+                    android:inputType="textMultiLine"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="32dp">
 
                     <Button
                         android:id="@+id/btnSelecionarFotoAlt"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="56dp"
                         android:layout_weight="1"
-                        android:text="📷 ALTERAR FOTO"
+                        android:text="ALTERAR FOTO"
                         android:backgroundTint="#33FFFFFF"
                         android:textColor="#FFFFFF"
-                        app:cornerRadius="8dp"/>
+                        app:cornerRadius="50dp"
+                        android:fontFamily="@font/neo_sans_medium"/>
 
                     <ImageView
                         android:id="@+id/ivPreviewFotoAlt"
@@ -194,7 +234,7 @@
                         android:layout_height="60dp"
                         android:layout_marginStart="16dp"
                         android:scaleType="centerCrop"
-                        android:background="#33FFFFFF"
+                        android:background="@drawable/bg_input_glass"
                         android:visibility="gone"/>
                 </LinearLayout>
 
@@ -202,53 +242,61 @@
                     android:id="@+id/btnAtualizar"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Atualizar"
-                    android:textColor="#1a4b9f"
+                    android:text="ATUALIZAR"
+                    android:textColor="#1B4F9B"
                     android:backgroundTint="#FFFFFF"
-                    app:cornerRadius="12dp"
-                    android:textStyle="bold"
-                    android:minHeight="48dp"/>
+                    app:cornerRadius="50dp"
+                    android:fontFamily="@font/neo_sans_bold_italic"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#4DFFFFFF"
-                    android:layout_marginVertical="24dp"/>
+                    android:layout_marginVertical="32dp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="DELETAR PRODUTO"
-                    android:textColor="#ffffff"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp"/>
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/neo_sans_medium"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"/>
 
                 <AutoCompleteTextView
                     android:id="@+id/etNomeDeletar"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="52dp"
                     android:hint="Nome do Produto (Selecione na lista)"
-                    android:textColorHint="#E0E0E0"
+                    android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
-                    android:paddingHorizontal="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="24dp"
                     android:completionThreshold="1"
-                    android:popupBackground="#E6FFFFFF"/>
+                    android:popupBackground="#E6FFFFFF"
+                    android:fontFamily="@font/neo_sans_regular"/>
 
                 <Button
                     android:id="@+id/btnDeletar"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:text="Deletar"
+                    android:text="DELETAR"
                     android:textColor="#FFFFFF"
                     android:backgroundTint="#ef5e31"
-                    app:cornerRadius="12dp"
-                    android:textStyle="bold"/>
+                    app:cornerRadius="50dp"
+                    android:fontFamily="@font/neo_sans_bold_italic"/>
             </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include layout="@layout/layout_sidebar" />
+    <ScrollView
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#B3000000"
+        android:fitsSystemWindows="true">
+        <include layout="@layout/layout_sidebar" />
+    </ScrollView>
 </androidx.drawerlayout.widget.DrawerLayout>

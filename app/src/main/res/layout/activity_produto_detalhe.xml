@@ -5,6 +5,7 @@
     android:id="@+id/mainContentLayoutDetalhe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="@drawable/bg_gradient">
 
     <LinearLayout
@@ -21,7 +22,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/senai_s"
-            android:padding="4dp"
+            android:padding="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"/>
@@ -30,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Produto"
+            android:text="Detalhes do Produto"
             android:textColor="@android:color/white"
             android:fontFamily="@font/neo_sans_bold_italic"
             android:textSize="22sp"
@@ -53,11 +54,12 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="240dp"
                 app:cardCornerRadius="24dp"
                 app:cardBackgroundColor="#1AFFFFFF"
                 app:cardElevation="0dp"
                 android:layout_marginBottom="24dp">
+
                 <ImageView
                     android:id="@+id/ivProdutoFoto"
                     android:layout_width="match_parent"
@@ -113,6 +115,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
+
             <TextView
                 android:id="@+id/tvUniNatalDetalhe"
                 android:layout_width="match_parent"
@@ -139,7 +142,7 @@
                 android:textColor="#E0E0E0"
                 android:textSize="16sp"
                 android:fontFamily="@font/neo_sans_regular"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="24dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -158,7 +161,7 @@
                 android:textColor="#E0E0E0"
                 android:textSize="16sp"
                 android:fontFamily="@font/neo_sans_regular"
-                android:layout_marginBottom="24dp"/>
+                android:layout_marginBottom="32dp"/>
         </LinearLayout>
     </ScrollView>
 
@@ -167,14 +170,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_margin="16dp"
         android:padding="16dp"
-        android:background="#B3000000"
+        android:background="@drawable/bg_glass"
+        android:elevation="8dp"
         android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="52dp"
             android:orientation="horizontal"
             android:background="@drawable/bg_input_glass"
             android:gravity="center"
@@ -204,6 +209,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:background="@null"/>
+
             <TextView
                 android:id="@+id/btnAumentarQtd"
                 android:layout_width="48dp"
@@ -227,7 +233,7 @@
             android:textColor="#FFFFFF"
             android:fontFamily="@font/neo_sans_bold_italic"
             android:backgroundTint="#E25A27"
-            app:cornerRadius="12dp"
+            app:cornerRadius="50dp"
             android:textAllCaps="false"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

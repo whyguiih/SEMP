@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/bg_input_glass"
-    android:padding="16dp"
-    android:layout_marginBottom="12dp"
-    android:elevation="0dp">
+    android:padding="20dp"
+    android:layout_marginBottom="16dp">
 
     <TextView
         android:id="@+id/tvPedidoId"
@@ -16,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Pedido #123"
         android:fontFamily="@font/neo_sans_bold_italic"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textColor="#FFFFFF"/>
 
     <TextView
@@ -24,21 +22,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Produtos solicitados..."
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/neo_sans_regular"
-        android:textSize="14sp"
+        android:textSize="15sp"
         android:textColor="#E0E0E0"/>
 
     <TextView
         android:id="@+id/tvPedidoStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:text="Status: Pendente"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="4dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
         android:background="@drawable/bg_input_glass"
-        android:textColor="#FF9800"
+        android:textColor="#FFD700"
         android:fontFamily="@font/neo_sans_bold_italic"
-        android:textSize="12sp"/>
+        android:textSize="14sp"/>
 </LinearLayout>

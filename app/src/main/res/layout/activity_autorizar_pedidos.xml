@@ -27,7 +27,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/senai_s"
-                android:padding="4dp"
+                android:padding="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"/>
@@ -66,5 +66,15 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include layout="@layout/layout_sidebar" />
+    <ScrollView
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#B3000000"
+        android:fitsSystemWindows="true">
+
+        <include layout="@layout/layout_sidebar" />
+
+    </ScrollView>
+
 </androidx.drawerlayout.widget.DrawerLayout>

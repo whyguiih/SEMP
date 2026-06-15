@@ -5,7 +5,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="?attr/selectableItemBackground">
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_input_glass"
+    android:clickable="true"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/tvNomeProduto"
@@ -13,8 +16,8 @@
         android:layout_height="wrap_content"
         android:text="@string/nome_do_produto"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#333333" />
+        android:fontFamily="@font/neo_sans_bold_italic"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/tvCodigoDetalhe"
@@ -22,6 +25,8 @@
         android:layout_height="wrap_content"
         android:text="@string/cod_000"
         android:textSize="14sp"
-        android:textColor="#777777" />
+        android:fontFamily="@font/neo_sans_medium"
+        android:textColor="#E0E0E0"
+        android:layout_marginTop="4dp"/>
 
 </LinearLayout>
