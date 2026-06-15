@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "continuacao"
+rootProject.name = "SEMP"
 include(":app")
