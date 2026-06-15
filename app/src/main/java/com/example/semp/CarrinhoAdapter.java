@@ -98,7 +98,7 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
         }
 
         int qtdFinal = item.quantidade > 0 ? item.quantidade : (item.carrinho > 0 ? item.carrinho : 1);
-        holder.tvQuantidade.setText("No carrinho: " + qtdFinal);
+        holder.tvQuantidade.setText("Quant.: " + qtdFinal);
 
         holder.cbSelecionar.setOnCheckedChangeListener(null);
         holder.cbSelecionar.setChecked(itensSelecionados.contains(item.id_estoque));

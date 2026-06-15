@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.semp.models.AutorizarRequest;
 import com.example.semp.models.GenericResponse;
 import com.example.semp.models.PedidosPendentes;
+import java.util.Collections; // ADICIONADO: Importação necessária para ordenar a lista
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,8 +66,19 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
 
                 List<PedidosPendentes> lista = response.body();
                 if (response.isSuccessful() && lista != null) {
+
                     if (lista.isEmpty()) {
                         Toast.makeText(AutorizarPedidosActivity.this, "Não há pedidos pendentes.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // ADICIONADO: Lógica de Ordenação
+                        // Ordena a lista baseada no peso da prioridade antes de passar para o Adapter
+                        Collections.sort(lista, (p1, p2) -> {
+                            // IMPORTANTE: Se o método de pegar a prioridade no seu modelo tiver outro nome
+                            // (ex: p1.prioridade em vez de p1.getPrioridade()), altere aqui.
+                            int peso1 = obterPesoPrioridade(p1.prioridade);
+                            int peso2 = obterPesoPrioridade(p2.prioridade);
+                            return Integer.compare(peso1, peso2);
+                        });
                     }
 
                     if (recyclerViewPedidos != null) {
@@ -84,6 +96,23 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
         });
     }
 
+    // ADICIONADO: Função auxiliar para converter o texto em peso numérico
+    private int obterPesoPrioridade(String prioridade) {
+        if (prioridade == null) return 4; // Se vier nulo, joga pro final da fila
+
+        switch (prioridade.toLowerCase()) {
+            case "alto":
+                return 1;
+            case "intermediário":
+            case "intermediario":
+                return 2;
+            case "baixo":
+                return 3;
+            default:
+                return 4; // Qualquer outro valor desconhecido vai pro final
+        }
+    }
+
     private void processarAutorizacao(int idEmprestimo, int novoStatus) {
         AutorizarRequest request = new AutorizarRequest(idEmprestimo, novoStatus);
         RetrofitClient.getApi().autorizarPedido(request).enqueue(new Callback<GenericResponse>() {
@@ -91,7 +120,7 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                 String acao = (novoStatus == 1) ? "aprovado" : "recusado";
                 Toast.makeText(AutorizarPedidosActivity.this, "Pedido " + acao + " com sucesso!", Toast.LENGTH_SHORT).show();
-                buscarPedidosPendentes(); 
+                buscarPedidosPendentes();
             }
 
             @Override
