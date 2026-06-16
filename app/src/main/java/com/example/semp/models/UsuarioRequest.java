@@ -5,26 +5,26 @@ public class UsuarioRequest {
     public String senha;
     public int nivel_conta;
     public String unidade;
+    public String foto; // 👉 NOVA VARIÁVEL
 
-    // Construtor 1: Para quando o código envia um número (int)
-    public UsuarioRequest(String usuario, String senha, int nivel_conta, String unidade) {
+    public UsuarioRequest(String usuario, String senha, int nivel_conta, String unidade, String foto) {
         this.usuario = usuario;
         this.senha = senha;
         this.nivel_conta = nivel_conta;
         this.unidade = unidade;
+        this.foto = foto;
     }
 
-    // Construtor 2: Para quando o código envia um texto (String) - CORRIGE O SEU ERRO!
-    public UsuarioRequest(String usuario, String senha, String nivel_conta_str, String unidade) {
+    public UsuarioRequest(String usuario, String senha, String nivel_conta_str, String unidade, String foto) {
         this.usuario = usuario;
         this.senha = senha;
         this.unidade = unidade;
+        this.foto = foto;
 
-        // Tenta converter o texto num número de forma segura
         try {
             this.nivel_conta = Integer.parseInt(nivel_conta_str);
         } catch (NumberFormatException e) {
-            this.nivel_conta = 0; // Se houver algum erro ou vier vazio, assume nível 0 (comum)
+            this.nivel_conta = 0;
         }
     }
 }

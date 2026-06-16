@@ -35,6 +35,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
         EditText etSenha = findViewById(R.id.etNovaSenha);
         EditText etNivel = findViewById(R.id.etNovoNivel);
         EditText etUnidade = findViewById(R.id.etNovaUnidade);
+        EditText etFoto = findViewById(R.id.etNovaFoto); // 👉 NOVA LINHA
         Button btnSalvar = findViewById(R.id.btnSalvarUsuario);
 
         btnSalvar.setOnClickListener(v -> {
@@ -42,9 +43,10 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             String senha = etSenha.getText().toString().trim();
             String nivelStr = etNivel.getText().toString().trim();
             String unidade = etUnidade.getText().toString().trim();
+            String fotoUrl = etFoto.getText().toString().trim(); // 👉 NOVA LINHA
 
             if (user.isEmpty() || senha.isEmpty() || nivelStr.isEmpty() || unidade.isEmpty()) {
-                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Preencha todos os campos obrigatórios!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -59,7 +61,8 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             btnSalvar.setText("Salvando...");
 
             int nivel = Integer.parseInt(nivelStr);
-            UsuarioRequest request = new UsuarioRequest(user, senha, nivel, unidade);
+            // 👉 PASSA A VARIÁVEL fotoUrl NO FINAL DO NOVO CONSTRUTOR:
+            UsuarioRequest request = new UsuarioRequest(user, senha, nivel, unidade, fotoUrl);
 
             // Chamada REAL para a API
             RetrofitClient.getApi().cadastrarUsuario(request).enqueue(new Callback<GenericResponse>() {
@@ -70,11 +73,12 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().sucesso)) {
                         Toast.makeText(CadastrarUsuarioActivity.this, "Usuário cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-                        // Limpa os campos para o master poder cadastrar vários seguidos
+                        // Limpa todos os campos
                         etUsuario.setText("");
                         etSenha.setText("");
                         etNivel.setText("");
                         etUnidade.setText("");
+                        etFoto.setText(""); // 👉 NOVA LINHA
                         etUsuario.requestFocus();
                     } else {
                         String msgErro = (response.body() != null && response.body().mensagem != null) ? response.body().mensagem : "Erro ao cadastrar usuário.";

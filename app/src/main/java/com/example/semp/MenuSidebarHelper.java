@@ -34,15 +34,10 @@ public class MenuSidebarHelper {
             if (btnVisualizarPedido != null) btnVisualizarPedido.setVisibility(View.VISIBLE);
             if (btnConfigEstoque != null) btnConfigEstoque.setVisibility(View.VISIBLE);
         } else if ("2".equals(nivel)) {
-            if (btnVisualizarPedido != null) btnVisualizarPedido.setVisibility(View.VISIBLE);
             if (btnConfigEstoque != null) btnConfigEstoque.setVisibility(View.VISIBLE);
             if (btnAutorizar != null) btnAutorizar.setVisibility(View.VISIBLE);
         } else if ("3".equals(nivel)) {
             if (btnCadastrarUsuario != null) btnCadastrarUsuario.setVisibility(View.VISIBLE);
-            // Presumindo que o Admin (3) tenha acesso aos mesmos que o Nível 2
-            if (btnVisualizarPedido != null) btnVisualizarPedido.setVisibility(View.VISIBLE);
-            if (btnConfigEstoque != null) btnConfigEstoque.setVisibility(View.VISIBLE);
-            if (btnAutorizar != null) btnAutorizar.setVisibility(View.VISIBLE);
         }
 
         // Configuração de Cliques

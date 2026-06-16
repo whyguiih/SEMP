@@ -56,6 +56,7 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         String cor = intent.getStringExtra("PRODUTO_COR") != null ? intent.getStringExtra("PRODUTO_COR") : "Não especificada";
         String marca = intent.getStringExtra("PRODUTO_MARCA") != null ? intent.getStringExtra("PRODUTO_MARCA") : "Não especificada";
         String uniNatal = intent.getStringExtra("PRODUTO_UNI_NATAL") != null ? intent.getStringExtra("PRODUTO_UNI_NATAL") : "Não especificada";
+        String unidadeAtual = intent.getStringExtra("PRODUTO_UNIDADE_ATUAL") != null ? intent.getStringExtra("PRODUTO_UNIDADE_ATUAL") : "Não especificada";
         String fotoBase64 = intent.getStringExtra("PRODUTO_FOTO") != null ? intent.getStringExtra("PRODUTO_FOTO") : "";
         String qtdEstoqueString = intent.getStringExtra("PRODUTO_QTD") != null ? intent.getStringExtra("PRODUTO_QTD") : "0";
         String qtdCarrinhoString = intent.getStringExtra("PRODUTO_QTD_CARRINHO") != null ? intent.getStringExtra("PRODUTO_QTD_CARRINHO") : "1";
@@ -70,6 +71,7 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tvCorDetalhe)).setText("Cor: " + cor);
         ((TextView) findViewById(R.id.tvMarcaRefDetalhe)).setText("Marca/Ref: " + marca);
         ((TextView) findViewById(R.id.tvUniNatalDetalhe)).setText("Unidade Natal: " + uniNatal);
+        ((TextView) findViewById(R.id.tvUnidadeAtualDetalhe)).setText("Unidade Atual: " + unidadeAtual);
         ((TextView) findViewById(R.id.tvEstoqueDetalhe)).setText("Estoque disponível: " + estoqueMaximo);
 
         ImageView ivFoto = findViewById(R.id.ivProdutoFoto);

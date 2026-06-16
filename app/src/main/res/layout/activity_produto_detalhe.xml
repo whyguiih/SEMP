@@ -126,6 +126,15 @@
                 android:layout_marginBottom="24dp" />
 
             <TextView
+                android:id="@+id/tvUnidadeAtualDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Unidade Atual: ---"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_marginBottom="24dp" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Descrição"

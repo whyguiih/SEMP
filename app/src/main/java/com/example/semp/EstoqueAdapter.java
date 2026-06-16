@@ -88,6 +88,8 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
             intent.putExtra("PRODUTO_COR", produto.cor != null ? produto.cor : "");
             intent.putExtra("PRODUTO_MARCA", produto.marca_ref != null ? produto.marca_ref : "");
             intent.putExtra("PRODUTO_UNI_NATAL", produto.uni_natal != null ? produto.uni_natal : "");
+            // Onde você passa o ID, NOME, CODIGO, etc., adicione esta linha:
+            intent.putExtra("PRODUTO_UNIDADE_ATUAL", produto.unidade_atual != null ? produto.unidade_atual : "Não informada");
             intent.putExtra("PRODUTO_DESC_DETALHADA", produto.descricao_detalhada != null ? produto.descricao_detalhada : "");
             intent.putExtra("PRODUTO_FOTO", produto.foto != null ? produto.foto : "");
             context.startActivity(intent);

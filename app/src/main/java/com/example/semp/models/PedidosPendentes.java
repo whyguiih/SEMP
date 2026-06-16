@@ -10,4 +10,6 @@ public class PedidosPendentes {
     public String motivo;
     public String data_reserva;
     public int aprovacao;
+
+    public int processamento;
 }

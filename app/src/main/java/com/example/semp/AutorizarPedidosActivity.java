@@ -1,8 +1,12 @@
 package com.example.semp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -15,8 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.semp.models.AutorizarRequest;
 import com.example.semp.models.GenericResponse;
 import com.example.semp.models.PedidosPendentes;
-import java.util.Collections; // ADICIONADO: Importação necessária para ordenar a lista
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,7 +34,9 @@ import retrofit2.Response;
 public class AutorizarPedidosActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-    private RecyclerView recyclerViewPedidos;
+    private RecyclerView rvPendentes, rvConfirmados;
+    private SharedPreferences prefsOcultos;
+    private String usuarioAtual = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +44,13 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_autorizar_pedidos);
 
         drawerLayout = findViewById(R.id.drawerLayoutAutorizar);
-        recyclerViewPedidos = findViewById(R.id.recyclerViewPedidos);
+        rvPendentes = findViewById(R.id.rvPendentes);
+        rvConfirmados = findViewById(R.id.rvConfirmados);
+
+        // Pega o usuário logado para saber de quem são os pedidos ocultos
+        SharedPreferences prefsSessao = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
+        usuarioAtual = prefsSessao.getString("usuarioLogado", MainActivity.usuarioLogado);
+        prefsOcultos = getSharedPreferences("PedidosOcultos", MODE_PRIVATE);
 
         View mainView = findViewById(R.id.mainContentLayout);
         if (mainView != null) {
@@ -52,37 +70,58 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
 
         configurarNavegacaoMenu();
 
-        if (recyclerViewPedidos != null) {
-            recyclerViewPedidos.setLayoutManager(new LinearLayoutManager(this));
-            buscarPedidosPendentes();
-        }
+        if (rvPendentes != null) rvPendentes.setLayoutManager(new LinearLayoutManager(this));
+        if (rvConfirmados != null) rvConfirmados.setLayoutManager(new LinearLayoutManager(this));
+
+        buscarPedidosPendentes();
     }
 
+    // MÉTODO QUE BUSCA E DIVIDE OS PEDIDOS (CORRIGIDO)
+    // MÉTODO QUE BUSCA E DIVIDE OS PEDIDOS
     private void buscarPedidosPendentes() {
-        RetrofitClient.getApi().getPedidosPendentes().enqueue(new Callback<List<PedidosPendentes>>() {
+        SharedPreferences prefsSessao = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
+        String usuarioAtual = prefsSessao.getString("usuarioLogado", "");
+        String unidadeAtual = prefsSessao.getString("unidadeAtual", "");
+        String nivelContaStr = prefsSessao.getString("nivelContaAtual", "0");
+
+        // 👉 MUDANÇA AQUI: Trocamos para getMeusPedidos() para trazer os aprovados também!
+        RetrofitClient.getApi().getMeusPedidos(usuarioAtual, nivelContaStr, unidadeAtual).enqueue(new Callback<List<PedidosPendentes>>() {
             @Override
             public void onResponse(Call<List<PedidosPendentes>> call, Response<List<PedidosPendentes>> response) {
                 if (isDestroyed() || isFinishing()) return;
 
-                List<PedidosPendentes> lista = response.body();
-                if (response.isSuccessful() && lista != null) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(AutorizarPedidosActivity.this, "Erro API: " + response.code(), Toast.LENGTH_LONG).show();
+                    return;
+                }
 
-                    if (lista.isEmpty()) {
-                        Toast.makeText(AutorizarPedidosActivity.this, "Não há pedidos pendentes.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // ADICIONADO: Lógica de Ordenação
-                        // Ordena a lista baseada no peso da prioridade antes de passar para o Adapter
-                        Collections.sort(lista, (p1, p2) -> {
-                            // IMPORTANTE: Se o método de pegar a prioridade no seu modelo tiver outro nome
-                            // (ex: p1.prioridade em vez de p1.getPrioridade()), altere aqui.
-                            int peso1 = obterPesoPrioridade(p1.prioridade);
-                            int peso2 = obterPesoPrioridade(p2.prioridade);
-                            return Integer.compare(peso1, peso2);
-                        });
+                List<PedidosPendentes> todosPedidos = response.body();
+                if (todosPedidos != null) {
+                    List<PedidosPendentes> pendentes = new ArrayList<>();
+                    List<PedidosPendentes> confirmados = new ArrayList<>();
+
+                    Set<String> ocultos = prefsOcultos.getStringSet("ocultos_" + usuarioAtual, new HashSet<>());
+
+                    for (PedidosPendentes p : todosPedidos) {
+                        if (p.aprovacao == 0) {
+                            pendentes.add(p);
+                        } else if (p.aprovacao == 1) {
+                            // Só entra na lista de baixo se não estiver oculto localmente
+                            if (!ocultos.contains(String.valueOf(p.id_emprestimo))) {
+                                confirmados.add(p);
+                            }
+                        }
                     }
 
-                    if (recyclerViewPedidos != null) {
-                        recyclerViewPedidos.setAdapter(new PedidoAdapter(lista, (pedido, novoStatus) -> processarAutorizacao(pedido.id_emprestimo, novoStatus)));
+                    Collections.sort(pendentes, (p1, p2) -> Integer.compare(obterPesoPrioridade(p1.prioridade), obterPesoPrioridade(p2.prioridade)));
+
+                    if (rvPendentes != null) {
+                        rvPendentes.setAdapter(new PedidoAdapter(pendentes, 0, (pedido, novoStatus) -> processarAutorizacao(pedido.id_emprestimo, novoStatus)));
+                    }
+                    if (rvConfirmados != null) {
+                        rvConfirmados.setAdapter(new PedidoAdapter(confirmados, 1, (pedido, acao) -> {
+                            if (acao == 99) ocultarPedidoDaTela(pedido.id_emprestimo);
+                        }));
                     }
                 }
             }
@@ -90,26 +129,44 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<PedidosPendentes>> call, Throwable t) {
                 if (!isDestroyed() && !isFinishing()) {
-                    Toast.makeText(AutorizarPedidosActivity.this, "Erro ao carregar pedidos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AutorizarPedidosActivity.this, "Falha de Leitura", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    // ADICIONADO: Função auxiliar para converter o texto em peso numérico
-    private int obterPesoPrioridade(String prioridade) {
-        if (prioridade == null) return 4; // Se vier nulo, joga pro final da fila
+    // ALERTA TAMBÉM NO TOPO AQUI
+    private void mostrarAlertaWeb(View view, String mensagem, String corHexa) {
+        try {
+            Snackbar snackbar = Snackbar.make(view, mensagem, Snackbar.LENGTH_LONG);
+            View snackbarView = snackbar.getView();
+            snackbarView.setBackgroundColor(Color.parseColor(corHexa));
 
-        switch (prioridade.toLowerCase()) {
-            case "alto":
-                return 1;
+            android.widget.FrameLayout.LayoutParams params = (android.widget.FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = android.view.Gravity.TOP;
+            params.topMargin = 120;
+            snackbarView.setLayoutParams(params);
+
+            TextView textView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+            textView.setTextColor(Color.WHITE);
+            textView.setTextSize(16);
+            textView.setMaxLines(3);
+            snackbar.show();
+        } catch (Exception e) {
+            Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show(); // Fallback de segurança
+        }
+    }
+
+    private int obterPesoPrioridade(String prioridade) {
+        if (prioridade == null) return 4;
+        switch (prioridade.toLowerCase().trim()) {
+            case "alto": return 1;
             case "intermediário":
             case "intermediario":
-                return 2;
-            case "baixo":
-                return 3;
-            default:
-                return 4; // Qualquer outro valor desconhecido vai pro final
+            case "médio":
+            case "medio": return 2;
+            case "baixo": return 3;
+            default: return 4;
         }
     }
 
@@ -119,7 +176,7 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                 String acao = (novoStatus == 1) ? "aprovado" : "recusado";
-                Toast.makeText(AutorizarPedidosActivity.this, "Pedido " + acao + " com sucesso!", Toast.LENGTH_SHORT).show();
+                mostrarAlertaWeb(findViewById(android.R.id.content), "Pedido " + acao + " com sucesso!", "#1a4b9f");
                 buscarPedidosPendentes();
             }
 
@@ -128,6 +185,15 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
                 Toast.makeText(AutorizarPedidosActivity.this, "Erro ao processar", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void ocultarPedidoDaTela(int idEmprestimo) {
+        Set<String> ocultos = new HashSet<>(prefsOcultos.getStringSet("ocultos_" + usuarioAtual, new HashSet<>()));
+        ocultos.add(String.valueOf(idEmprestimo));
+        prefsOcultos.edit().putStringSet("ocultos_" + usuarioAtual, ocultos).apply();
+
+        mostrarAlertaWeb(findViewById(android.R.id.content), "Pedido removido da sua tela de visualização.", "#555555");
+        buscarPedidosPendentes();
     }
 
     private void configurarNavegacaoMenu() {

@@ -30,6 +30,13 @@ public interface ApiService {
     @GET("pedidos/pendentes")
     Call<List<PedidosPendentes>> getPedidosPendentes();
 
+    @GET("pedidos/todos")
+    Call<List<PedidosPendentes>> getTodosPedidos(
+            @Query("unidade") String unidade,
+            @Query("nivel") String nivel,
+            @Query("usuario") String usuario
+    );
+
     @POST("pedidos/autorizar")
     Call<GenericResponse> autorizarPedido(@Body AutorizarRequest request);
 
@@ -61,4 +68,6 @@ public interface ApiService {
             @Header("X-Usuario-ID") String usuario,
             @Body CarrinhoRequest request
     );
+
+
 }

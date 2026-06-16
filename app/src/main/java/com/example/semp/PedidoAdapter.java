@@ -13,14 +13,17 @@ import java.util.List;
 public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoViewHolder> {
 
     private List<PedidosPendentes> listaPedidos;
+    private int tipoLista; // 0 = Pendente, 1 = Confirmado
     private OnAcaoClickListener listener;
 
     public interface OnAcaoClickListener {
-        void onAcaoClick(PedidosPendentes pedido, int novoStatus);
+        void onAcaoClick(PedidosPendentes pedido, int acao);
     }
 
-    public PedidoAdapter(List<PedidosPendentes> listaPedidos, OnAcaoClickListener listener) {
+    // CONSTRUTOR ATUALIZADO: Agora ele exige receber o "tipoLista"
+    public PedidoAdapter(List<PedidosPendentes> listaPedidos, int tipoLista, OnAcaoClickListener listener) {
         this.listaPedidos = listaPedidos;
+        this.tipoLista = tipoLista;
         this.listener = listener;
     }
 
@@ -41,13 +44,34 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         holder.tvPedidoPrioridade.setText("Prioridade: " + (pedido.prioridade != null ? pedido.prioridade : "Normal"));
         holder.tvPedidoMotivo.setText("Motivo: " + (pedido.motivo != null ? pedido.motivo : "Não informado"));
 
-        holder.btnAutorizar.setOnClickListener(v -> {
-            if (listener != null) listener.onAcaoClick(pedido, 1); // 1 = Aprovado
-        });
+        // ========================================================
+        // LÓGICA DE SEPARAÇÃO VISUAL DOS BOTÕES
+        // ========================================================
+        if (tipoLista == 0) {
+            // LISTA DE PENDENTES
+            holder.btnAutorizar.setVisibility(View.VISIBLE);
+            holder.btnRecusar.setVisibility(View.VISIBLE);
 
-        holder.btnRecusar.setOnClickListener(v -> {
-            if (listener != null) listener.onAcaoClick(pedido, 2); // 2 = Recusado
-        });
+            holder.btnAutorizar.setText("Liberar");
+            holder.btnRecusar.setText("Recusar");
+
+            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#1a4b9f")); // Azul
+            holder.btnRecusar.setBackgroundColor(android.graphics.Color.parseColor("#ef5e31")); // Laranja
+
+            holder.btnAutorizar.setOnClickListener(v -> listener.onAcaoClick(pedido, 1));
+            holder.btnRecusar.setOnClickListener(v -> listener.onAcaoClick(pedido, 2));
+
+        } else if (tipoLista == 1) {
+            // LISTA DE CONFIRMADOS
+            holder.btnRecusar.setVisibility(View.GONE); // Esconde o botão de recusar
+
+            holder.btnAutorizar.setVisibility(View.VISIBLE);
+            holder.btnAutorizar.setText("Remover da Tela");
+            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#555555")); // Fica Cinza
+
+            // Retorna a ação "99" (Código que criamos para ocultar o item localmente)
+            holder.btnAutorizar.setOnClickListener(v -> listener.onAcaoClick(pedido, 99));
+        }
     }
 
     @Override
@@ -61,7 +85,6 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
 
         public PedidoViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Puxando os IDs corretos do item_pedido.xml
             tvPedidoNome = itemView.findViewById(R.id.tvPedidoNome);
             tvPedidoUnidade = itemView.findViewById(R.id.tvPedidoUnidade);
             tvPedidoProdutos = itemView.findViewById(R.id.tvPedidoProdutos);

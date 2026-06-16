@@ -3,9 +3,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Produto {
     public int id_estoque;
-    
+
     @SerializedName("quantidade")
-    public int quantidade; 
+    public int quantidade;
 
     public String nome;
     public String codigo;
@@ -19,4 +19,8 @@ public class Produto {
     public int carrinho;
     public String pedido;
     public String foto;
+
+    // 👉 ADICIONE ESTAS DUAS LINHAS:
+    @SerializedName("uni_atual")
+    public String unidade_atual;
 }

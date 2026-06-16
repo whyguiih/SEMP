@@ -108,7 +108,19 @@
                     android:textColor="#FFFFFF"
                     android:background="@drawable/bg_input_glass"
                     android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <EditText
+                    android:id="@+id/etNovaFoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="URL da Foto (Opcional)"
+                    android:textColorHint="#88FFFFFF"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
                     android:layout_marginBottom="32dp"/>
+
 
                 <Button
                     android:id="@+id/btnSalvarUsuario"
