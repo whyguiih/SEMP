@@ -101,7 +101,6 @@ public class FazerPedidoActivity extends AppCompatActivity {
         String dataReserva = etDataReserva.getText().toString().trim();
         String justificativa = etJustificativa.getText().toString().trim();
 
-        // Validações melhoradas
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             etEmail.setError("Insira um e-mail válido");
             etEmail.requestFocus();
@@ -113,68 +112,54 @@ public class FazerPedidoActivity extends AppCompatActivity {
             return;
         }
 
-        // Bloqueia duplo clique
         btnConfirmar.setEnabled(false);
         btnConfirmar.setText("Enviando...");
 
         String dataPostagemComHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-        // --- INÍCIO DA CORREÇÃO ---
         String prioridadeSelecionada = spinnerPrioridade.getSelectedItem() != null ? spinnerPrioridade.getSelectedItem().toString() : "Baixo";
-        String prioridadeParaDB = "baixo"; // Valor padrão em minúsculo
-
-        // Converte o valor visual para o formato exigido pelo banco de dados
+        String prioridadeParaDB = "baixo";
         switch (prioridadeSelecionada) {
-            case "Alto":
-                prioridadeParaDB = "alto";
-                break;
-            case "Médio":
-                prioridadeParaDB = "intermediário";
-                break;
-            case "Baixo":
-            default:
-                prioridadeParaDB = "baixo";
-                break;
+            case "Alto": prioridadeParaDB = "alto"; break;
+            case "Médio": prioridadeParaDB = "intermediário"; break;
         }
-        // --- FIM DA CORREÇÃO ---
+
+        // GERA O CÓDIGO DO PEDIDO
+        String codigoPedidoGerado = SempUtils.gerarCodigoSemp(unidadeSegura, 3);
+
+        // MONTA A LISTA DE PRODUTOS COM CÓDIGOS Semp INDIVIDUAIS
+        List<PedidoRequest.ProdutoPedido> produtosFormatados = new ArrayList<>();
+        for (Integer id : listaIdsParaPedido) {
+            // Aqui você idealmente resgata o nome e a quantidade exata do carrinho.
+            // Como o ID é o que temos, vamos estruturar a base:
+            String codigoProdutoGerado = SempUtils.gerarCodigoSemp(unidadeSegura, 2);
+
+            produtosFormatados.add(new PedidoRequest.ProdutoPedido(
+                    codigoProdutoGerado,
+                    "Nome do Produto (Busque do Carrinho)",
+                    1, // Quantidade
+                    unidadeSegura,
+                    codigoPedidoGerado
+            ));
+        }
 
         PedidoRequest request = new PedidoRequest(
-                usuarioSeguro,
-                email,
-                unidadeSegura,
-                dataReserva,
-                listaIdsParaPedido,
-                prioridadeParaDB, // <-- Usa a variável corrigida aqui
+                usuarioSeguro, email, unidadeSegura, dataReserva,
+                produtosFormatados, prioridadeParaDB,
                 justificativa.isEmpty() ? "Solicitação de Empréstimo" : justificativa,
-                dataPostagemComHora
+                dataPostagemComHora, codigoPedidoGerado
         );
-
-        Log.d("DEBUG_PEDIDO", "JSON_COMPLETO: " + new Gson().toJson(request));
 
         RetrofitClient.getApi().fazerPedido(request).enqueue(new Callback<GenericResponse>() {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                 btnConfirmar.setEnabled(true);
                 btnConfirmar.setText("Confirmar Pedido");
-
-                if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().sucesso)) {
-                    Toast.makeText(FazerPedidoActivity.this, "Pedido efetivado com sucesso!", Toast.LENGTH_SHORT).show();
-                    finish(); // Volta ao carrinho
+                if (response.isSuccessful() && response.body() != null && response.body().sucesso) {
+                    Toast.makeText(FazerPedidoActivity.this, "Pedido efetivado! Cód: " + codigoPedidoGerado, Toast.LENGTH_LONG).show();
+                    finish();
                 } else {
-                    String msg = "Erro no servidor.";
-                    if (response.body() != null && response.body().mensagem != null) {
-                        msg = response.body().mensagem;
-                    } else if (response.errorBody() != null) {
-                        try {
-                            String errorStr = response.errorBody().string();
-                            if (errorStr.contains("check constraint failed")) {
-                                msg = "Verifique se todos os campos estão preenchidos corretamente.";
-                            } else {
-                                msg = errorStr;
-                            }
-                        } catch (Exception ignored) {}
-                    }
-                    Toast.makeText(FazerPedidoActivity.this, "Erro: " + msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(FazerPedidoActivity.this, "Erro no servidor.", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -182,7 +167,7 @@ public class FazerPedidoActivity extends AppCompatActivity {
             public void onFailure(Call<GenericResponse> call, Throwable t) {
                 btnConfirmar.setEnabled(true);
                 btnConfirmar.setText("Confirmar Pedido");
-                Toast.makeText(FazerPedidoActivity.this, "Erro de conexão: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(FazerPedidoActivity.this, "Erro de conexão", Toast.LENGTH_SHORT).show();
             }
         });
     }

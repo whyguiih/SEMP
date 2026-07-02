@@ -70,4 +70,19 @@ public interface ApiService {
     );
 
 
+    // Para a tela de Rastreio
+    @POST("pedido/rastreio")
+    Call<GenericResponse> registrarRastreio(@Body RastreioRequest request);
+
+    @GET("rastreio/todos")
+    Call<List<Rastreio>> getTodosRastreios();
+
+    // Para a tela de Itens Emprestados
+    @GET("pedidos/emprestados")
+    Call<List<PedidosPendentes>> getItensEmprestados(@Query("unidade") String unidade);
+
+    @POST("pedidos/solicitar_retorno")
+    Call<GenericResponse> solicitarRetorno(@Body RetornoRequest request);
+
+
 }

@@ -12,4 +12,8 @@ public class PedidosPendentes {
     public int aprovacao;
 
     public int processamento;
+
+    public String codigo_pedido;
+    public String codigo_produto;
+    public String data_postagem;
 }

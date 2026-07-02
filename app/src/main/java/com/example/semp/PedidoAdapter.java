@@ -40,6 +40,9 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
 
         holder.tvPedidoNome.setText("Solicitante: " + pedido.nome);
         holder.tvPedidoUnidade.setText("Unidade: " + pedido.unidade);
+        holder.tvPedidoProdutos.setText("Produto: " + pedido.nome_produto + " | Qtd: " + pedido.quant +
+                "\nCód Prod: " + (pedido.codigo_produto != null ? pedido.codigo_produto : "N/A") +
+                "\nCód Ped.: " + (pedido.codigo_pedido != null ? pedido.codigo_pedido : "N/A"));
         holder.tvPedidoProdutos.setText("Produtos: " + pedido.nome_produto + " (Qtd: " + pedido.quant + ")");
         holder.tvPedidoPrioridade.setText("Prioridade: " + (pedido.prioridade != null ? pedido.prioridade : "Normal"));
         holder.tvPedidoMotivo.setText("Motivo: " + (pedido.motivo != null ? pedido.motivo : "Não informado"));

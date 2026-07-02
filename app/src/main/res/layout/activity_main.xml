@@ -113,6 +113,7 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:fontFamily="@font/neo_sans" />
+
     </LinearLayout>
 
     <TextView

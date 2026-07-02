@@ -2,7 +2,6 @@ package com.example.semp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,10 +22,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.semp.models.PedidosPendentes;
 import com.example.semp.models.Produto;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.semp.models.Rastreio;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -92,6 +95,7 @@ public class EstoqueActivity extends AppCompatActivity {
         // CHAMA A VERIFICAÇÃO DE NOTIFICAÇÕES AQUI
         // ==========================================
         verificarNotificacoes();
+
     }
 
     // ==========================================
@@ -138,6 +142,18 @@ public class EstoqueActivity extends AppCompatActivity {
         } catch (Exception e) {
             nivelConta = prefsSessao.getInt("nivelContaAtual", 0);
         }
+        // ... código anterior de verificarNotificacoes() ...
+
+        if (nivelConta== 1 || nivelConta == 2) {
+            // ... lógicas já existentes ...
+
+            // CHAMADA INJETADA AQUI PARA OS GERENTES
+            if (nivelConta == 2) {
+                verificarNotificacoesRastreio(prefsSessao.getString("unidadeAtual", ""));
+            }
+        }
+
+// ... código posterior ...
         final int nivelFinal = nivelConta;
 
         // Usa a rota que sabemos com 100% de certeza que funciona no seu banco
@@ -158,6 +174,7 @@ public class EstoqueActivity extends AppCompatActivity {
                         int maiorIdDaLista = ultimoIdVisto;
 
                         for (PedidosPendentes p : lista) {
+                            if (p == null) continue;
                             // Se o ID desse pedido for MAIOR que o último visto, é um pedido novo de verdade!
                             if (p.id_emprestimo > ultimoIdVisto) {
                                 novos++;
@@ -186,6 +203,7 @@ public class EstoqueActivity extends AppCompatActivity {
                         boolean houveMudanca = false;
 
                         for (PedidosPendentes pedido : lista) {
+                            if (pedido == null) continue;
                             if (pedido.nome != null && pedido.nome.equals(usuarioAtual)) {
                                 String id = String.valueOf(pedido.id_emprestimo);
                                 int statusAtual = pedido.aprovacao;
@@ -261,5 +279,82 @@ public class EstoqueActivity extends AppCompatActivity {
 
     private void configurarNavegacaoMenu() {
         MenuSidebarHelper.configurarNavegacao(this, drawerLayout);
+    }
+
+
+
+
+
+    private void verificarNotificacoesRastreio(String minhaUnidade) {
+        RetrofitClient.getApi().getTodosRastreios().enqueue(new Callback<List<Rastreio>>() {
+            @Override
+            public void onResponse(Call<List<Rastreio>> call, Response<List<Rastreio>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Rastreio> rastreios = response.body();
+                    String hoje = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+                    // Agrupar rastreios por código
+                    HashMap<String, List<Rastreio>> pacotes = new HashMap<>();
+                    if (rastreios != null) {
+                        for (Rastreio r : rastreios) {
+                            if (r == null || r.codigo == null) continue;
+                            if (!pacotes.containsKey(r.codigo)) pacotes.put(r.codigo, new ArrayList<>());
+                            pacotes.get(r.codigo).add(r);
+                        }
+                    }
+
+                    for (String codigo : pacotes.keySet()) {
+                        List<Rastreio> historico = pacotes.get(codigo);
+                        if (historico == null || historico.isEmpty()) continue;
+
+                        Rastreio atual = historico.get(historico.size() - 1);
+                        if (atual == null) continue;
+
+                        String origem = atual.unidade_original != null ? atual.unidade_original : "";
+                        String destino = atual.unidade_destino != null ? atual.unidade_destino : "";
+
+                        boolean souOrigem = origem.equalsIgnoreCase(minhaUnidade);
+                        boolean souDestino = destino.equalsIgnoreCase(minhaUnidade);
+
+                        if (!souOrigem && !souDestino) continue;
+
+                        // LÓGICA DE TRÂNSITO E ATRASOS (1 registro)
+                        if (historico.size() == 1) {
+                            if (atual.data_entrada != null && hoje.compareTo(atual.data_entrada) > 0) {
+                                mostrarAlertaWeb("ATRASO: O pedido " + codigo + " não chegou na unidade " + destino, "#c0392b");
+                            } else if (hoje.equals(atual.data_saida) && souOrigem) {
+                                mostrarAlertaWeb("O pedido " + codigo + " deve SAIR HOJE da sua unidade para " + destino, "#8e44ad");
+                            } else if (hoje.equals(atual.data_entrada) && souDestino) {
+                                mostrarAlertaWeb("O pedido " + codigo + " deve CHEGAR HOJE na sua unidade.", "#005c97");
+                            }
+                        }
+                    }
+
+                    // MENSAGEM NOVA FALTANTE: Avisar compras para registrar rastreio de pedido aprovado/pendente
+                    RetrofitClient.getApi().getPedidosPendentes().enqueue(new Callback<List<PedidosPendentes>>() {
+                        @Override
+                        public void onResponse(Call<List<PedidosPendentes>> call, Response<List<PedidosPendentes>> respPedidos) {
+                            if (respPedidos.isSuccessful() && respPedidos.body() != null) {
+                                for (PedidosPendentes p : respPedidos.body()) {
+                                    if (p == null) continue;
+                                    
+                                    String unidadePedido = p.unidade != null ? p.unidade : "";
+                                    String minhaUnidadeSegura = minhaUnidade != null ? minhaUnidade : "";
+
+                                    // Se for da minha unidade, foi criado hoje e não tem rastreio iniciado
+                                    if (unidadePedido.equalsIgnoreCase(minhaUnidadeSegura) && p.data_postagem != null && p.data_postagem.startsWith(hoje)) {
+                                        if (p.codigo_pedido != null && !pacotes.containsKey(p.codigo_pedido)) {
+                                            mostrarAlertaWeb("Lembrete: Registre a saída do pedido " + p.codigo_pedido + " no Rastreio hoje!", "#e06c00");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        @Override public void onFailure(Call<List<PedidosPendentes>> call, Throwable t) {}
+                    });
+                }
+            }
+            @Override public void onFailure(Call<List<Rastreio>> call, Throwable t) {}
+        });
     }
 }

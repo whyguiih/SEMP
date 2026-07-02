@@ -94,6 +94,42 @@
         android:paddingHorizontal="24dp"
         android:background="?attr/selectableItemBackground"/>
 
+    <TextView
+        android:id="@+id/menuItemRastreio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rastreio"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/neo_sans_medium"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="24dp"
+        android:background="?attr/selectableItemBackground"/>
+
+    <TextView
+        android:id="@+id/menuItemEmprestados"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Itens Emprestados"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/neo_sans_medium"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="24dp"
+        android:background="?attr/selectableItemBackground"/>
+
+    <TextView
+        android:id="@+id/menuItemMovimentacoes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Movimentações"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/neo_sans_medium"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="24dp"
+        android:background="?attr/selectableItemBackground"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
