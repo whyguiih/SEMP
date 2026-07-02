@@ -47,6 +47,6 @@
             android:text="Solicitar Retorno"
             android:textSize="12sp"
             android:backgroundTint="#27ae60"
-            app:cornerRadius="8dp" />
+            app:cornerRadius="50dp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

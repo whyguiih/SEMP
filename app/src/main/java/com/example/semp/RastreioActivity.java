@@ -1,5 +1,6 @@
 package com.example.semp;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +13,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.semp.models.GenericResponse;
 import com.example.semp.models.RastreioRequest;
+
+import java.util.Calendar;
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,6 +52,9 @@ public class RastreioActivity extends AppCompatActivity {
 
         etOriginal.setText(unidadeSegura);
 
+        etDataSaida.setOnClickListener(v -> abrirCalendario(etDataSaida));
+        etDataEntrada.setOnClickListener(v -> abrirCalendario(etDataEntrada));
+
         btnConfirmar.setOnClickListener(v -> {
             String codigo = etCodigo.getText().toString().trim();
             String original = etOriginal.getText().toString().trim();
@@ -78,5 +86,15 @@ public class RastreioActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private void abrirCalendario(EditText editText) {
+        final Calendar c = Calendar.getInstance();
+        DatePickerDialog dpd = new DatePickerDialog(this,
+                (view, year, month, day) -> {
+                    String dataFormatada = year + "-" + String.format(Locale.getDefault(), "%02d", (month + 1)) + "-" + String.format(Locale.getDefault(), "%02d", day);
+                    editText.setText(dataFormatada);
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+        dpd.show();
     }
 }

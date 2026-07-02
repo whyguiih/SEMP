@@ -35,7 +35,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
         EditText etSenha = findViewById(R.id.etNovaSenha);
         EditText etNivel = findViewById(R.id.etNovoNivel);
         EditText etUnidade = findViewById(R.id.etNovaUnidade);
-        EditText etFoto = findViewById(R.id.etNovaFoto); // 👉 NOVA LINHA
+        EditText etFoto = findViewById(R.id.etNovaFoto); // NOVA LINHA
         Button btnSalvar = findViewById(R.id.btnSalvarUsuario);
 
         btnSalvar.setOnClickListener(v -> {
@@ -43,7 +43,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             String senha = etSenha.getText().toString().trim();
             String nivelStr = etNivel.getText().toString().trim();
             String unidade = etUnidade.getText().toString().trim();
-            String fotoUrl = etFoto.getText().toString().trim(); // 👉 NOVA LINHA
+            String fotoUrl = etFoto.getText().toString().trim(); // NOVA LINHA
 
             if (user.isEmpty() || senha.isEmpty() || nivelStr.isEmpty() || unidade.isEmpty()) {
                 Toast.makeText(this, "Preencha todos os campos obrigatórios!", Toast.LENGTH_SHORT).show();
@@ -61,7 +61,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             btnSalvar.setText("Salvando...");
 
             int nivel = Integer.parseInt(nivelStr);
-            // 👉 PASSA A VARIÁVEL fotoUrl NO FINAL DO NOVO CONSTRUTOR:
+            // PASSA A VARIÁVEL fotoUrl NO FINAL DO NOVO CONSTRUTOR:
             UsuarioRequest request = new UsuarioRequest(user, senha, nivel, unidade, fotoUrl);
 
             // Chamada REAL para a API
@@ -78,7 +78,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                         etSenha.setText("");
                         etNivel.setText("");
                         etUnidade.setText("");
-                        etFoto.setText(""); // 👉 NOVA LINHA
+                        etFoto.setText(""); // NOVA LINHA
                         etUsuario.requestFocus();
                     } else {
                         String msgErro = (response.body() != null && response.body().mensagem != null) ? response.body().mensagem : "Erro ao cadastrar usuário.";

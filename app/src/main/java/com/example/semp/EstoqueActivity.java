@@ -212,9 +212,9 @@ public class EstoqueActivity extends AppCompatActivity {
                                     int statusSalvo = prefs.getInt("status_" + id, 0);
                                     if (statusSalvo != statusAtual) {
                                         if (statusAtual == 1) {
-                                            mostrarAlertaWeb("🎉 Seu pedido de '" + pedido.nome_produto + "' foi APROVADO!", "#27ae60");
+                                            mostrarAlertaWeb("Seu pedido de '" + pedido.nome_produto + "' foi APROVADO!", "#27ae60");
                                         } else {
-                                            mostrarAlertaWeb("❌ Seu pedido de '" + pedido.nome_produto + "' foi RECUSADO.", "#e74c3c");
+                                            mostrarAlertaWeb("Seu pedido de '" + pedido.nome_produto + "' foi RECUSADO.", "#e74c3c");
                                         }
                                         editor.putInt("status_" + id, statusAtual);
                                         houveMudanca = true;

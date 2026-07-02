@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.example.semp.models.GenericResponse;
 import com.example.semp.models.PedidoRequest;
 import com.google.gson.Gson;
@@ -32,6 +35,7 @@ public class FazerPedidoActivity extends AppCompatActivity {
     private Spinner spinnerPrioridade;
     private Button btnConfirmar;
     private List<Integer> listaIdsParaPedido = new ArrayList<>();
+    private DrawerLayout drawerLayout;
 
     // Variáveis seguras da sessão
     private String usuarioSeguro = "Usuario";
@@ -41,6 +45,15 @@ public class FazerPedidoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fazer_pedido);
+
+        drawerLayout = findViewById(R.id.drawerLayoutFazerPedido);
+        View btnMenu = findViewById(R.id.btnMenu);
+        if (btnMenu != null) {
+            btnMenu.setOnClickListener(v -> {
+                if (drawerLayout != null) drawerLayout.openDrawer(GravityCompat.START);
+            });
+        }
+        MenuSidebarHelper.configurarNavegacao(this, drawerLayout);
 
         // Busca dados da sessão de forma segura (previne NullPointerException)
         SharedPreferences prefs = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">SEMP</string>
+    <string name="login_entrar">Entrar</string>
+    <string name="login_google">Entrar com Google</string>
     <string name="nome_do_produto">Nome do Produto</string>
     <string name="cod_000">Cód: 000</string>
 </resources>

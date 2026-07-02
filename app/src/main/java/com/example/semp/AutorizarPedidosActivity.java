@@ -84,7 +84,7 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
         String unidadeAtual = prefsSessao.getString("unidadeAtual", "");
         String nivelContaStr = prefsSessao.getString("nivelContaAtual", "0");
 
-        // 👉 MUDANÇA AQUI: Trocamos para getMeusPedidos() para trazer os aprovados também!
+        // MUDANÇA AQUI: Trocamos para getMeusPedidos() para trazer os aprovados também!
         RetrofitClient.getApi().getMeusPedidos(usuarioAtual, nivelContaStr, unidadeAtual).enqueue(new Callback<List<PedidosPendentes>>() {
             @Override
             public void onResponse(Call<List<PedidosPendentes>> call, Response<List<PedidosPendentes>> response) {
