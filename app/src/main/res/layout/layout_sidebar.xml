@@ -3,7 +3,7 @@
     android:layout_width="280dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="#BE1A1A24"
+    android:background="#ff7236"
     android:orientation="vertical"
     android:paddingTop="48dp"
     android:paddingBottom="24dp">
@@ -50,13 +50,6 @@
         android:paddingVertical="16dp"
         android:paddingHorizontal="24dp"
         android:background="?attr/selectableItemBackground"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#33FFFFFF"
-        android:layout_marginVertical="16dp"
-        android:layout_marginHorizontal="24dp"/>
 
     <TextView
         android:id="@+id/menuItemConfigEstoque"

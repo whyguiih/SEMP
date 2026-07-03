@@ -108,11 +108,11 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:backgroundTint="#1B4F9B"
-            app:cornerRadius="50dp"
+            android:fontFamily="@font/neo_sans"
             android:text="Entrar"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            android:fontFamily="@font/neo_sans" />
+            app:cornerRadius="50dp" />
 
     </LinearLayout>
 
