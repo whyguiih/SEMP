@@ -8,7 +8,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="SEMP"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:theme="@style/Theme.SEMP"
         android:usesCleartextTraffic="true"> <activity android:name="com.example.semp.MainActivity" android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

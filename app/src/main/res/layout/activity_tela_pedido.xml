@@ -44,9 +44,9 @@
             android:text="VOLTAR AO INÍCIO"
             android:textColor="#1A4B9F"
             android:backgroundTint="#FFFFFF"
-            app:cornerRadius="50dp"
             android:fontFamily="@font/neo_sans_bold_italic"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            app:cornerRadius="100dp"/>
 
     </LinearLayout>
 </LinearLayout>

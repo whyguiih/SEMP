@@ -145,8 +145,8 @@
                         android:text="CONFIRMAR PEDIDO"
                         android:textColor="#FFFFFF"
                         android:backgroundTint="#ef5e31"
-                        app:cornerRadius="50dp"
-                        android:fontFamily="@font/neo_sans_bold_italic"/>
+                        android:fontFamily="@font/neo_sans_bold_italic"
+                        app:cornerRadius="100dp"/>
                 </LinearLayout>
 
                 <!-- Botão Voltar como opção secundária -->
@@ -158,7 +158,7 @@
                     android:backgroundTint="#33FFFFFF"
                     android:textColor="#FFFFFF"
                     android:layout_marginBottom="32dp"
-                    app:cornerRadius="50dp"/>
+                    app:cornerRadius="100dp"/>
 
             </LinearLayout>
         </ScrollView>

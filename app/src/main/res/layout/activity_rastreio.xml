@@ -138,7 +138,7 @@
                     android:fontFamily="@font/neo_sans_bold_italic"
                     android:text="Confirmar Rastreio"
                     android:textColor="#FFFFFF"
-                    app:cornerRadius="50dp" />
+                    app:cornerRadius="100dp" />
 
             </LinearLayout>
         </ScrollView>

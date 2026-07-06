@@ -71,7 +71,7 @@
                     android:fontFamily="@font/neo_sans_bold_italic"
                     android:backgroundTint="#33FFFFFF"
                     android:layout_marginBottom="32dp"
-                    app:cornerRadius="50dp"/>
+                    app:cornerRadius="100dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -225,8 +225,8 @@
                         android:text="ALTERAR FOTO"
                         android:backgroundTint="#33FFFFFF"
                         android:textColor="#FFFFFF"
-                        app:cornerRadius="50dp"
-                        android:fontFamily="@font/neo_sans_medium"/>
+                        android:fontFamily="@font/neo_sans_medium"
+                        app:cornerRadius="100dp"/>
 
                     <ImageView
                         android:id="@+id/ivPreviewFotoAlt"
@@ -245,8 +245,8 @@
                     android:text="ATUALIZAR"
                     android:textColor="#1B4F9B"
                     android:backgroundTint="#FFFFFF"
-                    app:cornerRadius="50dp"
-                    android:fontFamily="@font/neo_sans_bold_italic"/>
+                    android:fontFamily="@font/neo_sans_bold_italic"
+                    app:cornerRadius="100dp"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -285,8 +285,8 @@
                     android:text="DELETAR"
                     android:textColor="#FFFFFF"
                     android:backgroundTint="#ef5e31"
-                    app:cornerRadius="50dp"
-                    android:fontFamily="@font/neo_sans_bold_italic"/>
+                    android:fontFamily="@font/neo_sans_bold_italic"
+                    app:cornerRadius="100dp"/>
             </LinearLayout>
         </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

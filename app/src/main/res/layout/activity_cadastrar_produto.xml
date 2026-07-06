@@ -62,7 +62,7 @@
                     android:fontFamily="@font/neo_sans_bold_italic"
                     android:backgroundTint="#33FFFFFF"
                     android:layout_marginBottom="32dp"
-                    app:cornerRadius="50dp"/>
+                    app:cornerRadius="100dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -198,7 +198,7 @@
                         android:text="SELECIONAR FOTO"
                         android:backgroundTint="#33FFFFFF"
                         android:textColor="#FFFFFF"
-                        app:cornerRadius="50dp"/>
+                        app:cornerRadius="100dp"/>
 
                     <ImageView
                         android:id="@+id/ivPreviewFoto"
@@ -218,7 +218,7 @@
                     android:textColor="#FFFFFF"
                     android:fontFamily="@font/neo_sans_bold_italic"
                     android:backgroundTint="#ef5e31"
-                    app:cornerRadius="50dp"/>
+                    app:cornerRadius="100dp"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

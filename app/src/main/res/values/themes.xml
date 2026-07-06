@@ -8,6 +8,18 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 
         <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Global Button Style -->
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
+    </style>
+
+    <style name="Widget.App.Button" parent="Widget.Material3.Button">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.Button</item>
+    </style>
+
+    <style name="ShapeAppearance.App.Button" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="Theme.SEMP" parent="Base.Theme.SEMP" />

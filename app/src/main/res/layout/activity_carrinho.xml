@@ -82,14 +82,14 @@
             android:layout_marginHorizontal="24dp"
             android:layout_marginBottom="32dp"
             android:backgroundTint="#1B4F9B"
-            app:cornerRadius="50dp"
             android:text="Finalizar Pedido"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:fontFamily="@font/neo_sans_bold_italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:cornerRadius="100dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

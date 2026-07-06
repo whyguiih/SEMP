@@ -242,7 +242,7 @@
             android:textColor="#FFFFFF"
             android:fontFamily="@font/neo_sans_bold_italic"
             android:backgroundTint="#E25A27"
-            app:cornerRadius="50dp"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            app:cornerRadius="100dp"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

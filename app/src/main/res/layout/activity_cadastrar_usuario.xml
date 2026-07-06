@@ -130,7 +130,7 @@
                     android:textColor="#FFFFFF"
                     android:fontFamily="@font/neo_sans_bold_italic"
                     android:backgroundTint="#1B4F9B"
-                    app:cornerRadius="50dp"/>
+                    app:cornerRadius="100dp"/>
 
             </LinearLayout>
         </ScrollView>

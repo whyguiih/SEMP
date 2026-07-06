@@ -67,7 +67,7 @@
             android:textColor="#FFFFFF"
             android:fontFamily="@font/neo_sans_bold_italic"
             android:backgroundTint="#4CAF50"
-            app:cornerRadius="50dp"/>
+            app:cornerRadius="100dp"/>
 
         <Button
             android:id="@+id/btnRecusar"
@@ -79,6 +79,6 @@
             android:fontFamily="@font/neo_sans_bold_italic"
             android:backgroundTint="#F44336"
             android:layout_marginStart="12dp"
-            app:cornerRadius="50dp"/>
+            app:cornerRadius="100dp"/>
     </LinearLayout>
 </LinearLayout>
