@@ -27,4 +27,7 @@ public class PedidosPendentes {
     public String codigo_pedido;
     public String codigo_produto;
     public String data_postagem;
+
+    @SerializedName(value = "data_devolucao", alternate = {"data_retorno", "devolucao", "retorno"})
+    public String data_devolucao;
 }

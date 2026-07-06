@@ -37,8 +37,9 @@ import retrofit2.Response;
 public class AutorizarPedidosActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-    private RecyclerView rvPendentes, rvConfirmados;
-    private PedidoAdapter adapterPendentes, adapterConfirmados;
+    private RecyclerView rvPendentes, rvConfirmados, rvRetornos;
+    private PedidoAdapter adapterPendentes, adapterConfirmados, adapterRetornos;
+    private TextView tvTituloRetornos;
     private SharedPreferences prefsOcultos;
     private String usuarioAtual = "";
     private EditText etPesquisa;
@@ -51,6 +52,8 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawerLayoutAutorizar);
         rvPendentes = findViewById(R.id.rvPendentes);
         rvConfirmados = findViewById(R.id.rvConfirmados);
+        rvRetornos = findViewById(R.id.rvRetornos);
+        tvTituloRetornos = findViewById(R.id.tvTituloRetornos);
 
         // Pega o usuário logado para saber de quem são os pedidos ocultos
         SharedPreferences prefsSessao = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
@@ -77,6 +80,7 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
 
         if (rvPendentes != null) rvPendentes.setLayoutManager(new LinearLayoutManager(this));
         if (rvConfirmados != null) rvConfirmados.setLayoutManager(new LinearLayoutManager(this));
+        if (rvRetornos != null) rvRetornos.setLayoutManager(new LinearLayoutManager(this));
 
         etPesquisa = findViewById(R.id.etPesquisa);
         if (etPesquisa != null) {
@@ -88,6 +92,7 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
                     String texto = s.toString();
                     if (adapterPendentes != null) adapterPendentes.filtrar(texto);
                     if (adapterConfirmados != null) adapterConfirmados.filtrar(texto);
+                    if (adapterRetornos != null) adapterRetornos.filtrar(texto);
                 }
             });
         }
@@ -95,16 +100,13 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
         buscarPedidosPendentes();
     }
 
-    // MÉTODO QUE BUSCA E DIVIDE OS PEDIDOS (CORRIGIDO)
-    // MÉTODO QUE BUSCA E DIVIDE OS PEDIDOS
     private void buscarPedidosPendentes() {
         SharedPreferences prefsSessao = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
         String usuarioAtual = prefsSessao.getString("usuarioLogado", "");
         String unidadeAtual = prefsSessao.getString("unidadeAtual", "");
-        String nivelContaStr = prefsSessao.getString("nivelContaAtual", "0");
 
-        // Usamos getMeusPedidos para trazer a lista completa (incluindo os aprovados)
-        RetrofitClient.getApi().getMeusPedidos(usuarioAtual, nivelContaStr, unidadeAtual).enqueue(new Callback<List<PedidosPendentes>>() {
+        // Retornando para getPedidosPendentes que sabemos que não dá 404
+        RetrofitClient.getApi().getPedidosPendentes().enqueue(new Callback<List<PedidosPendentes>>() {
             @Override
             public void onResponse(Call<List<PedidosPendentes>> call, Response<List<PedidosPendentes>> response) {
                 if (isDestroyed() || isFinishing()) return;
@@ -118,14 +120,24 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
                 if (todosPedidos != null) {
                     List<PedidosPendentes> pendentes = new ArrayList<>();
                     List<PedidosPendentes> confirmados = new ArrayList<>();
+                    List<PedidosPendentes> retornos = new ArrayList<>();
 
-                    Set<String> ocultos = prefsOcultos.getStringSet("ocultos_" + usuarioAtual, new HashSet<>());
+                    Set<String> ocultos = prefsOcultos.getStringSet("ocultos_" + AutorizarPedidosActivity.this.usuarioAtual, new HashSet<>());
 
                     for (PedidosPendentes p : todosPedidos) {
-                        if (p.aprovacao == 0) {
+                        // Filtro de unidade (opcional, mas bom para garantir)
+                        String unidadePedido = p.unidade != null ? p.unidade : "";
+                        if (!unidadePedido.equalsIgnoreCase(unidadeAtual) && !unidadeAtual.isEmpty()) {
+                             // Se quiser ver apenas da sua unidade, descomente a linha abaixo ou mantenha como está para ver todos
+                             // continue; 
+                        }
+
+                        // Conforme o Worker: aprovacao == 3 significa retorno solicitado
+                        if (p.aprovacao == 3) {
+                            retornos.add(p);
+                        } else if (p.aprovacao == 0) {
                             pendentes.add(p);
                         } else if (p.aprovacao == 1) {
-                            // Só entra na lista de baixo se não estiver oculto localmente
                             if (!ocultos.contains(String.valueOf(p.id_emprestimo))) {
                                 confirmados.add(p);
                             }
@@ -133,6 +145,20 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
                     }
 
                     Collections.sort(pendentes, (p1, p2) -> Integer.compare(obterPesoPrioridade(p1.prioridade), obterPesoPrioridade(p2.prioridade)));
+
+                    if (rvRetornos != null) {
+                        if (!retornos.isEmpty()) {
+                            tvTituloRetornos.setVisibility(View.VISIBLE);
+                            rvRetornos.setVisibility(View.VISIBLE);
+                            adapterRetornos = new PedidoAdapter(retornos, 2, (pedido, acao) -> {
+                                if (acao == 3) processarAutorizacao(pedido.id_emprestimo, 4); 
+                            });
+                            rvRetornos.setAdapter(adapterRetornos);
+                        } else {
+                            tvTituloRetornos.setVisibility(View.GONE);
+                            rvRetornos.setVisibility(View.GONE);
+                        }
+                    }
 
                     if (rvPendentes != null) {
                         adapterPendentes = new PedidoAdapter(pendentes, 0, (pedido, novoStatus) -> processarAutorizacao(pedido.id_emprestimo, novoStatus));
@@ -145,11 +171,11 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
                         rvConfirmados.setAdapter(adapterConfirmados);
                     }
                     
-                    // Se houver texto na pesquisa ao recarregar, aplica o filtro novamente
                     if (etPesquisa != null && !etPesquisa.getText().toString().isEmpty()) {
                         String texto = etPesquisa.getText().toString();
                         if (adapterPendentes != null) adapterPendentes.filtrar(texto);
                         if (adapterConfirmados != null) adapterConfirmados.filtrar(texto);
+                        if (adapterRetornos != null) adapterRetornos.filtrar(texto);
                     }
                 }
             }
@@ -163,7 +189,6 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
         });
     }
 
-    // ALERTA TAMBÉM NO TOPO AQUI
     private void mostrarAlertaWeb(View view, String mensagem, String corHexa) {
         try {
             Snackbar snackbar = Snackbar.make(view, mensagem, Snackbar.LENGTH_LONG);
@@ -181,7 +206,7 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
             textView.setMaxLines(3);
             snackbar.show();
         } catch (Exception e) {
-            Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show(); // Fallback de segurança
+            Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -203,7 +228,12 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
         RetrofitClient.getApi().autorizarPedido(request).enqueue(new Callback<GenericResponse>() {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                String acao = (novoStatus == 1) ? "aprovado" : "recusado";
+                String acao;
+                if (novoStatus == 1) acao = "aprovado";
+                else if (novoStatus == 2) acao = "recusado";
+                else if (novoStatus == 4) acao = "de retorno confirmado";
+                else acao = "processado";
+
                 mostrarAlertaWeb(findViewById(android.R.id.content), "Pedido " + acao + " com sucesso!", "#1a4b9f");
                 buscarPedidosPendentes();
             }

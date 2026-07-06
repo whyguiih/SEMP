@@ -14,7 +14,7 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
 
     private List<PedidosPendentes> listaPedidos;
     private List<PedidosPendentes> listaOriginal;
-    private int tipoLista; // 0 = Pendente, 1 = Confirmado
+    private int tipoLista; // 0 = Pendente, 1 = Confirmado, 2 = Retorno
     private OnAcaoClickListener listener;
 
     public interface OnAcaoClickListener {
@@ -72,7 +72,14 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
             infoProdutos.append("\nCód Ped.: ").append(pedido.codigo_pedido);
         }
         if (pedido.data_reserva != null && !pedido.data_reserva.isEmpty()) {
-            infoProdutos.append("\nReserva: ").append(pedido.data_reserva);
+            if (pedido.aprovacao == 3) {
+                infoProdutos.append("\nSOLICITADO RETORNO PARA: ").append(pedido.data_reserva);
+            } else {
+                infoProdutos.append("\nReserva: ").append(pedido.data_reserva);
+            }
+        }
+        if (pedido.data_devolucao != null && !pedido.data_devolucao.isEmpty() && !pedido.data_devolucao.equalsIgnoreCase("null")) {
+            infoProdutos.append("\nDEVOLUÇÃO: ").append(pedido.data_devolucao);
         }
 
         holder.tvPedidoProdutos.setText(infoProdutos.toString());
@@ -106,6 +113,16 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
 
             // Retorna a ação "99" (Código que criamos para ocultar o item localmente)
             holder.btnAutorizar.setOnClickListener(v -> listener.onAcaoClick(pedido, 99));
+        } else if (tipoLista == 2) {
+            // LISTA DE RETORNOS (EXIGEM RETORNO)
+            holder.btnRecusar.setVisibility(View.GONE);
+            holder.btnAutorizar.setVisibility(View.VISIBLE);
+            holder.btnAutorizar.setText("Ciente");
+            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#FFD700")); // Dourado
+            holder.btnAutorizar.setTextColor(android.graphics.Color.BLACK);
+
+            // Ação 3 para confirmar que está ciente do retorno
+            holder.btnAutorizar.setOnClickListener(v -> listener.onAcaoClick(pedido, 3));
         }
     }
 
