@@ -61,17 +61,18 @@
                 android:orientation="vertical"
                 android:padding="28dp">
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/etRastreioCodigo"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_input_glass"
                     android:fontFamily="@font/neo_sans_regular"
-                    android:hint="Código do Pedido"
+                    android:hint="Pesquisar Pedido..."
                     android:paddingHorizontal="16dp"
                     android:textColor="#FFFFFF"
-                    android:textColorHint="#99FFFFFF" />
+                    android:textColorHint="#99434343"
+                    android:completionThreshold="1" />
 
                 <EditText
                     android:id="@+id/etRastreioOriginal"
