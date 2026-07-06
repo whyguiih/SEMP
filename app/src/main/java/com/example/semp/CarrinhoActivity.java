@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.semp.models.*;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ import retrofit2.Response;
 public class CarrinhoActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private List<Produto> itensCarrinhoCompleto = new java.util.ArrayList<>();
     private java.util.List<Integer> idsSelecionadosParaPedido = new java.util.ArrayList<>();
     private String usuarioSeguro = "";
 
@@ -63,8 +65,15 @@ public class CarrinhoActivity extends AppCompatActivity {
         if (btnFinalizarPedido != null) {
             btnFinalizarPedido.setEnabled(false);
             btnFinalizarPedido.setOnClickListener(v -> {
+                java.util.List<Produto> selecionados = new java.util.ArrayList<>();
+                for (Produto p : itensCarrinhoCompleto) {
+                    if (idsSelecionadosParaPedido.contains(p.id_estoque)) {
+                        selecionados.add(p);
+                    }
+                }
+                
                 Intent intent = new Intent(CarrinhoActivity.this, FazerPedidoActivity.class);
-                intent.putIntegerArrayListExtra("IDS_SELECIONADOS", new java.util.ArrayList<>(idsSelecionadosParaPedido));
+                intent.putExtra("ITENS_SELECIONADOS", new Gson().toJson(selecionados));
                 startActivity(intent);
             });
         }
@@ -96,6 +105,7 @@ public class CarrinhoActivity extends AppCompatActivity {
 
                         if (responseCarrinho.isSuccessful() && responseCarrinho.body() != null) {
                             List<Produto> itensCarrinho = responseCarrinho.body();
+                            itensCarrinhoCompleto = itensCarrinho;
 
                             // OTIMIZAÇÃO: Uso de HashMap para evitar O(n*m) - Crucial para estoques grandes
                             if (todosProdutos != null) {

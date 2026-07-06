@@ -35,10 +35,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Movimentações"
+                android:fontFamily="@font/neo_sans"
+                android:text="Movimentações do dia"
                 android:textColor="#FFFFFF"
-                android:textSize="22sp"
-                android:fontFamily="@font/neo_sans" />
+                android:textSize="22sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -47,32 +47,29 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
             app:layout_constraintTop_toBottomOf="@id/topBar">
 
             <EditText
                 android:id="@+id/etDataFiltro"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/bg_input_glass"
                 android:hint="Filtrar por data"
-                android:paddingHorizontal="16dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#99FFFFFF"
                 android:focusable="false"
                 android:clickable="true"
-                android:drawableEnd="@android:drawable/ic_menu_my_calendar"
-                android:drawablePadding="12dp"
-                android:fontFamily="@font/neo_sans_regular" />
+                android:textColor="#FFFFFF"
+                android:textColorHint="#CCCCCC"
+                android:backgroundTint="#FFFFFF"
+                android:inputType="date"
+                android:importantForAutofill="no" />
 
             <Button
                 android:id="@+id/btnLimparFiltro"
                 android:layout_width="wrap_content"
-                android:layout_height="52dp"
-                android:layout_marginStart="8dp"
+                android:layout_height="wrap_content"
                 android:text="Limpar"
-                android:backgroundTint="#33FFFFFF"
-                app:cornerRadius="50dp" />
+                android:layout_marginStart="8dp" />
         </LinearLayout>
 
         <TextView
@@ -86,13 +83,21 @@
             app:layout_constraintTop_toBottomOf="@id/dateFilterLayout"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <View
+            android:id="@+id/lineSaidas"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="#80FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/tvSaidas" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSaidasHoje"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             app:layout_constraintHeight_percent="0.4"
-            app:layout_constraintTop_toBottomOf="@id/tvSaidas"
+            app:layout_constraintTop_toBottomOf="@id/lineSaidas"
             tools:layout_editor_absoluteX="-65dp" />
 
         <TextView
@@ -106,12 +111,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rvSaidasHoje" />
 
+        <View
+            android:id="@+id/lineChegadas"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="#80FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/tvChegadas" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvChegadasHoje"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/tvChegadas"
+            app:layout_constraintTop_toBottomOf="@id/lineChegadas"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.constraintlayout.widget.Barrier
@@ -135,6 +148,29 @@
             android:layout_height="wrap_content"
             tools:layout_editor_absoluteX="199dp"
             tools:layout_editor_absoluteY="199dp" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="715dp"
+            android:layout_marginEnd="395dp"
+            android:layout_marginBottom="16dp"
+            app:barrierDirection="top"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

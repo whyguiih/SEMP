@@ -12,10 +12,10 @@
         android:id="@+id/tvPedidoId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pedido #123"
         android:fontFamily="@font/neo_sans_bold_italic"
-        android:textSize="20sp"
-        android:textColor="#FFFFFF"/>
+        android:text="Pedido #123"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvPedidoProdutos"

@@ -18,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.semp.models.GenericResponse;
 import com.example.semp.models.PedidoRequest;
+import com.example.semp.models.Produto;
 import com.google.gson.Gson;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class FazerPedidoActivity extends AppCompatActivity {
     private EditText etEmail, etDataReserva, etJustificativa, etNomeUsuario;
     private Spinner spinnerPrioridade;
     private Button btnConfirmar;
-    private List<Integer> listaIdsParaPedido = new ArrayList<>();
+    private List<Produto> listaProdutosParaPedido = new ArrayList<>();
     private DrawerLayout drawerLayout;
 
     // Variáveis seguras da sessão
@@ -60,8 +61,12 @@ public class FazerPedidoActivity extends AppCompatActivity {
         usuarioSeguro = prefs.getString("usuarioLogado", "Usuario");
         unidadeSegura = prefs.getString("unidadeAtual", "Unidade Central");
 
-        if (getIntent().hasExtra("IDS_SELECIONADOS")) {
-            listaIdsParaPedido = getIntent().getIntegerArrayListExtra("IDS_SELECIONADOS");
+        if (getIntent().hasExtra("ITENS_SELECIONADOS")) {
+            String json = getIntent().getStringExtra("ITENS_SELECIONADOS");
+            if (json != null) {
+                java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<List<Produto>>() {}.getType();
+                listaProdutosParaPedido = new Gson().fromJson(json, listType);
+            }
         }
 
         etNomeUsuario = findViewById(R.id.etNomeUsuario);
@@ -105,7 +110,7 @@ public class FazerPedidoActivity extends AppCompatActivity {
     }
 
     private void efetivarPedido() {
-        if (listaIdsParaPedido == null || listaIdsParaPedido.isEmpty()) {
+        if (listaProdutosParaPedido == null || listaProdutosParaPedido.isEmpty()) {
             Toast.makeText(this, "Nenhum produto selecionado no carrinho!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -140,18 +145,19 @@ public class FazerPedidoActivity extends AppCompatActivity {
         // GERA O CÓDIGO DO PEDIDO
         String codigoPedidoGerado = SempUtils.gerarCodigoSemp(unidadeSegura, 3);
 
-        // MONTA A LISTA DE PRODUTOS COM CÓDIGOS Semp INDIVIDUAIS
+        // MONTA A LISTA DE PRODUTOS COM DADOS REAIS
         List<PedidoRequest.ProdutoPedido> produtosFormatados = new ArrayList<>();
-        for (Integer id : listaIdsParaPedido) {
-            // Aqui você idealmente resgata o nome e a quantidade exata do carrinho.
-            // Como o ID é o que temos, vamos estruturar a base:
-            String codigoProdutoGerado = SempUtils.gerarCodigoSemp(unidadeSegura, 2);
+        for (Produto p : listaProdutosParaPedido) {
+            String codigoProdutoGerado = SempUtils.gerarCodigoSemp(p.unidade_atual != null ? p.unidade_atual : unidadeSegura, 2);
+            
+            // Pega a quantidade correta do carrinho
+            int qtdSolicitada = p.quantidade > 0 ? p.quantidade : (p.carrinho > 0 ? p.carrinho : 1);
 
             produtosFormatados.add(new PedidoRequest.ProdutoPedido(
-                    codigoProdutoGerado,
-                    "Nome do Produto (Busque do Carrinho)",
-                    1, // Quantidade
-                    unidadeSegura,
+                    p.codigo != null ? p.codigo : codigoProdutoGerado,
+                    p.nome != null ? p.nome : "Produto Sem Nome",
+                    qtdSolicitada,
+                    p.unidade_atual != null ? p.unidade_atual : unidadeSegura,
                     codigoPedidoGerado
             ));
         }

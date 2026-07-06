@@ -3,6 +3,9 @@ package com.example.semp;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,8 @@ import retrofit2.Response;
 public class VisualizarPedidoActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private RecyclerView recyclerView;
+    private MeusPedidosAdapter adapter;
+    private EditText etPesquisa;
 
     // Variáveis seguras
     private String nivelSeguro = "0";
@@ -43,6 +48,19 @@ public class VisualizarPedidoActivity extends AppCompatActivity {
         MenuSidebarHelper.configurarNavegacao(this, drawerLayout);
 
         recyclerView = findViewById(R.id.rvMeusPedidos);
+        etPesquisa = findViewById(R.id.etPesquisa);
+
+        if (etPesquisa != null) {
+            etPesquisa.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (adapter != null) adapter.filtrar(s.toString());
+                }
+            });
+        }
+
         if (recyclerView != null) {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             carregarPedidos();
@@ -61,7 +79,8 @@ public class VisualizarPedidoActivity extends AppCompatActivity {
                     if (response.body().isEmpty()) {
                         Toast.makeText(VisualizarPedidoActivity.this, "Nenhum pedido encontrado para esta unidade.", Toast.LENGTH_SHORT).show();
                     } else {
-                        recyclerView.setAdapter(new MeusPedidosAdapter(response.body()));
+                        adapter = new MeusPedidosAdapter(response.body());
+                        recyclerView.setAdapter(adapter);
                     }
                 }
             }

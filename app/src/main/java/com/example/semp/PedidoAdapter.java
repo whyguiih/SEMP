@@ -13,6 +13,7 @@ import java.util.List;
 public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoViewHolder> {
 
     private List<PedidosPendentes> listaPedidos;
+    private List<PedidosPendentes> listaOriginal;
     private int tipoLista; // 0 = Pendente, 1 = Confirmado
     private OnAcaoClickListener listener;
 
@@ -20,11 +21,30 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         void onAcaoClick(PedidosPendentes pedido, int acao);
     }
 
-    // CONSTRUTOR ATUALIZADO: Agora ele exige receber o "tipoLista"
     public PedidoAdapter(List<PedidosPendentes> listaPedidos, int tipoLista, OnAcaoClickListener listener) {
-        this.listaPedidos = listaPedidos;
+        this.listaPedidos = new java.util.ArrayList<>(listaPedidos);
+        this.listaOriginal = new java.util.ArrayList<>(listaPedidos);
         this.tipoLista = tipoLista;
         this.listener = listener;
+    }
+
+    public void filtrar(String texto) {
+        listaPedidos.clear();
+        if (texto.isEmpty()) {
+            listaPedidos.addAll(listaOriginal);
+        } else {
+            String busca = texto.toLowerCase().trim();
+            for (PedidosPendentes p : listaOriginal) {
+                boolean matchNome = p.nome_produto != null && p.nome_produto.toLowerCase().contains(busca);
+                boolean matchCodPedido = p.codigo_pedido != null && p.codigo_pedido.toLowerCase().contains(busca);
+                boolean matchSolicitante = p.nome != null && p.nome.toLowerCase().contains(busca);
+
+                if (matchNome || matchCodPedido || matchSolicitante) {
+                    listaPedidos.add(p);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -38,12 +58,24 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
     public void onBindViewHolder(@NonNull PedidoViewHolder holder, int position) {
         PedidosPendentes pedido = listaPedidos.get(position);
 
-        holder.tvPedidoNome.setText("Solicitante: " + pedido.nome);
-        holder.tvPedidoUnidade.setText("Unidade: " + pedido.unidade);
-        String infoProdutos = "Produto: " + (pedido.nome_produto != null ? pedido.nome_produto : "N/A") + " (Qtd: " + pedido.quant + ")" +
-                "\nCód Prod: " + (pedido.codigo_produto != null ? pedido.codigo_produto : "N/A") +
-                "\nCód Ped.: " + (pedido.codigo_pedido != null ? pedido.codigo_pedido : "N/A");
-        holder.tvPedidoProdutos.setText(infoProdutos);
+        holder.tvPedidoNome.setText("Solicitante: " + (pedido.nome != null ? pedido.nome : "N/A"));
+        holder.tvPedidoUnidade.setText("Unidade: " + (pedido.unidade != null ? pedido.unidade : "N/A"));
+        
+        StringBuilder infoProdutos = new StringBuilder();
+        infoProdutos.append("Produto: ").append(pedido.nome_produto != null ? pedido.nome_produto : "N/A");
+        infoProdutos.append(" (Qtd: ").append(pedido.quant).append(")");
+        
+        if (pedido.codigo_produto != null && !pedido.codigo_produto.isEmpty()) {
+            infoProdutos.append("\nCód Prod: ").append(pedido.codigo_produto);
+        }
+        if (pedido.codigo_pedido != null && !pedido.codigo_pedido.isEmpty()) {
+            infoProdutos.append("\nCód Ped.: ").append(pedido.codigo_pedido);
+        }
+        if (pedido.data_reserva != null && !pedido.data_reserva.isEmpty()) {
+            infoProdutos.append("\nReserva: ").append(pedido.data_reserva);
+        }
+
+        holder.tvPedidoProdutos.setText(infoProdutos.toString());
         holder.tvPedidoPrioridade.setText("Prioridade: " + (pedido.prioridade != null ? pedido.prioridade : "Normal"));
         holder.tvPedidoMotivo.setText("Motivo: " + (pedido.motivo != null ? pedido.motivo : "Não informado"));
 

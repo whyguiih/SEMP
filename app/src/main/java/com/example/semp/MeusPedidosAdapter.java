@@ -11,9 +11,30 @@ import java.util.List;
 
 public class MeusPedidosAdapter extends RecyclerView.Adapter<MeusPedidosAdapter.ViewHolder> {
     private List<PedidosPendentes> listaPedidos;
+    private List<PedidosPendentes> listaOriginal;
 
     public MeusPedidosAdapter(List<PedidosPendentes> listaPedidos) {
-        this.listaPedidos = listaPedidos;
+        this.listaPedidos = new java.util.ArrayList<>(listaPedidos);
+        this.listaOriginal = new java.util.ArrayList<>(listaPedidos);
+    }
+
+    public void filtrar(String texto) {
+        listaPedidos.clear();
+        if (texto.isEmpty()) {
+            listaPedidos.addAll(listaOriginal);
+        } else {
+            String busca = texto.toLowerCase().trim();
+            for (PedidosPendentes p : listaOriginal) {
+                boolean matchNome = p.nome_produto != null && p.nome_produto.toLowerCase().contains(busca);
+                boolean matchId = String.valueOf(p.id_emprestimo).contains(busca);
+                boolean matchSolicitante = p.nome != null && p.nome.toLowerCase().contains(busca);
+                
+                if (matchNome || matchId || matchSolicitante) {
+                    listaPedidos.add(p);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull

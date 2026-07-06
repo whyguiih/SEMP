@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +29,10 @@ public class ItensEmprestadosActivity extends AppCompatActivity {
 
     private String minhaUnidade = "";
     private RecyclerView rvEmprestados;
+    private android.widget.TextView tvEmpty;
     private DrawerLayout drawerLayout;
+    private EmprestadosAdapter adapter;
+    private EditText etPesquisa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,20 @@ public class ItensEmprestadosActivity extends AppCompatActivity {
         minhaUnidade = prefs.getString("unidadeAtual", "");
 
         rvEmprestados = findViewById(R.id.rvItensEmprestados);
+        tvEmpty = findViewById(R.id.tvEmptyEmprestados);
+        etPesquisa = findViewById(R.id.etPesquisa);
+
+        if (etPesquisa != null) {
+            etPesquisa.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (adapter != null) adapter.filtrar(s.toString());
+                }
+            });
+        }
+
         if (rvEmprestados != null) {
             rvEmprestados.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -60,8 +80,21 @@ public class ItensEmprestadosActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<PedidosPendentes> lista = response.body();
 
-                    // No seu Adapter, configure o botão de retorno para chamar mostrarSeletorData()
-                    rvEmprestados.setAdapter(new EmprestadosAdapter(lista, pedido -> mostrarSeletorData(pedido.id_emprestimo)));
+                    if (lista.isEmpty()) {
+                        if (tvEmpty != null) tvEmpty.setVisibility(android.view.View.VISIBLE);
+                        if (rvEmprestados != null) rvEmprestados.setVisibility(android.view.View.GONE);
+                    } else {
+                        if (tvEmpty != null) tvEmpty.setVisibility(android.view.View.GONE);
+                        if (rvEmprestados != null) rvEmprestados.setVisibility(android.view.View.VISIBLE);
+                        adapter = new EmprestadosAdapter(lista, pedido -> mostrarSeletorData(pedido.id_emprestimo));
+                        rvEmprestados.setAdapter(adapter);
+
+                        if (etPesquisa != null && !etPesquisa.getText().toString().isEmpty()) {
+                            adapter.filtrar(etPesquisa.getText().toString());
+                        }
+                    }
+                } else {
+                    if (tvEmpty != null) tvEmpty.setVisibility(android.view.View.VISIBLE);
                 }
             }
 

@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
@@ -35,8 +38,10 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private RecyclerView rvPendentes, rvConfirmados;
+    private PedidoAdapter adapterPendentes, adapterConfirmados;
     private SharedPreferences prefsOcultos;
     private String usuarioAtual = "";
+    private EditText etPesquisa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,20 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
         if (rvPendentes != null) rvPendentes.setLayoutManager(new LinearLayoutManager(this));
         if (rvConfirmados != null) rvConfirmados.setLayoutManager(new LinearLayoutManager(this));
 
+        etPesquisa = findViewById(R.id.etPesquisa);
+        if (etPesquisa != null) {
+            etPesquisa.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String texto = s.toString();
+                    if (adapterPendentes != null) adapterPendentes.filtrar(texto);
+                    if (adapterConfirmados != null) adapterConfirmados.filtrar(texto);
+                }
+            });
+        }
+
         buscarPedidosPendentes();
     }
 
@@ -84,7 +103,7 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
         String unidadeAtual = prefsSessao.getString("unidadeAtual", "");
         String nivelContaStr = prefsSessao.getString("nivelContaAtual", "0");
 
-        // MUDANÇA AQUI: Trocamos para getMeusPedidos() para trazer os aprovados também!
+        // Usamos getMeusPedidos para trazer a lista completa (incluindo os aprovados)
         RetrofitClient.getApi().getMeusPedidos(usuarioAtual, nivelContaStr, unidadeAtual).enqueue(new Callback<List<PedidosPendentes>>() {
             @Override
             public void onResponse(Call<List<PedidosPendentes>> call, Response<List<PedidosPendentes>> response) {
@@ -116,12 +135,21 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
                     Collections.sort(pendentes, (p1, p2) -> Integer.compare(obterPesoPrioridade(p1.prioridade), obterPesoPrioridade(p2.prioridade)));
 
                     if (rvPendentes != null) {
-                        rvPendentes.setAdapter(new PedidoAdapter(pendentes, 0, (pedido, novoStatus) -> processarAutorizacao(pedido.id_emprestimo, novoStatus)));
+                        adapterPendentes = new PedidoAdapter(pendentes, 0, (pedido, novoStatus) -> processarAutorizacao(pedido.id_emprestimo, novoStatus));
+                        rvPendentes.setAdapter(adapterPendentes);
                     }
                     if (rvConfirmados != null) {
-                        rvConfirmados.setAdapter(new PedidoAdapter(confirmados, 1, (pedido, acao) -> {
+                        adapterConfirmados = new PedidoAdapter(confirmados, 1, (pedido, acao) -> {
                             if (acao == 99) ocultarPedidoDaTela(pedido.id_emprestimo);
-                        }));
+                        });
+                        rvConfirmados.setAdapter(adapterConfirmados);
+                    }
+                    
+                    // Se houver texto na pesquisa ao recarregar, aplica o filtro novamente
+                    if (etPesquisa != null && !etPesquisa.getText().toString().isEmpty()) {
+                        String texto = etPesquisa.getText().toString();
+                        if (adapterPendentes != null) adapterPendentes.filtrar(texto);
+                        if (adapterConfirmados != null) adapterConfirmados.filtrar(texto);
                     }
                 }
             }

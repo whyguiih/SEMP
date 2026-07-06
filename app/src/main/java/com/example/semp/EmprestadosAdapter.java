@@ -13,6 +13,7 @@ import java.util.List;
 public class EmprestadosAdapter extends RecyclerView.Adapter<EmprestadosAdapter.ViewHolder> {
 
     private List<PedidosPendentes> lista;
+    private List<PedidosPendentes> listaOriginal;
     private OnRetornoClickListener listener;
 
     public interface OnRetornoClickListener {
@@ -20,8 +21,28 @@ public class EmprestadosAdapter extends RecyclerView.Adapter<EmprestadosAdapter.
     }
 
     public EmprestadosAdapter(List<PedidosPendentes> lista, OnRetornoClickListener listener) {
-        this.lista = lista;
+        this.lista = new java.util.ArrayList<>(lista);
+        this.listaOriginal = new java.util.ArrayList<>(lista);
         this.listener = listener;
+    }
+
+    public void filtrar(String texto) {
+        lista.clear();
+        if (texto.isEmpty()) {
+            lista.addAll(listaOriginal);
+        } else {
+            String busca = texto.toLowerCase().trim();
+            for (PedidosPendentes p : listaOriginal) {
+                boolean matchProduto = p.nome_produto != null && p.nome_produto.toLowerCase().contains(busca);
+                boolean matchPara = p.nome != null && p.nome.toLowerCase().contains(busca);
+                boolean matchUnidade = p.unidade != null && p.unidade.toLowerCase().contains(busca);
+
+                if (matchProduto || matchPara || matchUnidade) {
+                    lista.add(p);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -31,13 +52,27 @@ public class EmprestadosAdapter extends RecyclerView.Adapter<EmprestadosAdapter.
         return new ViewHolder(view);
     }
 
+    // Local: app/src/main/java/com/example/semp/EmprestadosAdapter.java
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PedidosPendentes p = lista.get(position);
-        holder.tvProduto.setText(p.nome_produto);
-        holder.tvQuant.setText("Qtd: " + p.quant);
-        holder.tvStatus.setText(p.aprovacao == 1 ? "Aprovado" : "Pendente");
-        
+
+        // Produto
+        holder.tvProduto.setText(p.nome_produto != null ? p.nome_produto : "Produto N/A");
+
+        // "Emprestado para" (Usando p.nome que é o campo do seu modelo para solicitante)
+        holder.tvPara.setText("Emprestado para: " + (p.nome != null ? p.nome : "N/A"));
+
+        // Unidade
+        holder.tvUnidade.setText("Unidade: " + (p.unidade != null ? p.unidade : "N/A"));
+
+        // Quantidade (Linkando com o ID tvItemQuant que você criou)
+        holder.tvQuant.setText("Quant. Emprestada: " + p.quant);
+
+        // Data
+        holder.tvDatas.setText("Reserva: " + (p.data_reserva != null ? p.data_reserva : "N/A"));
+
         holder.btnRetorno.setOnClickListener(v -> listener.onRetornoClick(p));
     }
 
@@ -47,14 +82,16 @@ public class EmprestadosAdapter extends RecyclerView.Adapter<EmprestadosAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvProduto, tvQuant, tvStatus;
+        TextView tvProduto, tvPara, tvUnidade, tvQuant, tvDatas;
         Button btnRetorno;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvProduto = itemView.findViewById(R.id.tvItemEmprestadoProduto);
-            tvQuant = itemView.findViewById(R.id.tvItemEmprestadoQuant);
-            tvStatus = itemView.findViewById(R.id.tvItemEmprestadoStatus);
+            tvPara = itemView.findViewById(R.id.tvItemEmprestadoPara);
+            tvUnidade = itemView.findViewById(R.id.tvItemEmprestadoUnidade);
+            tvQuant = itemView.findViewById(R.id.tvItemQuant);
+            tvDatas = itemView.findViewById(R.id.tvItemEmprestadoDatas);
             btnRetorno = itemView.findViewById(R.id.btnSolicitarRetorno);
         }
     }

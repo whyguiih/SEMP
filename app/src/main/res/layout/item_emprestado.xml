@@ -5,48 +5,74 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@android:color/transparent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
-        android:background="@drawable/bg_glass">
+        android:background="@drawable/bg_input_glass">
 
         <TextView
             android:id="@+id/tvItemEmprestadoProduto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Produto"
-            android:textColor="#FFFFFF"
+            android:textColor="#1509C8"
             android:textSize="18sp"
-            android:fontFamily="@font/neo_sans" />
+            android:fontFamily="@font/neo_sans_bold_italic" />
 
         <TextView
-            android:id="@+id/tvItemEmprestadoQuant"
+            android:id="@+id/tvItemEmprestadoPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Qtd: 0"
-            android:textColor="#CCFFFFFF"
-            android:textSize="14sp" />
+            android:text="Emprestado para: Nome"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/neo_sans_medium"/>
 
         <TextView
-            android:id="@+id/tvItemEmprestadoStatus"
+            android:id="@+id/tvItemEmprestadoUnidade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status"
-            android:textColor="#CCFFFFFF"
-            android:textSize="14sp" />
+            android:text="Unidade: Nome da Unidade"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/neo_sans_medium"/>
+
+        <TextView
+            android:id="@+id/tvItemEmprestadoDatas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reserva: 00/00/0000"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/neo_sans_medium"/>
+
+        <TextView
+            android:id="@+id/tvItemQuant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quant. Emprestada: 0"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/neo_sans_medium"/>
 
         <Button
             android:id="@+id/btnSolicitarRetorno"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
             android:text="Solicitar Retorno"
-            android:textSize="12sp"
-            android:backgroundTint="#27ae60"
-            app:cornerRadius="50dp" />
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#E76E1D"
+            app:cornerRadius="50dp"
+            android:fontFamily="@font/neo_sans_bold_italic"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
