@@ -72,19 +72,13 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="16dp">
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@android:drawable/ic_menu_edit"
-                        app:tint="#FFFFFF"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
                         android:text="Aguardando Autorização"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:fontFamily="@font/neo_sans_bold_italic"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -104,19 +98,13 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="16dp">
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@android:drawable/ic_menu_revert"
-                        app:tint="#FFFFFF"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
                         android:text="Retornos Solicitados"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:fontFamily="@font/neo_sans_bold_italic"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -135,19 +123,13 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="16dp">
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@android:drawable/ic_menu_directions"
-                        app:tint="#FFFFFF"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="Aguardando Cadastro de Rastreio"
+                        android:text="Aguardando Rastreio"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
-                        android:textStyle="bold"/>
+                        android:fontFamily="@font/neo_sans_bold_italic"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -187,7 +169,7 @@
                     android:text="Título da Pasta"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:fontFamily="@font/neo_sans_bold_italic"/>
             </LinearLayout>
 
             <EditText
@@ -205,14 +187,20 @@
                 android:drawablePadding="12dp"
                 android:fontFamily="@font/neo_sans_regular" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvPasta"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="12dp"
-                android:paddingHorizontal="16dp"
-                android:clipToPadding="false"
-                android:paddingBottom="24dp"/>
+                android:layout_margin="24dp"
+                android:background="#1AFFFFFF"
+                android:elevation="0dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvPasta"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:padding="16dp"/>
+            </FrameLayout>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

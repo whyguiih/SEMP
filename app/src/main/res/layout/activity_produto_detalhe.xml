@@ -49,16 +49,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:background="@drawable/bg_glass"
+            android:elevation="8dp"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="28dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
-                app:cardCornerRadius="24dp"
-                app:cardBackgroundColor="#1AFFFFFF"
+                app:cardCornerRadius="32dp"
+                app:cardBackgroundColor="#26FFFFFF"
                 app:cardElevation="0dp"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="32dp">
 
                 <ImageView
                     android:id="@+id/ivProdutoFoto"
@@ -73,105 +76,124 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nome do Produto"
-                android:textColor="#FFFFFF"
-                android:textSize="28sp"
+                android:textColor="#1a4b9f"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:layout_marginBottom="4dp"
                 android:fontFamily="@font/neo_sans_bold_italic"/>
 
             <TextView
                 android:id="@+id/tvCodigoDetalhe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Código: ---"
-                android:textColor="#E6FFFFFF"
-                android:textSize="16sp"
+                android:text="CÓDIGO: ---"
+                android:textColor="#ffffff"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:letterSpacing="0.1"
                 android:fontFamily="@font/neo_sans_medium"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="24dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#26000000"
+                android:layout_marginBottom="24dp"/>
 
             <TextView
                 android:id="@+id/tvEstoqueDetalhe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Estoque disponível: 0"
-                android:textColor="#E25A27"
+                android:text="Disponível em estoque: 0"
+                android:textColor="#ef5e31"
                 android:textSize="18sp"
+                android:gravity="center"
                 android:fontFamily="@font/neo_sans_bold_italic"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="16dp"/>
 
-            <TextView
-                android:id="@+id/tvCorDetalhe"
+            <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cor: ---"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:fontFamily="@font/neo_sans_medium"
-                android:layout_marginBottom="24dp"/>
+                android:columnCount="2"
+                android:rowCount="4"
+                android:layout_marginBottom="24dp">
 
-            <TextView
-                android:id="@+id/tvMarcaRefDetalhe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Marca/Ref: ---"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp" />
+                <TextView
+                    android:id="@+id/tvCorDetalhe"
+                    android:layout_columnWeight="1"
+                    android:text="Cor: ---"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/neo_sans_regular"
+                    android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:id="@+id/tvUniNatalDetalhe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Unidade Natal: ---"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:fontFamily="@font/neo_sans_medium"
-                android:layout_marginBottom="8dp" />
+                <TextView
+                    android:id="@+id/tvMarcaRefDetalhe"
+                    android:layout_columnWeight="1"
+                    android:text="Ref: ---"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/neo_sans_regular"
+                    android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:id="@+id/tvUnidadeAtualDetalhe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Unidade Atual: ---"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:fontFamily="@font/neo_sans_medium"
-                android:layout_marginBottom="8dp" />
+                <TextView
+                    android:id="@+id/tvUniNatalDetalhe"
+                    android:layout_columnWeight="1"
+                    android:text="U. Natal: ---"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/neo_sans_regular"
+                    android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:id="@+id/AlturaDetalhe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Altura: ---"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:fontFamily="@font/neo_sans_medium"
-                android:layout_marginBottom="8dp" />
+                <TextView
+                    android:id="@+id/tvUnidadeAtualDetalhe"
+                    android:layout_columnWeight="1"
+                    android:text="U. Atual: ---"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/neo_sans_regular"
+                    android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:id="@+id/ComprimentoDetalhe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Comprimento: ---"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:fontFamily="@font/neo_sans_medium"
-                android:layout_marginBottom="8dp" />
+                <TextView
+                    android:id="@+id/AlturaDetalhe"
+                    android:layout_columnWeight="1"
+                    android:text="Alt: ---"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/neo_sans_regular"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/ComprimentoDetalhe"
+                    android:layout_columnWeight="1"
+                    android:text="Comp: ---"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/neo_sans_regular"
+                    android:layout_marginBottom="8dp"/>
+            </GridLayout>
 
             <TextView
                 android:id="@+id/PeriodoReserva"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Reserva: ---"
-                android:textColor="#E25A27"
-                android:textSize="16sp"
+                android:text="Período de Reserva: ---"
+                android:textColor="#ef5e31"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:background="@drawable/bg_input_glass"
+                android:backgroundTint="#0D000000"
+                android:padding="12dp"
                 android:fontFamily="@font/neo_sans_bold_italic"
                 android:layout_marginBottom="24dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Descrição"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
+                android:text="SOBRE O PRODUTO"
+                android:textColor="#1a4b9f"
+                android:textSize="14sp"
+                android:letterSpacing="0.1"
                 android:fontFamily="@font/neo_sans_bold_italic"
                 android:layout_marginBottom="8dp"/>
 
@@ -180,27 +202,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Descrição básica do produto..."
-                android:textColor="#E0E0E0"
+                android:textColor="#444444"
                 android:textSize="16sp"
                 android:fontFamily="@font/neo_sans_regular"
-                android:layout_marginBottom="24dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Descrição Detalhada"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:fontFamily="@font/neo_sans_bold_italic"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="16dp"/>
 
             <TextView
                 android:id="@+id/tvDescDetalhadaDetalhe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Detalhes completos aparecerão aqui..."
-                android:textColor="#E0E0E0"
-                android:textSize="16sp"
+                android:textColor="#666666"
+                android:textSize="14sp"
                 android:fontFamily="@font/neo_sans_regular"
                 android:layout_marginBottom="32dp"/>
 
