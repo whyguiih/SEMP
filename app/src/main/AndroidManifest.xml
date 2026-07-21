@@ -28,6 +28,7 @@
         <activity android:name="com.example.semp.RastreioActivity" />
         <activity android:name="com.example.semp.ItensEmprestadosActivity" />
         <activity android:name="com.example.semp.MovimentacoesActivity" />
+        <activity android:name="com.example.semp.CadastrarUnidades" />
 
     </application>
 </manifest>

@@ -31,12 +31,12 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
         });
         MenuSidebarHelper.configurarNavegacao(this, drawerLayout);
 
-        EditText etUsuario = findViewById(R.id.etNovoUsuario);
+        EditText etUsuario = findViewById(R.id.nomeUnidade);
         EditText etSenha = findViewById(R.id.etNovaSenha);
         EditText etNivel = findViewById(R.id.etNovoNivel);
         EditText etUnidade = findViewById(R.id.etNovaUnidade);
         EditText etFoto = findViewById(R.id.etNovaFoto); // NOVA LINHA
-        Button btnSalvar = findViewById(R.id.btnSalvarUsuario);
+        Button btnSalvar = findViewById(R.id.btnSalvarUnidade);
 
         btnSalvar.setOnClickListener(v -> {
             String user = etUsuario.getText().toString().trim();

@@ -43,6 +43,9 @@ public interface ApiService {
     @POST("usuario/cadastrar")
     Call<GenericResponse> cadastrarUsuario(@Body UsuarioRequest request);
 
+    @POST("unidade/cadastrar")
+    Call<GenericResponse> cadastrarUnidade(@Body UnidadeRequest request);
+
     @POST("produto/atualizar")
     Call<GenericResponse> atualizarProduto(@Body UpdateProdutoRequest request);
 

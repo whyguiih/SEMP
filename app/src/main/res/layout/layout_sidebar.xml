@@ -123,6 +123,18 @@
         android:paddingHorizontal="24dp"
         android:background="?attr/selectableItemBackground"/>
 
+    <TextView
+        android:id="@+id/CadastrarUnidades"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cadastrar unidades"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/neo_sans_medium"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="24dp"
+        android:background="?attr/selectableItemBackground"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"

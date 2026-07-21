@@ -33,11 +33,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cadastro de Usuários"
-                android:textColor="#FFFFFF"
-                android:textSize="22sp"
+                android:layout_marginStart="16dp"
                 android:fontFamily="@font/neo_sans_bold_italic"
-                android:layout_marginStart="16dp"/>
+                android:text="Cadastro de unidades"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp" />
         </LinearLayout>
 
         <ScrollView
@@ -58,79 +58,66 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Dados do Novo Usuário"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp"
+                    android:layout_marginBottom="24dp"
                     android:fontFamily="@font/neo_sans_medium"
-                    android:layout_marginBottom="24dp"/>
+                    android:text="Dados da nova unidade"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/nomeUnidade"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:hint="Nome de Usuário"
-                    android:textColorHint="#88FFFFFF"
-                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_input_glass"
+                    android:hint="Nome da unidade"
                     android:paddingHorizontal="20dp"
-                    android:layout_marginBottom="16dp"/>
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#88FFFFFF" />
 
-                <EditText
-                    android:id="@+id/etNovaSenha"
+                <AutoCompleteTextView
+                    android:id="@+id/estado"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:hint="Senha de Acesso"
-                    android:textColorHint="#88FFFFFF"
-                    android:textColor="#FFFFFF"
-                    android:inputType="textPassword"
+                    android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_input_glass"
+                    android:hint="Estado"
                     android:paddingHorizontal="20dp"
-                    android:layout_marginBottom="16dp"/>
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#88FFFFFF" />
 
-                <EditText
-                    android:id="@+id/etNovoNivel"
+                <AutoCompleteTextView
+                    android:id="@+id/regiao"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:hint="Nível (0, 1, 2 ou 3)"
-                    android:textColorHint="#88FFFFFF"
-                    android:textColor="#FFFFFF"
-                    android:inputType="number"
+                    android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_input_glass"
+                    android:hint="Região"
                     android:paddingHorizontal="20dp"
-                    android:layout_marginBottom="16dp"/>
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#88FFFFFF" />
 
-                <EditText
-                    android:id="@+id/etNovaUnidade"
+
+                <AutoCompleteTextView
+                    android:id="@+id/identificacao"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:hint="Unidade (Ex: SENAI - SEDE)"
-                    android:textColorHint="#88FFFFFF"
-                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="24dp"
                     android:background="@drawable/bg_input_glass"
+                    android:hint="Identificação"
                     android:paddingHorizontal="20dp"
-                    android:layout_marginBottom="16dp"/>
-
-                <EditText
-                    android:id="@+id/etNovaFoto"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:hint="URL da Foto (Opcional)"
-                    android:textColorHint="#88FFFFFF"
                     android:textColor="#FFFFFF"
-                    android:background="@drawable/bg_input_glass"
-                    android:paddingHorizontal="20dp"
-                    android:layout_marginBottom="32dp"/>
-
+                    android:textColorHint="#88FFFFFF" />
 
                 <Button
                     android:id="@+id/btnSalvarUnidade"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:text="CADASTRAR USUÁRIO"
-                    android:textColor="#FFFFFF"
-                    android:fontFamily="@font/neo_sans_bold_italic"
                     android:backgroundTint="#1B4F9B"
-                    app:cornerRadius="100dp"/>
+                    android:fontFamily="@font/neo_sans_bold_italic"
+                    android:text="CADASTRAR UNIDADE"
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="100dp" />
 
             </LinearLayout>
         </ScrollView>

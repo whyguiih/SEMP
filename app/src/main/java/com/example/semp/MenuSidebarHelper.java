@@ -25,6 +25,7 @@ public class MenuSidebarHelper {
         TextView btnRastreio = activity.findViewById(R.id.menuItemRastreio);
         TextView btnEmprestados = activity.findViewById(R.id.menuItemEmprestados);
         TextView btnMovimentacoes = activity.findViewById(R.id.menuItemMovimentacoes);
+        TextView btnCadastroUnidades = activity.findViewById(R.id.CadastrarUnidades);
 
         // Esconde itens restritos por padrão
         if (btnVisualizarPedido != null) btnVisualizarPedido.setVisibility(View.GONE);
@@ -34,6 +35,7 @@ public class MenuSidebarHelper {
         if (btnRastreio != null) btnRastreio.setVisibility(View.GONE);
         if (btnEmprestados != null) btnEmprestados.setVisibility(View.GONE);
         if (btnMovimentacoes != null) btnMovimentacoes.setVisibility(View.GONE);
+        if (btnCadastroUnidades != null) btnCadastroUnidades.setVisibility(View.GONE);
 
 
 
@@ -48,6 +50,7 @@ public class MenuSidebarHelper {
             if (btnEmprestados != null) btnEmprestados.setVisibility(View.VISIBLE);
         } else if ("3".equals(nivel)) {
             if (btnCadastrarUsuario != null) btnCadastrarUsuario.setVisibility(View.VISIBLE);
+            if (btnCadastroUnidades != null) btnCadastroUnidades.setVisibility(View.VISIBLE);
         }
 
         // Configuração de Cliques
@@ -60,6 +63,8 @@ public class MenuSidebarHelper {
         if (btnRastreio != null) btnRastreio.setOnClickListener(v -> redirecionar(activity, RastreioActivity.class, drawerLayout));
         if (btnEmprestados != null) btnEmprestados.setOnClickListener(v -> redirecionar(activity, ItensEmprestadosActivity.class, drawerLayout));
         if (btnMovimentacoes != null) btnMovimentacoes.setOnClickListener(v -> redirecionar(activity, MovimentacoesActivity.class, drawerLayout));
+        if (btnCadastroUnidades != null) btnCadastroUnidades.setOnClickListener(v -> redirecionar(activity, CadastrarUnidades.class, drawerLayout));
+
 
         // Botão Sair - Limpa o SharedPreferences de forma segura
         View btnSair = activity.findViewById(R.id.menuItemSair);
