@@ -1,10 +1,8 @@
 package com.example.semp;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,16 +11,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.semp.models.GenericResponse;
 import com.example.semp.models.PedidoRequest;
 import com.example.semp.models.Produto;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.gson.Gson;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -100,13 +99,21 @@ public class FazerPedidoActivity extends AppCompatActivity {
     }
 
     private void abrirCalendario() {
-        final Calendar c = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                (view, year, month, day) -> {
-                    String dataFormatada = year + "-" + String.format(Locale.getDefault(), "%02d", (month + 1)) + "-" + String.format(Locale.getDefault(), "%02d", day);
-                    etDataReserva.setText(dataFormatada);
-                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.show();
+        MaterialDatePicker.Builder<Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
+        builder.setTitleText("Selecione o período da reserva");
+
+        final MaterialDatePicker<Pair<Long, Long>> picker = builder.build();
+        picker.addOnPositiveButtonClickListener(selection -> {
+            if (selection.first != null && selection.second != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                String dataInicio = sdf.format(new Date(selection.first));
+                String dataFim = sdf.format(new Date(selection.second));
+                
+                String periodo = dataInicio + " até " + dataFim;
+                etDataReserva.setText(periodo);
+            }
+        });
+        picker.show(getSupportFragmentManager(), "RANGE_PICKER");
     }
 
     private void efetivarPedido() {
@@ -174,11 +181,17 @@ public class FazerPedidoActivity extends AppCompatActivity {
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                 btnConfirmar.setEnabled(true);
                 btnConfirmar.setText("Confirmar Pedido");
-                if (response.isSuccessful() && response.body() != null && response.body().sucesso) {
-                    Toast.makeText(FazerPedidoActivity.this, "Pedido efetivado! Cód: " + codigoPedidoGerado, Toast.LENGTH_LONG).show();
-                    finish();
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().sucesso) {
+                        Toast.makeText(FazerPedidoActivity.this, "Pedido efetivado! Cód: " + codigoPedidoGerado, Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        // EXIBE A MENSAGEM DE CONFLITO VINDA DO SERVIDOR
+                        String msgErro = response.body().mensagem != null ? response.body().mensagem : "Erro ao processar reserva.";
+                        Toast.makeText(FazerPedidoActivity.this, msgErro, Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    Toast.makeText(FazerPedidoActivity.this, "Erro no servidor.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(FazerPedidoActivity.this, "Erro no servidor: " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
 

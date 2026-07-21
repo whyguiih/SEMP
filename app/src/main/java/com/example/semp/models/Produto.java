@@ -20,6 +20,13 @@ public class Produto {
     public String pedido;
     public String foto;
 
+    public int estoque_real;
+    public int altura;
+    public int comprimento;
+
+    @SerializedName("data_reserva")
+    public String periodo_reserva;
+
     // 👉 ADICIONE ESTAS DUAS LINHAS:
     @SerializedName("uni_atual")
     public String unidade_atual;

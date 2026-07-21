@@ -16,6 +16,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.example.semp.models.CarrinhoRequest;
 import com.example.semp.models.GenericResponse;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,7 +37,6 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produto_detalhe);
 
-        // SharedPreferences para prevenir erro caso minimize o app
         SharedPreferences prefs = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
         usuarioSeguro = prefs.getString("usuarioLogado", "");
 
@@ -48,31 +53,50 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         btnVoltar.setOnClickListener(v -> finish());
 
         Intent intent = getIntent();
-        String idProduto = intent.getStringExtra("PRODUTO_ID") != null ? intent.getStringExtra("PRODUTO_ID") : "";
         String nome = intent.getStringExtra("PRODUTO_NOME") != null ? intent.getStringExtra("PRODUTO_NOME") : "Produto";
         String codigo = intent.getStringExtra("PRODUTO_CODIGO") != null ? intent.getStringExtra("PRODUTO_CODIGO") : "Sem código";
-        String desc = intent.getStringExtra("PRODUTO_DESC") != null ? intent.getStringExtra("PRODUTO_DESC") : "Sem descrição disponível.";
-        String descDetalhada = intent.getStringExtra("PRODUTO_DESC_DETALHADA") != null ? intent.getStringExtra("PRODUTO_DESC_DETALHADA") : "Nenhuma descrição detalhada informada.";
-        String cor = intent.getStringExtra("PRODUTO_COR") != null ? intent.getStringExtra("PRODUTO_COR") : "Não especificada";
-        String marca = intent.getStringExtra("PRODUTO_MARCA") != null ? intent.getStringExtra("PRODUTO_MARCA") : "Não especificada";
-        String uniNatal = intent.getStringExtra("PRODUTO_UNI_NATAL") != null ? intent.getStringExtra("PRODUTO_UNI_NATAL") : "Não especificada";
-        String unidadeAtual = intent.getStringExtra("PRODUTO_UNIDADE_ATUAL") != null ? intent.getStringExtra("PRODUTO_UNIDADE_ATUAL") : "Não especificada";
+        String desc = intent.getStringExtra("PRODUTO_DESC") != null ? intent.getStringExtra("PRODUTO_DESC") : "Sem descrição.";
+        String descDetalhada = intent.getStringExtra("PRODUTO_DESC_DETALHADA") != null ? intent.getStringExtra("PRODUTO_DESC_DETALHADA") : "Sem detalhes.";
+        String cor = intent.getStringExtra("PRODUTO_COR") != null ? intent.getStringExtra("PRODUTO_COR") : "N/A";
+        String marca = intent.getStringExtra("PRODUTO_MARCA") != null ? intent.getStringExtra("PRODUTO_MARCA") : "N/A";
+        String uniNatal = intent.getStringExtra("PRODUTO_UNI_NATAL") != null ? intent.getStringExtra("PRODUTO_UNI_NATAL") : "N/A";
+        String unidadeAtual = intent.getStringExtra("PRODUTO_UNIDADE_ATUAL") != null ? intent.getStringExtra("PRODUTO_UNIDADE_ATUAL") : "N/A";
         String fotoBase64 = intent.getStringExtra("PRODUTO_FOTO") != null ? intent.getStringExtra("PRODUTO_FOTO") : "";
-        String qtdEstoqueString = intent.getStringExtra("PRODUTO_QTD") != null ? intent.getStringExtra("PRODUTO_QTD") : "0";
         String qtdCarrinhoString = intent.getStringExtra("PRODUTO_QTD_CARRINHO") != null ? intent.getStringExtra("PRODUTO_QTD_CARRINHO") : "1";
+        String altura = intent.getStringExtra("PRODUTO_ALTURA") != null ? intent.getStringExtra("PRODUTO_ALTURA") : "N/A";
+        String comprimento = intent.getStringExtra("PRODUTO_COMPRIMENTO") != null ? intent.getStringExtra("PRODUTO_COMPRIMENTO") : "N/A";
+        
+        // Pega o estoque real calculado pelo Worker
+        String qtdEstoqueString = intent.getStringExtra("PRODUTO_QTD_REAL") != null ? intent.getStringExtra("PRODUTO_QTD_REAL") : intent.getStringExtra("PRODUTO_QTD");
 
-        try { estoqueMaximo = Integer.parseInt(qtdEstoqueString); } catch (NumberFormatException e) { estoqueMaximo = 0; }
-        try { quantidadeSelecionada = Integer.parseInt(qtdCarrinhoString); } catch (NumberFormatException e) { quantidadeSelecionada = 1; }
+        try { estoqueMaximo = Integer.parseInt(qtdEstoqueString); } catch (Exception e) { estoqueMaximo = 0; }
+        try { quantidadeSelecionada = Integer.parseInt(qtdCarrinhoString); } catch (Exception e) { quantidadeSelecionada = 1; }
 
         ((TextView) findViewById(R.id.tvNomeDetalhe)).setText(nome);
         ((TextView) findViewById(R.id.tvCodigoDetalhe)).setText("Código: " + codigo);
         ((TextView) findViewById(R.id.tvDescDetalhe)).setText(desc);
         ((TextView) findViewById(R.id.tvDescDetalhadaDetalhe)).setText(descDetalhada);
         ((TextView) findViewById(R.id.tvCorDetalhe)).setText("Cor: " + cor);
-        ((TextView) findViewById(R.id.tvMarcaRefDetalhe)).setText("Marca/Ref: " + marca);
+        ((TextView) findViewById(R.id.tvMarcaRefDetalhe)).setText("Marca: " + marca);
         ((TextView) findViewById(R.id.tvUniNatalDetalhe)).setText("Unidade Natal: " + uniNatal);
         ((TextView) findViewById(R.id.tvUnidadeAtualDetalhe)).setText("Unidade Atual: " + unidadeAtual);
-        ((TextView) findViewById(R.id.tvEstoqueDetalhe)).setText("Estoque disponível: " + estoqueMaximo);
+        
+        // MOSTRA STATUS E UNIDADES JUNTOS
+        TextView tvReserva = findViewById(R.id.PeriodoReserva);
+        if (estoqueMaximo > 0) {
+            tvReserva.setText("STATUS: DISPONÍVEL (" + estoqueMaximo + " unidades agora)");
+            tvReserva.setTextColor(android.graphics.Color.parseColor("#27ae60")); // Verde
+        } else {
+            tvReserva.setText("STATUS: INDISPONÍVEL HOJE");
+            tvReserva.setTextColor(android.graphics.Color.parseColor("#e74c3c")); // Vermelho
+        }
+
+        // Mostra o estoque total (fixo do cadastro)
+        String estoqueTotal = intent.getStringExtra("PRODUTO_QTD") != null ? intent.getStringExtra("PRODUTO_QTD") : "0";
+        ((TextView) findViewById(R.id.tvEstoqueDetalhe)).setText("Estoque total da unidade: " + estoqueTotal);
+
+        ((TextView) findViewById(R.id.AlturaDetalhe)).setText("Altura: " + altura + "cm");
+        ((TextView) findViewById(R.id.ComprimentoDetalhe)).setText("Comprimento: " + comprimento + "cm");
 
         ImageView ivFoto = findViewById(R.id.ivProdutoFoto);
         if (ivFoto != null && !fotoBase64.isEmpty()) {
@@ -99,9 +123,6 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
             btnAdicionarCarrinho.setText("Fora de Estoque");
         } else {
             tvQtdSelecionada.setText(String.valueOf(quantidadeSelecionada));
-            if (intent.hasExtra("PRODUTO_QTD_CARRINHO")) {
-                btnAdicionarCarrinho.setText("Atualizar Carrinho");
-            }
         }
 
         btnDiminuir.setOnClickListener(v -> {
@@ -117,71 +138,31 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
             if (atual < estoqueMaximo) {
                 quantidadeSelecionada = atual + 1;
                 tvQtdSelecionada.setText(String.valueOf(quantidadeSelecionada));
-            } else if (estoqueMaximo > 0) {
-                Toast.makeText(this, "Você atingiu o limite do estoque!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Limite atingido", Toast.LENGTH_SHORT).show();
             }
         });
 
         btnAdicionarCarrinho.setOnClickListener(v -> {
-            if (usuarioSeguro == null || usuarioSeguro.isEmpty()) {
-                Toast.makeText(ProdutoDetalheActivity.this, "Erro: Faça o login novamente!", Toast.LENGTH_LONG).show();
+            if (usuarioSeguro.isEmpty()) {
+                Toast.makeText(this, "Faça login!", Toast.LENGTH_LONG).show();
                 return;
             }
-
-            int qtdDigitada = lerQuantidadeDoCampo(tvQtdSelecionada);
-            quantidadeSelecionada = Math.min(qtdDigitada, estoqueMaximo);
-
-            btnAdicionarCarrinho.setEnabled(false);
-            btnAdicionarCarrinho.setText("Aguarde...");
-
-            CarrinhoRequest request = new CarrinhoRequest(nome, quantidadeSelecionada);
-            boolean ehEdicao = getIntent().hasExtra("PRODUTO_QTD_CARRINHO");
-
-            if (ehEdicao) {
-                RetrofitClient.getApi().removerDoCarrinho(usuarioSeguro, request).enqueue(new Callback<GenericResponse>() {
-                    @Override
-                    public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                        adicionarNovoAoCarrinho(usuarioSeguro, request, btnAdicionarCarrinho);
+            CarrinhoRequest request = new CarrinhoRequest(nome, lerQuantidadeDoCampo(tvQtdSelecionada));
+            RetrofitClient.getApi().adicionarAoCarrinho(usuarioSeguro, request).enqueue(new Callback<GenericResponse>() {
+                @Override
+                public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(ProdutoDetalheActivity.this, "Adicionado!", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
-                    @Override
-                    public void onFailure(Call<GenericResponse> call, Throwable t) {
-                        adicionarNovoAoCarrinho(usuarioSeguro, request, btnAdicionarCarrinho);
-                    }
-                });
-            } else {
-                adicionarNovoAoCarrinho(usuarioSeguro, request, btnAdicionarCarrinho);
-            }
-        });
-    }
-
-    private void adicionarNovoAoCarrinho(String usuarioId, CarrinhoRequest request, Button btn) {
-        RetrofitClient.getApi().adicionarAoCarrinho(usuarioId, request).enqueue(new Callback<GenericResponse>() {
-            @Override
-            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().sucesso) {
-                    Toast.makeText(ProdutoDetalheActivity.this, "Carrinho atualizado!", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    btn.setEnabled(true);
-                    btn.setText("Tentar Novamente");
-                    Toast.makeText(ProdutoDetalheActivity.this, "Erro ao atualizar carrinho", Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            public void onFailure(Call<GenericResponse> call, Throwable t) {
-                btn.setEnabled(true);
-                btn.setText("Tentar Novamente");
-                Toast.makeText(ProdutoDetalheActivity.this, "Erro de conexão", Toast.LENGTH_SHORT).show();
-            }
+                @Override public void onFailure(Call<GenericResponse> call, Throwable t) {}
+            });
         });
     }
 
     private int lerQuantidadeDoCampo(EditText et) {
-        try {
-            return Integer.parseInt(et.getText().toString());
-        } catch (NumberFormatException e) {
-            return 1;
-        }
+        try { return Integer.parseInt(et.getText().toString()); } catch (Exception e) { return 1; }
     }
 }

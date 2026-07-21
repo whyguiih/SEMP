@@ -71,7 +71,7 @@ public class EmprestadosAdapter extends RecyclerView.Adapter<EmprestadosAdapter.
         holder.tvQuant.setText("Quant. Emprestada: " + p.quant);
 
         // Data
-        holder.tvDatas.setText("Reserva: " + (p.data_reserva != null ? p.data_reserva : "N/A"));
+        holder.tvDatas.setText("Reserva: " + (p.periodo_reserva != null ? p.periodo_reserva : "N/A"));
 
         holder.btnRetorno.setOnClickListener(v -> listener.onRetornoClick(p));
     }

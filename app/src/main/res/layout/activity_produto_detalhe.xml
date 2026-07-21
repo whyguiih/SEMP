@@ -123,7 +123,8 @@
                 android:text="Unidade Natal: ---"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
-                android:layout_marginBottom="24dp" />
+                android:fontFamily="@font/neo_sans_medium"
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:id="@+id/tvUnidadeAtualDetalhe"
@@ -132,6 +133,37 @@
                 android:text="Unidade Atual: ---"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
+                android:fontFamily="@font/neo_sans_medium"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/AlturaDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Altura: ---"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:fontFamily="@font/neo_sans_medium"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/ComprimentoDetalhe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comprimento: ---"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:fontFamily="@font/neo_sans_medium"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/PeriodoReserva"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reserva: ---"
+                android:textColor="#E25A27"
+                android:textSize="16sp"
+                android:fontFamily="@font/neo_sans_bold_italic"
                 android:layout_marginBottom="24dp" />
 
             <TextView
@@ -171,6 +203,7 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/neo_sans_regular"
                 android:layout_marginBottom="32dp"/>
+
         </LinearLayout>
     </ScrollView>
 

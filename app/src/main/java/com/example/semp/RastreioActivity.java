@@ -4,8 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +15,13 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.example.semp.models.GenericResponse;
 import com.example.semp.models.PedidosPendentes;
 import com.example.semp.models.RastreioRequest;
@@ -89,16 +89,14 @@ public class RastreioActivity extends AppCompatActivity {
                 return;
             }
 
-            // 1. Validar Unidade Destino
             if (pedidoSelecionado != null) {
-                String destinoOficial = pedidoSelecionado.unidade != null ? pedidoSelecionado.unidade : "";
+                String destinoOficial = (pedidoSelecionado.unidade != null) ? pedidoSelecionado.unidade : "";
                 if (!destinoOficial.equalsIgnoreCase(destino)) {
-                    Toast.makeText(this, "ERRO: O destino para este pedido deve ser " + destinoOficial, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "ERRO: O destino deve ser " + destinoOficial, Toast.LENGTH_LONG).show();
                     etDestino.setText(destinoOficial);
                     return;
                 }
-                // Validar data
-                validarDatas(dataEntrada, pedidoSelecionado.data_reserva);
+                validarDatas(dataEntrada, pedidoSelecionado.periodo_reserva);
             }
 
             RastreioRequest req = new RastreioRequest(codigo, original, destino, dataSaida, dataEntrada);
@@ -106,10 +104,10 @@ public class RastreioActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                     if (response.isSuccessful() && response.body() != null && response.body().sucesso) {
-                        Toast.makeText(RastreioActivity.this, "Rastreio salvo com sucesso!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RastreioActivity.this, "Rastreio salvo!", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
-                        Toast.makeText(RastreioActivity.this, "Erro ao salvar rastreio.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RastreioActivity.this, "Erro ao salvar.", Toast.LENGTH_SHORT).show();
                     }
                 }
                 @Override
@@ -132,7 +130,7 @@ public class RastreioActivity extends AppCompatActivity {
                     autoView.setOnItemClickListener((parent, view, position, id) -> {
                         pedidoSelecionado = (PedidosPendentes) parent.getItemAtPosition(position);
                         if (pedidoSelecionado != null) {
-                            String displayCode = pedidoSelecionado.codigo_pedido != null ? pedidoSelecionado.codigo_pedido : String.valueOf(pedidoSelecionado.id_emprestimo);
+                            String displayCode = (pedidoSelecionado.codigo_pedido != null) ? pedidoSelecionado.codigo_pedido : String.valueOf(pedidoSelecionado.id_emprestimo);
                             autoView.setText(displayCode);
                             autoView.setSelection(displayCode.length());
                             etDestino.setText(pedidoSelecionado.unidade);
@@ -151,9 +149,9 @@ public class RastreioActivity extends AppCompatActivity {
             Date dataChegada = sdf.parse(dataChegadaStr);
             Date dataReserva = sdf.parse(dataReservaStr);
             if (dataChegada != null && dataReserva != null && dataChegada.after(dataReserva)) {
-                Toast.makeText(this, "AVISO: Previsão de chegada após a reserva (" + dataReservaStr + ")!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "AVISO: Chegada após a reserva (" + dataReservaStr + ")!", Toast.LENGTH_LONG).show();
             }
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
     }
 
     private void abrirCalendario(EditText editText) {
@@ -166,7 +164,7 @@ public class RastreioActivity extends AppCompatActivity {
     }
 
     private class PedidoDropdownAdapter extends ArrayAdapter<PedidosPendentes> {
-        private List<PedidosPendentes> fullList;
+        private final List<PedidosPendentes> fullList;
         private List<PedidosPendentes> filteredList;
 
         public PedidoDropdownAdapter(Context context, List<PedidosPendentes> pedidos) {
@@ -226,7 +224,9 @@ public class RastreioActivity extends AppCompatActivity {
                 protected void publishResults(CharSequence constraint, FilterResults results) {
                     filteredList.clear();
                     if (results != null && results.count > 0) {
-                        filteredList.addAll((List) results.values);
+                        @SuppressWarnings("unchecked")
+                        List<PedidosPendentes> values = (List<PedidosPendentes>) results.values;
+                        filteredList.addAll(values);
                     }
                     notifyDataSetChanged();
                 }
@@ -234,7 +234,7 @@ public class RastreioActivity extends AppCompatActivity {
                 @Override
                 public CharSequence convertResultToString(Object resultValue) {
                     PedidosPendentes p = (PedidosPendentes) resultValue;
-                    return p.codigo_pedido != null ? p.codigo_pedido : String.valueOf(p.id_emprestimo);
+                    return (p.codigo_pedido != null) ? p.codigo_pedido : String.valueOf(p.id_emprestimo);
                 }
             };
         }

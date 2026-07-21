@@ -85,6 +85,10 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
             intent.putExtra("PRODUTO_CODIGO", produto.codigo != null ? produto.codigo : "");
             intent.putExtra("PRODUTO_DESC", produto.descricao != null ? produto.descricao : "");
             intent.putExtra("PRODUTO_QTD", String.valueOf(produto.quant));
+            
+            // NOVIDADE: Passa o estoque real calculado pelo servidor
+            intent.putExtra("PRODUTO_QTD_REAL", String.valueOf(produto.estoque_real));
+
             intent.putExtra("PRODUTO_COR", produto.cor != null ? produto.cor : "");
             intent.putExtra("PRODUTO_MARCA", produto.marca_ref != null ? produto.marca_ref : "");
             intent.putExtra("PRODUTO_UNI_NATAL", produto.uni_natal != null ? produto.uni_natal : "");
@@ -92,6 +96,12 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
             intent.putExtra("PRODUTO_UNIDADE_ATUAL", produto.unidade_atual != null ? produto.unidade_atual : "Não informada");
             intent.putExtra("PRODUTO_DESC_DETALHADA", produto.descricao_detalhada != null ? produto.descricao_detalhada : "");
             intent.putExtra("PRODUTO_FOTO", produto.foto != null ? produto.foto : "");
+            
+            // ADICIONE ESTAS TRÊS LINHAS:
+            intent.putExtra("PRODUTO_ALTURA", String.valueOf(produto.altura));
+            intent.putExtra("PRODUTO_COMPRIMENTO", String.valueOf(produto.comprimento));
+            intent.putExtra("PRODUTO_PERIODO_RESERVA", produto.periodo_reserva != null ? produto.periodo_reserva : "");
+
             context.startActivity(intent);
         });
     }

@@ -1,11 +1,15 @@
 package com.example.semp.models;
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class PedidoRequest {
     public String remetente;
     public String email;
     public String unidade;
-    public String data_reserva;
+
+    @SerializedName("data_reserva")
+    public String periodo_reserva;
+
     public String prioridade;
     public String motivo;
     public String data_postagem;
@@ -18,7 +22,6 @@ public class PedidoRequest {
         public int quantidade_produto;
         public String unidade_produto;
         public String pedido_produto;
-        // Adicione os campos vazios que a API espera
         public String descricao_produto = "";
         public String descricao_detalhada_produto = "";
         public String cor_produto = "";
@@ -33,9 +36,15 @@ public class PedidoRequest {
         }
     }
 
-    public PedidoRequest(String remetente, String email, String unidade, String data_reserva, List<ProdutoPedido> produtos, String prioridade, String motivo, String data_postagem, String codigo_pedido) {
-        this.remetente = remetente; this.email = email; this.unidade = unidade;
-        this.data_reserva = data_reserva; this.produtos = produtos; this.prioridade = prioridade;
-        this.motivo = motivo; this.data_postagem = data_postagem; this.codigo_pedido = codigo_pedido;
+    public PedidoRequest(String remetente, String email, String unidade, String periodo_reserva, List<ProdutoPedido> produtos, String prioridade, String motivo, String data_postagem, String codigo_pedido) {
+        this.remetente = remetente; 
+        this.email = email; 
+        this.unidade = unidade;
+        this.periodo_reserva = periodo_reserva; 
+        this.produtos = produtos; 
+        this.prioridade = prioridade;
+        this.motivo = motivo; 
+        this.data_postagem = data_postagem; 
+        this.codigo_pedido = codigo_pedido;
     }
 }

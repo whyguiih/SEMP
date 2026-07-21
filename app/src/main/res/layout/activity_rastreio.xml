@@ -70,8 +70,8 @@
                     android:fontFamily="@font/neo_sans_regular"
                     android:hint="Pesquisar Pedido..."
                     android:paddingHorizontal="16dp"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#99434343"
+                    android:textColor="#222222"
+                    android:textColorHint="#666666"
                     android:completionThreshold="1" />
 
                 <EditText
@@ -83,8 +83,8 @@
                     android:fontFamily="@font/neo_sans_regular"
                     android:hint="Unidade Original"
                     android:paddingHorizontal="16dp"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#99FFFFFF" />
+                    android:textColor="#222222"
+                    android:textColorHint="#666666" />
 
                 <EditText
                     android:id="@+id/etRastreioDestino"
@@ -95,8 +95,8 @@
                     android:fontFamily="@font/neo_sans_regular"
                     android:hint="Unidade Destino"
                     android:paddingHorizontal="16dp"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#99FFFFFF" />
+                    android:textColor="#222222"
+                    android:textColorHint="#666666" />
 
                 <EditText
                     android:id="@+id/etRastreioDataSaida"
@@ -111,8 +111,8 @@
                     android:fontFamily="@font/neo_sans_regular"
                     android:hint="Data de Saída"
                     android:paddingHorizontal="16dp"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#99FFFFFF" />
+                    android:textColor="#222222"
+                    android:textColorHint="#666666" />
 
                 <EditText
                     android:id="@+id/etRastreioDataEntrada"
@@ -127,8 +127,8 @@
                     android:fontFamily="@font/neo_sans_regular"
                     android:hint="Data Prevista Entrada"
                     android:paddingHorizontal="16dp"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#99FFFFFF" />
+                    android:textColor="#222222"
+                    android:textColorHint="#666666" />
 
                 <Button
                     android:id="@+id/btnConfirmarRastreio"

@@ -71,16 +71,14 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         if (pedido.codigo_pedido != null && !pedido.codigo_pedido.isEmpty()) {
             infoProdutos.append("\nCód Ped.: ").append(pedido.codigo_pedido);
         }
-        if (pedido.data_reserva != null && !pedido.data_reserva.isEmpty()) {
+        if (pedido.periodo_reserva != null && !pedido.periodo_reserva.isEmpty()) {
             if (pedido.aprovacao == 3) {
-                infoProdutos.append("\nSOLICITADO RETORNO PARA: ").append(pedido.data_reserva);
+                infoProdutos.append("\nSOLICITADO RETORNO PARA: ").append(pedido.periodo_reserva);
             } else {
-                infoProdutos.append("\nReserva: ").append(pedido.data_reserva);
+                infoProdutos.append("\nReserva: ").append(pedido.periodo_reserva);
             }
         }
-        if (pedido.data_devolucao != null && !pedido.data_devolucao.isEmpty() && !pedido.data_devolucao.equalsIgnoreCase("null")) {
-            infoProdutos.append("\nDEVOLUÇÃO: ").append(pedido.data_devolucao);
-        }
+
 
         holder.tvPedidoProdutos.setText(infoProdutos.toString());
         holder.tvPedidoPrioridade.setText("Prioridade: " + (pedido.prioridade != null ? pedido.prioridade : "Normal"));

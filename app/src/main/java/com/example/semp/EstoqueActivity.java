@@ -98,14 +98,7 @@ public class EstoqueActivity extends AppCompatActivity {
 
     }
 
-    // ==========================================
-    // MÉTODOS DE NOTIFICAÇÃO E ALERTA
-    // ==========================================
-    // 1. MÉTODO PARA O ALERTA ESTILO WEB (AGORA NO TOPO DA TELA)
-    // 1. MÉTODO DE ALERTA CORRIGIDO
-    // =========================================================
-    // 1. ALERTA NO TOPO DA TELA (COM FALLBACK PARA TOAST)
-    // =========================================================
+    
     private void mostrarAlertaWeb(String mensagem, String corHexa) {
         try {
             View rootView = findViewById(android.R.id.content);

@@ -33,10 +33,11 @@
                 android:focusable="true"/>
 
             <TextView
+                android:id="@+id/tvHeaderTitulo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Autorizar Pedidos"
+                android:text="Gestão de Pedidos"
                 android:textColor="@android:color/white"
                 android:fontFamily="@font/neo_sans_bold_italic"
                 android:textSize="24sp"
@@ -44,85 +45,176 @@
                 android:layout_marginEnd="48dp"/>
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/etPesquisa"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_input_glass"
-            android:hint="Pesquisar pedidos..."
-            android:textColorHint="#99FFFFFF"
-            android:textColor="#FFFFFF"
-            android:paddingHorizontal="20dp"
-            android:drawableStart="@android:drawable/ic_menu_search"
-            android:drawablePadding="12dp"
-            android:fontFamily="@font/neo_sans_regular"
-            app:layout_constraintTop_toBottomOf="@id/headerLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <androidx.core.widget.NestedScrollView
+        <!-- LAYOUT DE MENU (PASTAS) -->
+        <LinearLayout
+            android:id="@+id/layoutMenuPastas"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/etPesquisa"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/headerLayout"
             app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardAguardando"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="#33FFFFFF"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@android:drawable/ic_menu_edit"
+                        app:tint="#FFFFFF"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Aguardando Autorização"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardRetornos"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="#33FFFFFF"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@android:drawable/ic_menu_revert"
+                        app:tint="#FFFFFF"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Retornos Solicitados"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardRastreio"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="#33FFFFFF"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@android:drawable/ic_menu_directions"
+                        app:tint="#FFFFFF"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Aguardando Cadastro de Rastreio"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <!-- LAYOUT DE SUB-PASTA (LISTA FILTRADA) -->
+        <LinearLayout
+            android:id="@+id/layoutSubPasta"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/headerLayout"
+            app:layout_constraintBottom_toBottomOf="parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:orientation="horizontal"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="8dp"
+                android:gravity="center_vertical">
+
+                <ImageButton
+                    android:id="@+id/btnVoltarMenu"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@android:drawable/ic_menu_revert"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:tint="#FFFFFF" />
 
                 <TextView
-                    android:id="@+id/tvTituloRetornos"
+                    android:id="@+id/tvTituloPasta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Retornos Solicitados"
-                    android:textColor="#0611A4"
+                    android:layout_marginStart="8dp"
+                    android:text="Título da Pasta"
+                    android:textColor="#FFFFFF"
                     android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:paddingBottom="8dp"
-                    android:visibility="gone"/>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvRetornos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Aguardando Autorização"
-                    android:textColor="#4604B1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:paddingBottom="8dp" />
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvPendentes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pedidos Confirmados (Preparo)"
-                    android:textColor="#A95C08"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="24dp"
-                    android:paddingBottom="8dp" />
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvConfirmados"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"/>
-
+                    android:textStyle="bold"/>
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+
+            <EditText
+                android:id="@+id/etPesquisaPasta"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_input_glass"
+                android:hint="Pesquisar nesta pasta..."
+                android:textColorHint="#99FFFFFF"
+                android:textColor="#FFFFFF"
+                android:paddingHorizontal="20dp"
+                android:drawableStart="@android:drawable/ic_menu_search"
+                android:drawablePadding="12dp"
+                android:fontFamily="@font/neo_sans_regular" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPasta"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="12dp"
+                android:paddingHorizontal="16dp"
+                android:clipToPadding="false"
+                android:paddingBottom="24dp"/>
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
@@ -131,9 +223,7 @@
         android:layout_gravity="start"
         android:background="#B3000000"
         android:fitsSystemWindows="true">
-
         <include layout="@layout/layout_sidebar" />
-
     </ScrollView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

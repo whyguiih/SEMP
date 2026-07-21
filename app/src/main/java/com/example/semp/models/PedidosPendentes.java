@@ -19,7 +19,10 @@ public class PedidosPendentes {
 
     public String prioridade;
     public String motivo;
-    public String data_reserva;
+
+    @SerializedName(value = "data_reserva", alternate = {"periodo_reserva", "reserva"})
+    public String periodo_reserva;
+
     public int aprovacao;
 
     public int processamento;
