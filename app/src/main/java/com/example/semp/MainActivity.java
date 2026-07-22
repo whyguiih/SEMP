@@ -57,16 +57,22 @@ public class MainActivity extends AppCompatActivity {
         nivelContaAtual = prefs.getString("nivelContaAtual", "0");
     }
 
-    public void salvarSessao(String usuario, String unidade, String nivel) {
-        usuarioLogado = usuario != null ? usuario : "";
-        unidadeAtual = unidade != null ? unidade : "";
-        nivelContaAtual = nivel != null ? nivel : "0";
+    public void salvarSessao(LoginResponse res) {
+        usuarioLogado = res.usuario != null ? res.usuario : "";
+        unidadeAtual = res.unidade != null ? res.unidade : "";
+        nivelContaAtual = res.nivel_conta != null ? res.nivel_conta : "0";
 
         SharedPreferences sharedPreferences = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("usuarioLogado", usuarioLogado);
         editor.putString("unidadeAtual", unidadeAtual);
         editor.putString("nivelContaAtual", nivelContaAtual);
+        
+        // Salva os identificadores para gerar código de produto depois
+        editor.putString("id_estado", res.estado_identificador != null ? res.estado_identificador : "X");
+        editor.putString("id_regiao", res.regiao_identificador != null ? res.regiao_identificador : "X");
+        editor.putInt("id_unidade", res.unidade_identificador != null ? res.unidade_identificador : 0);
+
         editor.apply();
     }
 
@@ -125,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
                     LoginResponse body = response.body();
 
                     if (response.isSuccessful() && body != null && Boolean.TRUE.equals(body.sucesso)) {
+                        salvarSessao(body);
                         String nivel = body.nivel_conta != null ? body.nivel_conta : "0";
-                        salvarSessao(body.usuario, body.unidade, nivel);
                         Toast.makeText(MainActivity.this, body.mensagem != null ? body.mensagem : "Login realizado!", Toast.LENGTH_SHORT).show();
 
                         Intent intent;

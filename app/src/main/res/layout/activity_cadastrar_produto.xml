@@ -86,17 +86,48 @@
                     android:layout_marginBottom="16dp"
                     android:inputType="text"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp">
+
+                    <EditText
+                        android:id="@+id/etCadCodigo"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:hint="Código do Sistema"
+                        android:textColorHint="#88FFFFFF"
+                        android:background="@drawable/bg_input_glass"
+                        android:textColor="#FFFFFF"
+                        android:paddingHorizontal="20dp"
+                        android:enabled="false"
+                        android:inputType="text"/>
+
+                    <Button
+                        android:id="@+id/btnGerarCodigo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="52dp"
+                        android:layout_marginStart="8dp"
+                        android:text="Gerar"
+                        android:textSize="12sp"
+                        android:backgroundTint="#33FFFFFF"
+                        android:textColor="#FFFFFF"
+                        app:cornerRadius="8dp"/>
+                </LinearLayout>
+
                 <EditText
-                    android:id="@+id/etCadCodigo"
+                    android:id="@+id/codigoFisico"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:hint="Código do Produto"
-                    android:textColorHint="#88FFFFFF"
-                    android:background="@drawable/bg_input_glass"
-                    android:textColor="#FFFFFF"
-                    android:paddingHorizontal="20dp"
                     android:layout_marginBottom="16dp"
-                    android:inputType="text"/>
+                    android:background="@drawable/bg_input_glass"
+                    android:hint="Código Físico"
+                    android:inputType="text"
+                    android:paddingHorizontal="20dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#88FFFFFF" />
 
                 <EditText
                     android:id="@+id/etCadDescricao"

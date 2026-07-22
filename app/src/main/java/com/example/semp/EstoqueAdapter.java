@@ -83,6 +83,7 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
             intent.putExtra("PRODUTO_ID", String.valueOf(produto.id_estoque));
             intent.putExtra("PRODUTO_NOME", produto.nome != null ? produto.nome : "Sem nome");
             intent.putExtra("PRODUTO_CODIGO", produto.codigo != null ? produto.codigo : "");
+            intent.putExtra("PRODUTO_CODIGO_FISICO", produto.codigo_fisico != null ? produto.codigo_fisico : "");
             intent.putExtra("PRODUTO_DESC", produto.descricao != null ? produto.descricao : "");
             intent.putExtra("PRODUTO_QTD", String.valueOf(produto.quant));
             

@@ -55,6 +55,7 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String nome = intent.getStringExtra("PRODUTO_NOME") != null ? intent.getStringExtra("PRODUTO_NOME") : "Produto";
         String codigo = intent.getStringExtra("PRODUTO_CODIGO") != null ? intent.getStringExtra("PRODUTO_CODIGO") : "Sem código";
+        String codFisico = intent.getStringExtra("PRODUTO_CODIGO_FISICO") != null ? intent.getStringExtra("PRODUTO_CODIGO_FISICO") : "N/A";
         String desc = intent.getStringExtra("PRODUTO_DESC") != null ? intent.getStringExtra("PRODUTO_DESC") : "Sem descrição.";
         String descDetalhada = intent.getStringExtra("PRODUTO_DESC_DETALHADA") != null ? intent.getStringExtra("PRODUTO_DESC_DETALHADA") : "Sem detalhes.";
         String cor = intent.getStringExtra("PRODUTO_COR") != null ? intent.getStringExtra("PRODUTO_COR") : "N/A";
@@ -73,7 +74,7 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         try { quantidadeSelecionada = Integer.parseInt(qtdCarrinhoString); } catch (Exception e) { quantidadeSelecionada = 1; }
 
         ((TextView) findViewById(R.id.tvNomeDetalhe)).setText(nome);
-        ((TextView) findViewById(R.id.tvCodigoDetalhe)).setText("Código: " + codigo);
+        ((TextView) findViewById(R.id.tvCodigoDetalhe)).setText("Código: " + codigo + " | Físico: " + codFisico);
         ((TextView) findViewById(R.id.tvDescDetalhe)).setText(desc);
         ((TextView) findViewById(R.id.tvDescDetalhadaDetalhe)).setText(descDetalhada);
         ((TextView) findViewById(R.id.tvCorDetalhe)).setText("Cor: " + cor);

@@ -86,13 +86,13 @@
                 android:id="@+id/tvCodigoDetalhe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="CÓDIGO: ---"
-                android:textColor="#ffffff"
-                android:textSize="14sp"
+                android:layout_marginBottom="24dp"
+                android:fontFamily="@font/neo_sans_medium"
                 android:gravity="center"
                 android:letterSpacing="0.1"
-                android:fontFamily="@font/neo_sans_medium"
-                android:layout_marginBottom="24dp"/>
+                android:text="CÓDIGO DIGITAL: ---"
+                android:textColor="#ffffff"
+                android:textSize="14sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -216,6 +216,12 @@
                 android:textSize="14sp"
                 android:fontFamily="@font/neo_sans_regular"
                 android:layout_marginBottom="32dp"/>
+
+            <TextView
+                android:id="@+id/codigoFisico"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CÓDIGO FÍSICO" />
 
         </LinearLayout>
     </ScrollView>

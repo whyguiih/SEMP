@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -90,6 +91,7 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
         AutoCompleteTextView etNome = findViewById(R.id.etNomeAtualizar);
         EditText etId = findViewById(R.id.etIdAtualizar);
         EditText etCodigo = findViewById(R.id.etCodigoAtualizar);
+        EditText etCodigoFisico = findViewById(R.id.etCodigoFisicoAtualizar);
         EditText etDescricao = findViewById(R.id.etDescricaoAtualizar);
         EditText etQuantidade = findViewById(R.id.etQuantidadeAtualizar);
         EditText etUnidade = findViewById(R.id.etUnidadeAtualizar);
@@ -106,7 +108,7 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
         if (etNome != null) {
             etNome.setOnItemClickListener((parent, view, position, id) -> {
                 String nomeSelecionado = (String) parent.getItemAtPosition(position);
-                buscarEPreencherProduto(nomeSelecionado, etId, etCodigo, etDescricao, etQuantidade, etUnidade, etUniAtual, etCor, etMarca, etDescDetalhada);
+                buscarEPreencherProduto(nomeSelecionado, etId, etCodigo, etCodigoFisico, etDescricao, etQuantidade, etUnidade, etUniAtual, etCor, etMarca, etDescDetalhada);
             });
         }
 
@@ -136,6 +138,7 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
                         produtoSelecionado.id_estoque,
                         etNome.getText().toString().trim(),
                         etCodigo.getText().toString().trim(),
+                        etCodigoFisico.getText().toString().trim(),
                         etDescricao.getText().toString().trim(),
                         novaQtd,
                         etUnidade.getText().toString().trim(),
@@ -157,8 +160,17 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
                             fotoBase64 = "";
                             carregarProdutosAPI();
                         } else {
-                            String erro = response.body() != null ? response.body().mensagem : "Erro no servidor";
-                            Toast.makeText(ConfigEstoqueActivity.this, "Falha: " + erro, Toast.LENGTH_LONG).show();
+                            String erro = "Erro no servidor";
+                            if (response.body() != null && response.body().mensagem != null) {
+                                erro = response.body().mensagem;
+                            } else if (response.errorBody() != null) {
+                                try {
+                                    erro = "Erro " + response.code() + ": " + response.errorBody().string();
+                                } catch (Exception e) {
+                                    erro = "Erro HTTP " + response.code();
+                                }
+                            }
+                            mostrarAlertaGrande(findViewById(android.R.id.content), "Falha: " + erro, "#e74c3c");
                         }
                     }
 
@@ -166,7 +178,7 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
                     public void onFailure(Call<GenericResponse> call, Throwable t) {
                         btnAtualizar.setEnabled(true);
                         btnAtualizar.setText("Atualizar Produto");
-                        Toast.makeText(ConfigEstoqueActivity.this, "Erro de conexão!", Toast.LENGTH_SHORT).show();
+                        mostrarAlertaGrande(findViewById(android.R.id.content), "Erro de conexão: " + t.getMessage(), "#c0392b");
                     }
                 });
             });
@@ -273,12 +285,13 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
         if (etNomeDel != null) etNomeDel.setAdapter(adapter);
     }
 
-    private void buscarEPreencherProduto(String nome, EditText etId, EditText etCod, EditText etDesc, EditText etQtd, EditText etUni, EditText etUniAtu, EditText etCor, EditText etMarca, EditText etDescDet) {
+    private void buscarEPreencherProduto(String nome, EditText etId, EditText etCod, EditText etCodFis, EditText etDesc, EditText etQtd, EditText etUni, EditText etUniAtu, EditText etCor, EditText etMarca, EditText etDescDet) {
         for (Produto p : listaProdutos) {
             if (p.nome != null && p.nome.equalsIgnoreCase(nome)) {
                 produtoSelecionado = p;
                 if (etId != null) etId.setText(String.valueOf(p.id_estoque));
                 if (etCod != null) etCod.setText(p.codigo);
+                if (etCodFis != null) etCodFis.setText(p.codigo_fisico != null ? p.codigo_fisico : "");
                 if (etDesc != null) etDesc.setText(p.descricao);
                 if (etQtd != null) etQtd.setText(String.valueOf(p.quant));
                 if (etUni != null) etUni.setText(p.uni_natal);
@@ -306,6 +319,34 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
             }
         }
         produtoSelecionado = null;
+    }
+
+    private void mostrarAlertaGrande(View view, String mensagem, String corHexa) {
+        try {
+            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(view, mensagem, com.google.android.material.snackbar.Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("OK", v -> snackbar.dismiss());
+            snackbar.setActionTextColor(android.graphics.Color.WHITE);
+            
+            View snackbarView = snackbar.getView();
+            snackbarView.setBackgroundColor(android.graphics.Color.parseColor(corHexa));
+
+            android.widget.FrameLayout.LayoutParams params = (android.widget.FrameLayout.LayoutParams) snackbarView.getLayoutParams();
+            params.gravity = android.view.Gravity.TOP;
+            params.topMargin = 150;
+            snackbarView.setLayoutParams(params);
+
+            TextView textView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+            if (textView != null) {
+                textView.setTextColor(android.graphics.Color.WHITE);
+                textView.setTextSize(18);
+                textView.setPadding(20, 20, 20, 20);
+                textView.setMaxLines(10);
+            }
+            
+            snackbar.show();
+        } catch (Exception e) {
+            Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void configurarNavegacaoMenu() {

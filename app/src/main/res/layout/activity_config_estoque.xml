@@ -117,7 +117,19 @@
                     android:layout_height="52dp"
                     android:textColorHint="#99FFFFFF"
                     android:textColor="#FFFFFF"
-                    android:hint="Novo Código"
+                    android:hint="Novo Código do Sistema"
+                    android:background="@drawable/bg_input_glass"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/neo_sans_regular"/>
+
+                <EditText
+                    android:id="@+id/etCodigoFisicoAtualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:textColorHint="#99FFFFFF"
+                    android:textColor="#FFFFFF"
+                    android:hint="Novo Código Físico"
                     android:background="@drawable/bg_input_glass"
                     android:paddingHorizontal="20dp"
                     android:layout_marginBottom="16dp"

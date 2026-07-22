@@ -6,26 +6,47 @@ import java.util.Random;
 
 public class SempUtils {
     public static String gerarCodigoSemp(String nomeUnidade, int tipoEntidade) {
-        String unidadeFormatada = nomeUnidade != null ? nomeUnidade.trim().toLowerCase() : "default";
+        // ... (método antigo mantido para pedidos, se necessário)
+        return "9590" + tipoEntidade + "-OLD";
+    }
 
-        Map<String, String> mapaUnidades = new HashMap<>();
-        mapaUnidades.put("garibaldi", "9511");
-        mapaUnidades.put("farroupilha", "9521");
-        mapaUnidades.put("encantado", "9531");
-        mapaUnidades.put("ceit", "9510");
-        mapaUnidades.put("galvanotek", "9520");
-
-        String prefixoBase = mapaUnidades.containsKey(unidadeFormatada) ? mapaUnidades.get(unidadeFormatada) : "9590";
-        String prefixo = prefixoBase + tipoEntidade; // 2 para Produto, 3 para Pedido
-
+    public static String gerarCodigoPedidoModerno(String estadoIdent, String regiaoIdent, int imendaIdent) {
         String caracteresPermitidos = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder parteAleatoria = new StringBuilder();
         Random random = new Random();
-
+        
+        String c1 = (estadoIdent != null && !estadoIdent.isEmpty()) ? estadoIdent.substring(0,1) : "X";
+        String c2 = (regiaoIdent != null && !regiaoIdent.isEmpty()) ? regiaoIdent.substring(0,1) : "x";
+        char c3 = caracteresPermitidos.charAt(random.nextInt(caracteresPermitidos.length()));
+        String c4 = String.valueOf(imendaIdent);
+        String c5 = "3"; // SEMPRE 3 PARA PEDIDO
+        
+        String prefixo = c1 + c2 + c3 + c4 + c5;
+        
+        StringBuilder parteFinal = new StringBuilder("-");
         for (int i = 0; i < 10; i++) {
-            parteAleatoria.append(caracteresPermitidos.charAt(random.nextInt(caracteresPermitidos.length())));
+            parteFinal.append(caracteresPermitidos.charAt(random.nextInt(caracteresPermitidos.length())));
         }
+        
+        return prefixo + parteFinal.toString();
+    }
 
-        return prefixo + "-" + parteAleatoria.toString();
+    public static String gerarCodigoProdutoModerno(String estadoIdent, String regiaoIdent, int imendaIdent) {
+        String caracteresPermitidos = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        
+        String c1 = (estadoIdent != null && !estadoIdent.isEmpty()) ? estadoIdent.substring(0,1) : "X";
+        String c2 = (regiaoIdent != null && !regiaoIdent.isEmpty()) ? regiaoIdent.substring(0,1) : "x";
+        char c3 = caracteresPermitidos.charAt(random.nextInt(caracteresPermitidos.length()));
+        String c4 = String.valueOf(imendaIdent);
+        String c5 = "2"; // SEMPRE 2 PARA PRODUTO
+        
+        String prefixo = c1 + c2 + c3 + c4 + c5;
+        
+        StringBuilder parteFinal = new StringBuilder("-");
+        for (int i = 0; i < 10; i++) {
+            parteFinal.append(caracteresPermitidos.charAt(random.nextInt(caracteresPermitidos.length())));
+        }
+        
+        return prefixo + parteFinal.toString();
     }
 }

@@ -1,8 +1,14 @@
 package com.example.semp.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ProdutoRequest {
     public String nome;
     public String codigo;
+    
+    @SerializedName("codigo_fisico")
+    public String codigo_fisico;
+    
     public String descricao;
     public int quant;
     public String uni_natal;
@@ -12,9 +18,10 @@ public class ProdutoRequest {
     public String foto;
     public String unidade_atual;
 
-    public ProdutoRequest(String nome, String codigo, String descricao, int quant, String uni_natal, String marca_ref, String cor, String descricao_detalhada, String foto, String unidade_atual) {
+    public ProdutoRequest(String nome, String codigo, String codigo_fisico, String descricao, int quant, String uni_natal, String marca_ref, String cor, String descricao_detalhada, String foto, String unidade_atual) {
         this.nome = nome;
         this.codigo = codigo;
+        this.codigo_fisico = codigo_fisico;
         this.descricao = descricao;
         this.quant = quant;
         this.uni_natal = uni_natal;
