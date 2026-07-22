@@ -89,7 +89,6 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
         carregarProdutosAPI();
 
         AutoCompleteTextView etNome = findViewById(R.id.etNomeAtualizar);
-        EditText etId = findViewById(R.id.etIdAtualizar);
         EditText etCodigo = findViewById(R.id.etCodigoAtualizar);
         EditText etCodigoFisico = findViewById(R.id.etCodigoFisicoAtualizar);
         EditText etDescricao = findViewById(R.id.etDescricaoAtualizar);
@@ -108,7 +107,7 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
         if (etNome != null) {
             etNome.setOnItemClickListener((parent, view, position, id) -> {
                 String nomeSelecionado = (String) parent.getItemAtPosition(position);
-                buscarEPreencherProduto(nomeSelecionado, etId, etCodigo, etCodigoFisico, etDescricao, etQuantidade, etUnidade, etUniAtual, etCor, etMarca, etDescDetalhada);
+                buscarEPreencherProduto(nomeSelecionado, etCodigo, etCodigoFisico, etDescricao, etQuantidade, etUnidade, etUniAtual, etCor, etMarca, etDescDetalhada);
             });
         }
 
@@ -285,11 +284,10 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
         if (etNomeDel != null) etNomeDel.setAdapter(adapter);
     }
 
-    private void buscarEPreencherProduto(String nome, EditText etId, EditText etCod, EditText etCodFis, EditText etDesc, EditText etQtd, EditText etUni, EditText etUniAtu, EditText etCor, EditText etMarca, EditText etDescDet) {
+    private void buscarEPreencherProduto(String nome, EditText etCod, EditText etCodFis, EditText etDesc, EditText etQtd, EditText etUni, EditText etUniAtu, EditText etCor, EditText etMarca, EditText etDescDet) {
         for (Produto p : listaProdutos) {
             if (p.nome != null && p.nome.equalsIgnoreCase(nome)) {
                 produtoSelecionado = p;
-                if (etId != null) etId.setText(String.valueOf(p.id_estoque));
                 if (etCod != null) etCod.setText(p.codigo);
                 if (etCodFis != null) etCodFis.setText(p.codigo_fisico != null ? p.codigo_fisico : "");
                 if (etDesc != null) etDesc.setText(p.descricao);

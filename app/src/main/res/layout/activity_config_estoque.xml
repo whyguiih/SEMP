@@ -97,31 +97,17 @@
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/neo_sans_regular"/>
 
-                <EditText
-                    android:id="@+id/etIdAtualizar"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:hint="ID do Produto"
-                    android:textColorHint="#99FFFFFF"
-                    android:textColor="#88FFFFFF"
-                    android:inputType="number"
-                    android:enabled="false"
-                    android:background="@drawable/bg_input_glass"
-                    android:paddingHorizontal="20dp"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/neo_sans_regular"/>
-
-                <EditText
-                    android:id="@+id/etCodigoAtualizar"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:textColorHint="#99FFFFFF"
-                    android:textColor="#FFFFFF"
-                    android:hint="Novo Código do Sistema *"
-                    android:background="@drawable/bg_input_glass"
-                    android:paddingHorizontal="20dp"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="@font/neo_sans_regular"/>
+        <EditText
+            android:id="@+id/etCodigoAtualizar"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:textColorHint="#99FFFFFF"
+            android:textColor="#FFFFFF"
+            android:hint="Novo Código do Sistema *"
+            android:background="@drawable/bg_input_glass"
+            android:paddingHorizontal="20dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/neo_sans_regular"/>
 
                 <EditText
                     android:id="@+id/etCodigoFisicoAtualizar"
@@ -307,7 +293,8 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#B3000000"
+        android:background="@android:color/transparent"
+        android:fillViewport="true"
         android:fitsSystemWindows="true">
         <include layout="@layout/layout_sidebar" />
     </ScrollView>

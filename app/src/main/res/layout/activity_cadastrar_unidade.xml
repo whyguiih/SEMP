@@ -127,7 +127,8 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#B3000000"
+        android:background="@android:color/transparent"
+        android:fillViewport="true"
         android:fitsSystemWindows="true">
 
         <include layout="@layout/layout_sidebar" />
