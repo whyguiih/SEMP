@@ -25,7 +25,8 @@
         <activity android:name="com.example.semp.CadastrarUsuarioActivity" />
         <activity android:name="com.example.semp.AutorizarPedidosActivity" />
         <activity android:name="com.example.semp.ConfigEstoqueActivity" />
-        <activity android:name="com.example.semp.RastreioActivity" />
+        <activity android:name="com.example.semp.RastreioActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name="com.example.semp.ItensEmprestadosActivity" />
         <activity android:name="com.example.semp.MovimentacoesActivity" />
         <activity android:name="com.example.semp.CadastrarUnidades" />

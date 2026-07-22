@@ -43,14 +43,12 @@
         </LinearLayout>
 
         <ScrollView
-            android:layout_width="335dp"
-            android:layout_height="529dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="16dp"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/topBar"
-            app:layout_constraintVertical_bias="0.555"
-            tools:layout_editor_absoluteX="16dp">
+            app:layout_constraintTop_toBottomOf="@id/topBar">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -68,7 +66,7 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_input_glass"
                     android:fontFamily="@font/neo_sans_regular"
-                    android:hint="Pesquisar Pedido..."
+                    android:hint="Pesquisar Pedido... *"
                     android:paddingHorizontal="16dp"
                     android:textColor="#222222"
                     android:textColorHint="#666666"
@@ -81,7 +79,7 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_input_glass"
                     android:fontFamily="@font/neo_sans_regular"
-                    android:hint="Unidade Original"
+                    android:hint="Unidade Original *"
                     android:paddingHorizontal="16dp"
                     android:textColor="#222222"
                     android:textColorHint="#666666" />
@@ -93,7 +91,7 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_input_glass"
                     android:fontFamily="@font/neo_sans_regular"
-                    android:hint="Unidade Destino"
+                    android:hint="Unidade Destino *"
                     android:paddingHorizontal="16dp"
                     android:textColor="#222222"
                     android:textColorHint="#666666" />
@@ -109,7 +107,7 @@
                     android:drawablePadding="12dp"
                     android:focusable="false"
                     android:fontFamily="@font/neo_sans_regular"
-                    android:hint="Data de Saída"
+                    android:hint="Data de Saída *"
                     android:paddingHorizontal="16dp"
                     android:textColor="#222222"
                     android:textColorHint="#666666" />
@@ -125,7 +123,7 @@
                     android:drawablePadding="12dp"
                     android:focusable="false"
                     android:fontFamily="@font/neo_sans_regular"
-                    android:hint="Data Prevista Entrada"
+                    android:hint="Data Prevista Entrada *"
                     android:paddingHorizontal="16dp"
                     android:textColor="#222222"
                     android:textColorHint="#666666" />

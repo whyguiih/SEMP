@@ -70,7 +70,7 @@
                     android:layout_height="52dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_input_glass"
-                    android:hint="Nome da unidade"
+                    android:hint="Nome da unidade *"
                     android:paddingHorizontal="20dp"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#88FFFFFF" />
@@ -81,7 +81,7 @@
                     android:layout_height="52dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_input_glass"
-                    android:hint="Estado"
+                    android:hint="Estado *"
                     android:paddingHorizontal="20dp"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#88FFFFFF" />
@@ -92,7 +92,7 @@
                     android:layout_height="52dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_input_glass"
-                    android:hint="Região"
+                    android:hint="Região *"
                     android:paddingHorizontal="20dp"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#88FFFFFF" />
@@ -104,7 +104,7 @@
                     android:layout_height="52dp"
                     android:layout_marginBottom="24dp"
                     android:background="@drawable/bg_input_glass"
-                    android:hint="Identificação"
+                    android:hint="Identificação *"
                     android:paddingHorizontal="20dp"
                     android:textColor="#FFFFFF"
                     android:textColorHint="#88FFFFFF" />
