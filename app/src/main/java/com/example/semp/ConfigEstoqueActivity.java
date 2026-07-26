@@ -289,7 +289,7 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
             if (p.nome != null && p.nome.equalsIgnoreCase(nome)) {
                 produtoSelecionado = p;
                 if (etCod != null) etCod.setText(p.codigo);
-                if (etCodFis != null) etCodFis.setText(p.codigo_fisico != null ? p.codigo_fisico : "");
+                if (etCodFis != null) etCodFis.setText(p.codigo_rfid != null ? p.codigo_rfid : "");
                 if (etDesc != null) etDesc.setText(p.descricao);
                 if (etQtd != null) etQtd.setText(String.valueOf(p.quant));
                 if (etUni != null) etUni.setText(p.uni_natal);

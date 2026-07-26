@@ -9,7 +9,7 @@ public class Produto {
 
     public String nome;
     public String codigo;
-    public String codigo_fisico;
+    public String codigo_rfid;
     public String descricao;
     public String descricao_detalhada;
     public String cor;

@@ -111,67 +111,82 @@
                 android:fontFamily="@font/neo_sans_bold_italic"
                 android:layout_marginBottom="16dp"/>
 
-            <GridLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:rowCount="4"
+                android:orientation="vertical"
                 android:layout_marginBottom="24dp">
 
                 <TextView
                     android:id="@+id/tvCorDetalhe"
-                    android:layout_columnWeight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Cor: ---"
                     android:textColor="#333333"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/neo_sans_regular"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/tvCodigoFisicoDetalhe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CÓDIGO FÍSICO: ---"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
                     android:fontFamily="@font/neo_sans_regular"
                     android:layout_marginBottom="8dp"/>
 
                 <TextView
                     android:id="@+id/tvMarcaRefDetalhe"
-                    android:layout_columnWeight="1"
-                    android:text="Ref: ---"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Marca/Ref: ---"
                     android:textColor="#333333"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:fontFamily="@font/neo_sans_regular"
                     android:layout_marginBottom="8dp"/>
 
                 <TextView
                     android:id="@+id/tvUniNatalDetalhe"
-                    android:layout_columnWeight="1"
-                    android:text="U. Natal: ---"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Unidade Natal: ---"
                     android:textColor="#333333"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:fontFamily="@font/neo_sans_regular"
                     android:layout_marginBottom="8dp"/>
 
                 <TextView
                     android:id="@+id/tvUnidadeAtualDetalhe"
-                    android:layout_columnWeight="1"
-                    android:text="U. Atual: ---"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Unidade Atual: ---"
                     android:textColor="#333333"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:fontFamily="@font/neo_sans_regular"
                     android:layout_marginBottom="8dp"/>
 
                 <TextView
                     android:id="@+id/AlturaDetalhe"
-                    android:layout_columnWeight="1"
-                    android:text="Alt: ---"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Altura: ---"
                     android:textColor="#333333"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:fontFamily="@font/neo_sans_regular"
                     android:layout_marginBottom="8dp"/>
 
                 <TextView
                     android:id="@+id/ComprimentoDetalhe"
-                    android:layout_columnWeight="1"
-                    android:text="Comp: ---"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comprimento: ---"
                     android:textColor="#333333"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:fontFamily="@font/neo_sans_regular"
                     android:layout_marginBottom="8dp"/>
-            </GridLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/PeriodoReserva"
@@ -216,13 +231,6 @@
                 android:textSize="14sp"
                 android:fontFamily="@font/neo_sans_regular"
                 android:layout_marginBottom="32dp"/>
-
-            <TextView
-                android:id="@+id/codigoFisico"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="CÓDIGO FÍSICO" />
-
         </LinearLayout>
     </ScrollView>
 

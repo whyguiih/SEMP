@@ -74,7 +74,8 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         try { quantidadeSelecionada = Integer.parseInt(qtdCarrinhoString); } catch (Exception e) { quantidadeSelecionada = 1; }
 
         ((TextView) findViewById(R.id.tvNomeDetalhe)).setText(nome);
-        ((TextView) findViewById(R.id.tvCodigoDetalhe)).setText("Código: " + codigo + " | Físico: " + codFisico);
+        ((TextView) findViewById(R.id.tvCodigoDetalhe)).setText("Código digital: " + codigo);
+        ((TextView) findViewById(R.id.tvCodigoFisicoDetalhe)).setText("Código físico: " + codFisico);
         ((TextView) findViewById(R.id.tvDescDetalhe)).setText(desc);
         ((TextView) findViewById(R.id.tvDescDetalhadaDetalhe)).setText(descDetalhada);
         ((TextView) findViewById(R.id.tvCorDetalhe)).setText("Cor: " + cor);
