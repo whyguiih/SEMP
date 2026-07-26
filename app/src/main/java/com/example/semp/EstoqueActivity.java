@@ -102,7 +102,10 @@ public class EstoqueActivity extends AppCompatActivity {
     private void mostrarAlertaWeb(String mensagem, String corHexa) {
         try {
             View rootView = findViewById(android.R.id.content);
-            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(rootView, mensagem, com.google.android.material.snackbar.Snackbar.LENGTH_LONG);
+            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(rootView, mensagem, 20000); // 20 segundos
+            snackbar.setAction("FECHAR", v -> snackbar.dismiss());
+            snackbar.setActionTextColor(android.graphics.Color.BLACK);
+            
             View snackbarView = snackbar.getView();
             snackbarView.setBackgroundColor(android.graphics.Color.parseColor(corHexa));
 
@@ -112,9 +115,11 @@ public class EstoqueActivity extends AppCompatActivity {
             snackbarView.setLayoutParams(params);
 
             TextView textView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-            textView.setTextColor(android.graphics.Color.WHITE);
-            textView.setTextSize(16);
-            textView.setMaxLines(3);
+            if (textView != null) {
+                textView.setTextColor(android.graphics.Color.BLACK);
+                textView.setTextSize(16);
+                textView.setMaxLines(3);
+            }
             snackbar.show();
         } catch (Exception e) {
             Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show(); // Fallback se a tela bugar

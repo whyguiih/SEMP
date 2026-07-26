@@ -180,9 +180,23 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
     }
 
     private void mostrarAlertaWeb(View view, String mensagem, String corHexa) {
-        Snackbar snackbar = Snackbar.make(view, mensagem, Snackbar.LENGTH_LONG);
-        snackbar.getView().setBackgroundColor(Color.parseColor(corHexa));
-        snackbar.show();
+        try {
+            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(view, mensagem, 20000); // 20 segundos
+            snackbar.setAction("FECHAR", v -> snackbar.dismiss());
+            snackbar.setActionTextColor(Color.BLACK);
+            
+            View snackbarView = snackbar.getView();
+            snackbarView.setBackgroundColor(Color.parseColor(corHexa));
+
+            TextView textView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+            if (textView != null) {
+                textView.setTextColor(Color.BLACK);
+                textView.setTextSize(16);
+            }
+            snackbar.show();
+        } catch (Exception e) {
+            Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show();
+        }
     }
 
     private int obterPesoPrioridade(String p) {

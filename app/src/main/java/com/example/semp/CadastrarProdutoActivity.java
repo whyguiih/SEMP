@@ -173,9 +173,9 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
 
     private void mostrarAlertaGrande(View view, String mensagem, String corHexa) {
         try {
-            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(view, mensagem, com.google.android.material.snackbar.Snackbar.LENGTH_INDEFINITE);
-            snackbar.setAction("OK", v -> snackbar.dismiss());
-            snackbar.setActionTextColor(android.graphics.Color.WHITE);
+            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(view, mensagem, 20000); // 20 segundos
+            snackbar.setAction("FECHAR", v -> snackbar.dismiss());
+            snackbar.setActionTextColor(android.graphics.Color.BLACK);
             
             View snackbarView = snackbar.getView();
             snackbarView.setBackgroundColor(android.graphics.Color.parseColor(corHexa));
@@ -187,7 +187,7 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
 
             TextView textView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
             if (textView != null) {
-                textView.setTextColor(android.graphics.Color.WHITE);
+                textView.setTextColor(android.graphics.Color.BLACK);
                 textView.setTextSize(18);
                 textView.setPadding(20, 20, 20, 20);
                 textView.setMaxLines(10);

@@ -116,8 +116,8 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
             holder.btnRecusar.setVisibility(View.GONE);
             holder.btnAutorizar.setVisibility(View.VISIBLE);
             holder.btnAutorizar.setText("Ciente");
-            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#FFD700")); // Dourado
-            holder.btnAutorizar.setTextColor(android.graphics.Color.BLACK);
+            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#ef5e31")); // Laranja
+            holder.btnAutorizar.setTextColor(android.graphics.Color.WHITE);
 
             // Ação 3 para confirmar que está ciente do retorno
             holder.btnAutorizar.setOnClickListener(v -> listener.onAcaoClick(pedido, 3));
