@@ -17,11 +17,11 @@
 
 ---
 
-## 📋 Visão Geral
+## Visão Geral
 
 O **SEMP** é uma solução completa para controle de inventário distribuído, composta por um aplicativo Android nativo que consome uma API REST hospedada no **Cloudflare Workers** com banco de dados **SQLite D1 (Serverless)**. O sistema atende unidades como Garibaldi, Farroupilha e Encantado.
 
-### ✨ Principais Funcionalidades
+### Principais Funcionalidades
 
 | Funcionalidade | Descrição |
 | :--- | :--- |
@@ -34,7 +34,7 @@ O **SEMP** é uma solução completa para controle de inventário distribuído, 
 
 ---
 
-## 📱 Aplicativo Android
+## Aplicativo Android
 
 Construído nativamente em **Kotlin** com arquitetura baseada em Activities e comunicação via **Retrofit2 + Gson**.
 
@@ -108,7 +108,7 @@ com.example.semp.models
 
 ---
 
-## 🌐 Backend (Cloudflare Workers + D1)
+## Backend (Cloudflare Workers + D1)
 
 > **Nota**: O código do backend (Workers) não está neste repositório. Este README documenta a estrutura de dados esperada pela aplicação Android.
 
@@ -175,7 +175,7 @@ carrinho       INTEGER   -- Flag ativo (1)
 
 ---
 
-## 👥 Níveis de Acesso
+## Níveis de Acesso
 
 O sistema segmenta permissões rigorosamente por nível de conta:
 
@@ -188,7 +188,7 @@ O sistema segmenta permissões rigorosamente por nível de conta:
 
 ---
 
-## 🚀 Como Executar
+## Como Executar
 
 ### Pré-requisitos
 - **Android Studio** Koala (2024.1.2) ou superior
@@ -228,7 +228,7 @@ const val BASE_URL = "https://seu-worker.seu-subdominio.workers.dev/"
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 SEMP/
@@ -255,7 +255,6 @@ SEMP/
 ├── gradle/
 │   ├── libs.versions.toml            # Catálogo de versões
 │   └── wrapper/
-├── db.sql                            # Schema + seeds do SQLite D1
 ├── build.gradle.kts                  # Configuração root
 ├── settings.gradle.kts
 ├── gradle.properties
@@ -264,22 +263,7 @@ SEMP/
 
 ---
 
-## 🗄️ Script de Banco de Dados
-
-O arquivo [`db.sql`](db.sql) contém:
-- Schema completo das 4 tabelas principais
-- Índices únicos (`usuario`, `produto`)
-- Dados de seed para desenvolvimento/teste:
-  - 5 produtos de exemplo (Monitor, Teclado, Cadeira, etc.)
-  - 14 usuários de teste (todos níveis, múltiplas unidades)
-  - 37 empréstimos de exemplo com diversos status
-  - Itens de carrinho de exemplo
-
-> **Útil para**: Testes locais, desenvolvimento do backend, migrações D1.
-
----
-
-## 🔧 Scripts Gradle Úteis
+## Scripts Gradle Úteis
 
 ```bash
 # Compilar debug
@@ -300,13 +284,13 @@ O arquivo [`db.sql`](db.sql) contém:
 
 ---
 
-## 📝 Licença
+## Licença
 
 Este projeto é de uso interno para fins educacionais e operacionais das unidades SENAI.
 
 ---
 
-## 🤝 Contribuição
+## Contribuição
 
 1. Faça um fork do projeto
 2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
