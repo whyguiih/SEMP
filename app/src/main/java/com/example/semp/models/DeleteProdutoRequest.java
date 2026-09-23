@@ -1,4 +1,4 @@
-package com.example.semp.models; // Confirme se o seu pacote é semp ou semp
+package com.example.semp.models;
 
 public class DeleteProdutoRequest {
     public String codigo;

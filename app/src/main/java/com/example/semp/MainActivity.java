@@ -43,7 +43,6 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    // VARIÁVEIS GLOBAIS DE SESSÃO
     public static String usuarioLogado = "";
     public static String unidadeAtual = "";
     public static String nivelContaAtual = "0";
@@ -68,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("unidadeAtual", unidadeAtual);
         editor.putString("nivelContaAtual", nivelContaAtual);
         
-        // Salva os identificadores para gerar código de produto depois
         editor.putString("id_estado", res.estado_identificador != null ? res.estado_identificador : "X");
         editor.putString("id_regiao", res.regiao_identificador != null ? res.regiao_identificador : "X");
         editor.putInt("id_unidade", res.unidade_identificador != null ? res.unidade_identificador : 0);

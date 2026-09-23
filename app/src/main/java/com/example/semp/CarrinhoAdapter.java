@@ -20,7 +20,6 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
     private OnCarrinhoActionListener listener;
     private java.util.Set<Integer> itensSelecionados = new java.util.HashSet<>();
 
-    // Cache de memória para imagens Base64
     private LruCache<String, Bitmap> memoryCache;
 
     public interface OnCarrinhoActionListener {
@@ -33,7 +32,6 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
         this.itens = itens;
         this.listener = listener;
 
-        // Configuração do cache (1/8 da memória máxima)
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         final int cacheSize = maxMemory / 8;
         memoryCache = new LruCache<String, Bitmap>(cacheSize) {
@@ -73,7 +71,6 @@ public class CarrinhoAdapter extends RecyclerView.Adapter<CarrinhoAdapter.Carrin
 
         holder.tvNomeProduto.setText(item.nome != null ? item.nome : "Sem Nome");
 
-        // Otimização de imagem com cache
         if (item.foto != null && !item.foto.isEmpty()) {
             holder.ivProdutoCarrinho.setVisibility(View.VISIBLE);
             String cacheKey = String.valueOf(item.id_estoque) + "_carrinho";

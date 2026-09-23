@@ -1,7 +1,7 @@
 package com.example.semp.models;
 
 public class CarrinhoRequest {
-    public String nome_produto; // TEM que ter esse nome
+    public String nome_produto;
     public int quantidade;
 
     public CarrinhoRequest(String nome_produto, int quantidade) {

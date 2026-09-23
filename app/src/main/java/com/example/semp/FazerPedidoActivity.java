@@ -37,7 +37,6 @@ public class FazerPedidoActivity extends AppCompatActivity {
     private List<Produto> listaProdutosParaPedido = new ArrayList<>();
     private DrawerLayout drawerLayout;
 
-    // Variáveis seguras da sessão
     private String usuarioSeguro = "Usuario";
     private String unidadeSegura = "Unidade Central";
 
@@ -55,7 +54,6 @@ public class FazerPedidoActivity extends AppCompatActivity {
         }
         MenuSidebarHelper.configurarNavegacao(this, drawerLayout);
 
-        // Busca dados da sessão de forma segura (previne NullPointerException)
         SharedPreferences prefs = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
         usuarioSeguro = prefs.getString("usuarioLogado", "Usuario");
         unidadeSegura = prefs.getString("unidadeAtual", "Unidade Central");
@@ -163,24 +161,20 @@ public class FazerPedidoActivity extends AppCompatActivity {
             case "Médio": prioridadeParaDB = "intermediário"; break;
         }
 
-        // GERA O CÓDIGO DO PEDIDO (SE NÃO TIVER SIDO GERADO MANUALMENTE)
         String codigoPedidoGerado = etCodigoPedido.getText().toString().trim();
         if (codigoPedidoGerado.isEmpty()) {
             Toast.makeText(this, "Por favor, gere o código do pedido antes de confirmar!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // MONTA A LISTA DE PRODUTOS COM DADOS REAIS
         List<PedidoRequest.ProdutoPedido> produtosFormatados = new ArrayList<>();
         SharedPreferences sessao = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
         for (Produto p : listaProdutosParaPedido) {
-            // Usa o código do produto que já existe ou gera um novo prefixado com 2
             String idEst = sessao.getString("id_estado", "X");
             String idReg = sessao.getString("id_regiao", "X");
             int idUni = sessao.getInt("id_unidade", 0);
             String codigoProdutoGerado = SempUtils.gerarCodigoProdutoModerno(idEst, idReg, idUni);
             
-            // Pega a quantidade correta do carrinho
             int qtdSolicitada = p.quantidade > 0 ? p.quantidade : (p.carrinho > 0 ? p.carrinho : 1);
 
             produtosFormatados.add(new PedidoRequest.ProdutoPedido(
@@ -209,7 +203,6 @@ public class FazerPedidoActivity extends AppCompatActivity {
                         Toast.makeText(FazerPedidoActivity.this, "Pedido efetivado! Cód: " + codigoPedidoGerado, Toast.LENGTH_LONG).show();
                         finish();
                     } else {
-                        // EXIBE A MENSAGEM DE CONFLITO VINDA DO SERVIDOR
                         String msgErro = response.body().mensagem != null ? response.body().mensagem : "Erro ao processar reserva.";
                         Toast.makeText(FazerPedidoActivity.this, msgErro, Toast.LENGTH_LONG).show();
                     }

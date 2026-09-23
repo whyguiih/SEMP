@@ -121,7 +121,7 @@ public class ItensEmprestadosActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                 Toast.makeText(ItensEmprestadosActivity.this, "Retorno solicitado com sucesso!", Toast.LENGTH_SHORT).show();
-                carregarItensEmprestados(); // Atualiza a tela
+                carregarItensEmprestados();
             }
 
             @Override

@@ -14,7 +14,7 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
 
     private List<PedidosPendentes> listaPedidos;
     private List<PedidosPendentes> listaOriginal;
-    private int tipoLista; // 0 = Pendente, 1 = Confirmado, 2 = Retorno
+    private int tipoLista;
     private OnAcaoClickListener listener;
 
     public interface OnAcaoClickListener {
@@ -84,42 +84,34 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.PedidoView
         holder.tvPedidoPrioridade.setText("Prioridade: " + (pedido.prioridade != null ? pedido.prioridade : "Normal"));
         holder.tvPedidoMotivo.setText("Motivo: " + (pedido.motivo != null ? pedido.motivo : "Não informado"));
 
-        // ========================================================
-        // LÓGICA DE SEPARAÇÃO VISUAL DOS BOTÕES
-        // ========================================================
         if (tipoLista == 0) {
-            // LISTA DE PENDENTES
             holder.btnAutorizar.setVisibility(View.VISIBLE);
             holder.btnRecusar.setVisibility(View.VISIBLE);
 
             holder.btnAutorizar.setText("Liberar");
             holder.btnRecusar.setText("Recusar");
 
-            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#1a4b9f")); // Azul
-            holder.btnRecusar.setBackgroundColor(android.graphics.Color.parseColor("#ef5e31")); // Laranja
+            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#1a4b9f"));
+            holder.btnRecusar.setBackgroundColor(android.graphics.Color.parseColor("#ef5e31"));
 
             holder.btnAutorizar.setOnClickListener(v -> listener.onAcaoClick(pedido, 1));
             holder.btnRecusar.setOnClickListener(v -> listener.onAcaoClick(pedido, 2));
 
         } else if (tipoLista == 1) {
-            // LISTA DE CONFIRMADOS
-            holder.btnRecusar.setVisibility(View.GONE); // Esconde o botão de recusar
+            holder.btnRecusar.setVisibility(View.GONE);
 
             holder.btnAutorizar.setVisibility(View.VISIBLE);
             holder.btnAutorizar.setText("Remover da Tela");
-            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#555555")); // Fica Cinza
+            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#555555"));
 
-            // Retorna a ação "99" (Código que criamos para ocultar o item localmente)
             holder.btnAutorizar.setOnClickListener(v -> listener.onAcaoClick(pedido, 99));
         } else if (tipoLista == 2) {
-            // LISTA DE RETORNOS (EXIGEM RETORNO)
             holder.btnRecusar.setVisibility(View.GONE);
             holder.btnAutorizar.setVisibility(View.VISIBLE);
             holder.btnAutorizar.setText("Ciente");
-            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#ef5e31")); // Laranja
+            holder.btnAutorizar.setBackgroundColor(android.graphics.Color.parseColor("#ef5e31"));
             holder.btnAutorizar.setTextColor(android.graphics.Color.WHITE);
 
-            // Ação 3 para confirmar que está ciente do retorno
             holder.btnAutorizar.setOnClickListener(v -> listener.onAcaoClick(pedido, 3));
         }
     }

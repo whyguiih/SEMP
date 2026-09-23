@@ -91,9 +91,6 @@ public class EstoqueActivity extends AppCompatActivity {
             });
         }
 
-        // ==========================================
-        // CHAMA A VERIFICAÇÃO DE NOTIFICAÇÕES AQUI
-        // ==========================================
         verificarNotificacoes();
 
     }
@@ -102,7 +99,7 @@ public class EstoqueActivity extends AppCompatActivity {
     private void mostrarAlertaWeb(String mensagem, String corHexa) {
         try {
             View rootView = findViewById(android.R.id.content);
-            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(rootView, mensagem, 20000); // 20 segundos
+            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(rootView, mensagem, 20000);
             snackbar.setAction("FECHAR", v -> snackbar.dismiss());
             snackbar.setActionTextColor(android.graphics.Color.BLACK);
             
@@ -122,39 +119,29 @@ public class EstoqueActivity extends AppCompatActivity {
             }
             snackbar.show();
         } catch (Exception e) {
-            Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show(); // Fallback se a tela bugar
+            Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show();
         }
     }
 
-    // =========================================================
-    // 2. VERIFICAÇÃO DE NOTIFICAÇÕES (LÓGICA CORRIGIDA POR ID)
-    // =========================================================
     private void verificarNotificacoes() {
         SharedPreferences prefsSessao = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
         String usuarioAtual = prefsSessao.getString("usuarioLogado", "");
 
-        // Leitura à prova de falhas do nível
         int nivelConta = 0;
         try {
             nivelConta = Integer.parseInt(prefsSessao.getString("nivelContaAtual", "0"));
         } catch (Exception e) {
             nivelConta = prefsSessao.getInt("nivelContaAtual", 0);
         }
-        // ... código anterior de verificarNotificacoes() ...
 
         if (nivelConta== 1 || nivelConta == 2) {
-            // ... lógicas já existentes ...
-
-            // CHAMADA INJETADA AQUI PARA OS GERENTES
             if (nivelConta == 2) {
                 verificarNotificacoesRastreio(prefsSessao.getString("unidadeAtual", ""));
             }
         }
 
-// ... código posterior ...
         final int nivelFinal = nivelConta;
 
-        // Usa a rota que sabemos com 100% de certeza que funciona no seu banco
         RetrofitClient.getApi().getPedidosPendentes().enqueue(new Callback<List<PedidosPendentes>>() {
             @Override
             public void onResponse(Call<List<PedidosPendentes>> call, Response<List<PedidosPendentes>> response) {
@@ -162,40 +149,29 @@ public class EstoqueActivity extends AppCompatActivity {
                     List<PedidosPendentes> lista = response.body();
                     SharedPreferences prefs = getSharedPreferences("NotificacoesApp", MODE_PRIVATE);
 
-                    // ========================================================
-                    // LÓGICA PARA OS ADMINISTRADORES (NÍVEL 1 E 2)
-                    // ========================================================
                     if (nivelFinal == 1 || nivelFinal == 2) {
-                        // Puxa qual foi o MAIOR ID de pedido que esse admin já viu na vida dele
                         int ultimoIdVisto = prefs.getInt("ultimo_id_visto_" + usuarioAtual, 0);
                         int novos = 0;
                         int maiorIdDaLista = ultimoIdVisto;
 
                         for (PedidosPendentes p : lista) {
                             if (p == null) continue;
-                            // Se o ID desse pedido for MAIOR que o último visto, é um pedido novo de verdade!
                             if (p.id_emprestimo > ultimoIdVisto) {
                                 novos++;
                             }
-                            // Descobre qual é o maior ID da lista agora para salvar na memória
                             if (p.id_emprestimo > maiorIdDaLista) {
                                 maiorIdDaLista = p.id_emprestimo;
                             }
                         }
 
-                        // Se encontrou pedidos com ID novo, dispara o alerta!
                         if (novos > 0) {
                             String msg = (novos == 1) ? "Você tem 1 novo pedido aguardando autorização!" : "Você tem " + novos + " novos pedidos aguardando autorização!";
                             mostrarAlertaWeb(msg, "#e06c00");
 
-                            // Atualiza a memória com o novo MAIOR ID, assim não repete
                             prefs.edit().putInt("ultimo_id_visto_" + usuarioAtual, maiorIdDaLista).apply();
                         }
                     }
 
-                    // ========================================================
-                    // LÓGICA PARA O USUÁRIO COMUM (NÍVEL 0)
-                    // ========================================================
                     if (nivelFinal == 0) {
                         SharedPreferences.Editor editor = prefs.edit();
                         boolean houveMudanca = false;
@@ -227,13 +203,9 @@ public class EstoqueActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<PedidosPendentes>> call, Throwable t) {
-                // Fica silencioso para não incomodar o usuário se a internet piscar
             }
         });
     }
-    // ==========================================
-    // MÉTODOS ORIGINAIS DA TELA
-    // ==========================================
     private void filtrarLista(String textoPequisa) {
         if (listaOriginalProdutos == null) return;
 
@@ -291,7 +263,6 @@ public class EstoqueActivity extends AppCompatActivity {
                     List<Rastreio> rastreios = response.body();
                     String hoje = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-                    // Agrupar rastreios por código
                     HashMap<String, List<Rastreio>> pacotes = new HashMap<>();
                     if (rastreios != null) {
                         for (Rastreio r : rastreios) {
@@ -316,7 +287,6 @@ public class EstoqueActivity extends AppCompatActivity {
 
                         if (!souOrigem && !souDestino) continue;
 
-                        // LÓGICA DE TRÂNSITO E ATRASOS (1 registro)
                         if (historico.size() == 1) {
                             if (atual.data_entrada != null && hoje.compareTo(atual.data_entrada) > 0) {
                                 mostrarAlertaWeb("ATRASO: O pedido " + codigo + " não chegou na unidade " + destino, "#c0392b");
@@ -328,7 +298,6 @@ public class EstoqueActivity extends AppCompatActivity {
                         }
                     }
 
-                    // MENSAGEM NOVA FALTANTE: Avisar compras para registrar rastreio de pedido aprovado/pendente
                     RetrofitClient.getApi().getPedidosPendentes().enqueue(new Callback<List<PedidosPendentes>>() {
                         @Override
                         public void onResponse(Call<List<PedidosPendentes>> call, Response<List<PedidosPendentes>> respPedidos) {
@@ -339,7 +308,6 @@ public class EstoqueActivity extends AppCompatActivity {
                                     String unidadePedido = p.unidade != null ? p.unidade : "";
                                     String minhaUnidadeSegura = minhaUnidade != null ? minhaUnidade : "";
 
-                                    // Se for da minha unidade, foi criado hoje e não tem rastreio iniciado
                                     if (unidadePedido.equalsIgnoreCase(minhaUnidadeSegura) && p.data_postagem != null && p.data_postagem.startsWith(hoje)) {
                                         if (p.codigo_pedido != null && !pacotes.containsKey(p.codigo_pedido)) {
                                             mostrarAlertaWeb("Lembrete: Registre a saída do pedido " + p.codigo_pedido + " no Rastreio hoje!", "#e06c00");

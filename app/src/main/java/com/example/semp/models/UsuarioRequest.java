@@ -5,7 +5,7 @@ public class UsuarioRequest {
     public String senha;
     public int nivel_conta;
     public String unidade;
-    public String foto; // 👉 NOVA VARIÁVEL
+    public String foto;
 
     public UsuarioRequest(String usuario, String senha, int nivel_conta, String unidade, String foto) {
         this.usuario = usuario;

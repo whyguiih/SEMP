@@ -80,12 +80,11 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
         Button btnGerarCodigo = findViewById(R.id.btnGerarCodigo);
         ivPreview = findViewById(R.id.ivPreviewFoto);
 
-        // PUXA UNIDADE AUTOMATICAMENTE
         SharedPreferences sessao = getSharedPreferences("SessaoApp", MODE_PRIVATE);
         String unidadeLogada = sessao.getString("unidadeAtual", "");
         if (etUniNatal != null) {
             etUniNatal.setText(unidadeLogada);
-            etUniNatal.setEnabled(false); // Bloqueia para não cadastrar em unidade errada
+            etUniNatal.setEnabled(false);
         }
         if (etUniAtual != null) {
             etUniAtual.setText(unidadeLogada);
@@ -136,7 +135,6 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
 
                     if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().sucesso)) {
                         Toast.makeText(CadastrarProdutoActivity.this, "Produto salvo com sucesso!", Toast.LENGTH_SHORT).show();
-                        // LIMPA OS CAMPOS EM VEZ DE FECHAR A TELA
                         limparFormulario(etNome, etCodigo, etCodigoFisico, etDescricao, etQtd, etDescDetalhada, etMarca, etCor);
                     } else {
                         String erroApi = "Erro ao salvar";
@@ -173,7 +171,7 @@ public class CadastrarProdutoActivity extends AppCompatActivity {
 
     private void mostrarAlertaGrande(View view, String mensagem, String corHexa) {
         try {
-            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(view, mensagem, 20000); // 20 segundos
+            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(view, mensagem, 20000);
             snackbar.setAction("FECHAR", v -> snackbar.dismiss());
             snackbar.setActionTextColor(android.graphics.Color.BLACK);
             

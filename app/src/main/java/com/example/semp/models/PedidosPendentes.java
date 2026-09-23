@@ -6,7 +6,7 @@ public class PedidosPendentes {
     public int id_emprestimo;
 
     @SerializedName(value = "destinatario", alternate = {"nome", "remetente", "solicitante"})
-    public String nome; // É o remetente / solicitante / destinatário
+    public String nome;
 
     @SerializedName(value = "unidade_natal", alternate = {"unidade", "unidade_destino", "unidade_produto", "unidade_solicitante"})
     public String unidade;

@@ -6,7 +6,6 @@ import java.util.Random;
 
 public class SempUtils {
     public static String gerarCodigoSemp(String nomeUnidade, int tipoEntidade) {
-        // ... (método antigo mantido para pedidos, se necessário)
         return "9590" + tipoEntidade + "-OLD";
     }
 
@@ -18,7 +17,7 @@ public class SempUtils {
         String c2 = (regiaoIdent != null && !regiaoIdent.isEmpty()) ? regiaoIdent.substring(0,1) : "x";
         char c3 = caracteresPermitidos.charAt(random.nextInt(caracteresPermitidos.length()));
         String c4 = String.valueOf(imendaIdent);
-        String c5 = "3"; // SEMPRE 3 PARA PEDIDO
+        String c5 = "3"; 
         
         String prefixo = c1 + c2 + c3 + c4 + c5;
         
@@ -38,7 +37,7 @@ public class SempUtils {
         String c2 = (regiaoIdent != null && !regiaoIdent.isEmpty()) ? regiaoIdent.substring(0,1) : "x";
         char c3 = caracteresPermitidos.charAt(random.nextInt(caracteresPermitidos.length()));
         String c4 = String.valueOf(imendaIdent);
-        String c5 = "2"; // SEMPRE 2 PARA PRODUTO
+        String c5 = "2"; 
         
         String prefixo = c1 + c2 + c3 + c4 + c5;
         

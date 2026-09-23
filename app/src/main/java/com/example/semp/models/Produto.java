@@ -28,7 +28,6 @@ public class Produto {
     @SerializedName("data_reserva")
     public String periodo_reserva;
 
-    // 👉 ADICIONE ESTAS DUAS LINHAS:
     @SerializedName("uni_atual")
     public String unidade_atual;
 }

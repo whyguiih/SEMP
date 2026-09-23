@@ -25,7 +25,6 @@ public class VisualizarPedidoActivity extends AppCompatActivity {
     private MeusPedidosAdapter adapter;
     private EditText etPesquisa;
 
-    // Variáveis seguras
     private String nivelSeguro = "0";
     private String unidadeSegura = "";
 
@@ -34,7 +33,6 @@ public class VisualizarPedidoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizar_pedido);
 
-        // Resgate pelo SharedPreferences
         SharedPreferences prefs = getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
         nivelSeguro = prefs.getString("nivelContaAtual", "0");
         unidadeSegura = prefs.getString("unidadeAtual", "");

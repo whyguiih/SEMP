@@ -106,7 +106,6 @@ public class MovimentacoesActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Rastreio> todosRastreios = response.body();
 
-                    // MÁGICA 1: AGRUPAR O HISTÓRICO
                     HashMap<String, List<Rastreio>> pacotes = new HashMap<>();
                     for (Rastreio r : todosRastreios) {
                         if (!pacotes.containsKey(r.codigo)) pacotes.put(r.codigo, new ArrayList<>());
@@ -120,7 +119,6 @@ public class MovimentacoesActivity extends AppCompatActivity {
                         List<Rastreio> historico = pacotes.get(codigo);
                         Rastreio atual = historico.get(historico.size() - 1);
 
-                        // Ignora se já retornou (concluído)
                         if (historico.size() > 1 && atual.unidade_original.equalsIgnoreCase(atual.unidade_destino)) {
                             continue;
                         }

@@ -234,11 +234,10 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
             InputStream inputStream = getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-            // OTIMIZAÇÃO: Mantendo a proporção da imagem (Aspect Ratio) sem achatá-la
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
             float ratio = (float) width / height;
-            int newWidth = 400; // Tamanho ideal que respeita o limite da API (cerca de 1MB)
+            int newWidth = 400; 
             int newHeight = (int) (newWidth / ratio);
 
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
@@ -321,7 +320,7 @@ public class ConfigEstoqueActivity extends AppCompatActivity {
 
     private void mostrarAlertaGrande(View view, String mensagem, String corHexa) {
         try {
-            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(view, mensagem, 20000); // 20 segundos
+            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(view, mensagem, 20000);
             snackbar.setAction("FECHAR", v -> snackbar.dismiss());
             snackbar.setActionTextColor(android.graphics.Color.BLACK);
             

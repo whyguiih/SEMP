@@ -107,7 +107,6 @@ public class CarrinhoActivity extends AppCompatActivity {
                             List<Produto> itensCarrinho = responseCarrinho.body();
                             itensCarrinhoCompleto = itensCarrinho;
 
-                            // OTIMIZAÇÃO: Uso de HashMap para evitar O(n*m) - Crucial para estoques grandes
                             if (todosProdutos != null) {
                                 HashMap<String, Produto> mapaProdutos = new HashMap<>();
                                 for (Produto p : todosProdutos) {

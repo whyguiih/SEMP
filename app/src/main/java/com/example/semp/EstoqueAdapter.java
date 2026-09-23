@@ -20,14 +20,12 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
 
     private List<Produto> listaProdutos;
     private Context context;
-    // Cache de memória para evitar travamentos ao rolar a lista (Base64 é pesado)
     private LruCache<String, Bitmap> memoryCache;
 
     public EstoqueAdapter(List<Produto> listaProdutos, Context context) {
         this.listaProdutos = listaProdutos;
         this.context = context;
 
-        // Configuração do tamanho do cache (1/8 da memória máxima disponível)
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         final int cacheSize = maxMemory / 8;
         memoryCache = new LruCache<String, Bitmap>(cacheSize) {
@@ -53,11 +51,10 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
         holder.tvCodigo.setText("Cód: " + (produto.codigo != null ? produto.codigo : "N/A"));
         holder.tvQuantidade.setText("Em Estoque: " + produto.quant);
 
-        // Otimização: Carregamento de imagem usando Cache
         if (produto.foto != null && !produto.foto.isEmpty()) {
             Bitmap bitmapCached = memoryCache.get(String.valueOf(produto.id_estoque));
             if (bitmapCached != null) {
-                holder.ivProduto.setImageBitmap(bitmapCached); // Usa do cache, muito rápido!
+                holder.ivProduto.setImageBitmap(bitmapCached);
             } else {
                 try {
                     String base64Data = produto.foto;
@@ -67,7 +64,6 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
                     byte[] decodedString = Base64.decode(base64Data, Base64.DEFAULT);
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                    // Salva no cache para as próximas rolagens
                     memoryCache.put(String.valueOf(produto.id_estoque), decodedByte);
                     holder.ivProduto.setImageBitmap(decodedByte);
                 } catch (Exception e) {
@@ -87,18 +83,15 @@ public class EstoqueAdapter extends RecyclerView.Adapter<EstoqueAdapter.ProdutoV
             intent.putExtra("PRODUTO_DESC", produto.descricao != null ? produto.descricao : "");
             intent.putExtra("PRODUTO_QTD", String.valueOf(produto.quant));
             
-            // NOVIDADE: Passa o estoque real calculado pelo servidor
             intent.putExtra("PRODUTO_QTD_REAL", String.valueOf(produto.estoque_real));
 
             intent.putExtra("PRODUTO_COR", produto.cor != null ? produto.cor : "");
             intent.putExtra("PRODUTO_MARCA", produto.marca_ref != null ? produto.marca_ref : "");
             intent.putExtra("PRODUTO_UNI_NATAL", produto.uni_natal != null ? produto.uni_natal : "");
-            // Onde você passa o ID, NOME, CODIGO, etc., adicione esta linha:
             intent.putExtra("PRODUTO_UNIDADE_ATUAL", produto.unidade_atual != null ? produto.unidade_atual : "Não informada");
             intent.putExtra("PRODUTO_DESC_DETALHADA", produto.descricao_detalhada != null ? produto.descricao_detalhada : "");
             intent.putExtra("PRODUTO_FOTO", produto.foto != null ? produto.foto : "");
             
-            // ADICIONE ESTAS TRÊS LINHAS:
             intent.putExtra("PRODUTO_ALTURA", String.valueOf(produto.altura));
             intent.putExtra("PRODUTO_COMPRIMENTO", String.valueOf(produto.comprimento));
             intent.putExtra("PRODUTO_PERIODO_RESERVA", produto.periodo_reserva != null ? produto.periodo_reserva : "");

@@ -54,18 +54,18 @@ public class MeusPedidosAdapter extends RecyclerView.Adapter<MeusPedidosAdapter.
         switch (pedido.aprovacao) {
             case 1:
                 status = "Status: Aprovado";
-                holder.tvPedidoStatus.setBackgroundColor(0xFFE8F5E9); // Green background
-                holder.tvPedidoStatus.setTextColor(0xFF4CAF50); // Green text
+                holder.tvPedidoStatus.setBackgroundColor(0xFFE8F5E9);
+                holder.tvPedidoStatus.setTextColor(0xFF4CAF50);
                 break;
             case 2:
                 status = "Status: Recusado";
-                holder.tvPedidoStatus.setBackgroundColor(0xFFFFEBEE); // Red background
-                holder.tvPedidoStatus.setTextColor(0xFFF44336); // Red text
+                holder.tvPedidoStatus.setBackgroundColor(0xFFFFEBEE);
+                holder.tvPedidoStatus.setTextColor(0xFFF44336);
                 break;
             default:
                 status = "Status: Pendente";
-                holder.tvPedidoStatus.setBackgroundColor(0xFFFFF3E0); // Orange background
-                holder.tvPedidoStatus.setTextColor(0xFFFF9800); // Orange text
+                holder.tvPedidoStatus.setBackgroundColor(0xFFFFF3E0);
+                holder.tvPedidoStatus.setTextColor(0xFFFF9800);
                 break;
         }
         holder.tvPedidoStatus.setText(status);

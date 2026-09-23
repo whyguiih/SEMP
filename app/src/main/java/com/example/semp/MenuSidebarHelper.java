@@ -12,7 +12,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 public class MenuSidebarHelper {
     public static void configurarNavegacao(Activity activity, DrawerLayout drawerLayout) {
 
-        // RECUPERA DO SHAREDPREFERENCES (Mais seguro que variável global)
         SharedPreferences prefs = activity.getSharedPreferences("SessaoApp", Context.MODE_PRIVATE);
         String nivel = prefs.getString("nivelContaAtual", "0");
 
@@ -27,7 +26,6 @@ public class MenuSidebarHelper {
         TextView btnMovimentacoes = activity.findViewById(R.id.menuItemMovimentacoes);
         TextView btnCadastroUnidades = activity.findViewById(R.id.CadastrarUnidades);
 
-        // Esconde itens restritos por padrão
         if (btnVisualizarPedido != null) btnVisualizarPedido.setVisibility(View.GONE);
         if (btnConfigEstoque != null) btnConfigEstoque.setVisibility(View.GONE);
         if (btnAutorizar != null) btnAutorizar.setVisibility(View.GONE);
@@ -53,7 +51,6 @@ public class MenuSidebarHelper {
             if (btnCadastroUnidades != null) btnCadastroUnidades.setVisibility(View.VISIBLE);
         }
 
-        // Configuração de Cliques
         if (btnEstoque != null) btnEstoque.setOnClickListener(v -> redirecionar(activity, EstoqueActivity.class, drawerLayout));
         if (btnCarrinho != null) btnCarrinho.setOnClickListener(v -> redirecionar(activity, CarrinhoActivity.class, drawerLayout));
         if (btnVisualizarPedido != null) btnVisualizarPedido.setOnClickListener(v -> redirecionar(activity, VisualizarPedidoActivity.class, drawerLayout));
@@ -66,7 +63,6 @@ public class MenuSidebarHelper {
         if (btnCadastroUnidades != null) btnCadastroUnidades.setOnClickListener(v -> redirecionar(activity, CadastrarUnidades.class, drawerLayout));
 
 
-        // Botão Sair - Limpa o SharedPreferences de forma segura
         View btnSair = activity.findViewById(R.id.menuItemSair);
         if (btnSair != null) {
             btnSair.setOnClickListener(v -> {

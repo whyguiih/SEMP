@@ -35,7 +35,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
         EditText etSenha = findViewById(R.id.etNovaSenha);
         EditText etNivel = findViewById(R.id.etNovoNivel);
         EditText etUnidade = findViewById(R.id.etNovaUnidade);
-        EditText etFoto = findViewById(R.id.etNovaFoto); // NOVA LINHA
+        EditText etFoto = findViewById(R.id.etNovaFoto);
         Button btnSalvar = findViewById(R.id.btnSalvarUnidade);
 
         btnSalvar.setOnClickListener(v -> {
@@ -43,28 +43,24 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             String senha = etSenha.getText().toString().trim();
             String nivelStr = etNivel.getText().toString().trim();
             String unidade = etUnidade.getText().toString().trim();
-            String fotoUrl = etFoto.getText().toString().trim(); // NOVA LINHA
+            String fotoUrl = etFoto.getText().toString().trim();
 
             if (user.isEmpty() || senha.isEmpty() || nivelStr.isEmpty() || unidade.isEmpty()) {
                 Toast.makeText(this, "Preencha todos os campos obrigatórios!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // BLINDAGEM DOS NÍVEIS
             if (!nivelStr.equals("0") && !nivelStr.equals("1") && !nivelStr.equals("2") && !nivelStr.equals("3")) {
                 Toast.makeText(this, "Erro: O nível deve ser APENAS 0, 1, 2 ou 3.", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            // Bloqueia o botão para evitar duplicação de cadastro
             btnSalvar.setEnabled(false);
             btnSalvar.setText("Salvando...");
 
             int nivel = Integer.parseInt(nivelStr);
-            // PASSA A VARIÁVEL fotoUrl NO FINAL DO NOVO CONSTRUTOR:
             UsuarioRequest request = new UsuarioRequest(user, senha, nivel, unidade, fotoUrl);
 
-            // Chamada REAL para a API
             RetrofitClient.getApi().cadastrarUsuario(request).enqueue(new Callback<GenericResponse>() {
                 @Override
                 public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
@@ -73,12 +69,11 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().sucesso)) {
                         Toast.makeText(CadastrarUsuarioActivity.this, "Usuário cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
-                        // Limpa todos os campos
                         etUsuario.setText("");
                         etSenha.setText("");
                         etNivel.setText("");
                         etUnidade.setText("");
-                        etFoto.setText(""); // NOVA LINHA
+                        etFoto.setText("");
                         etUsuario.requestFocus();
                     } else {
                         String msgErro = (response.body() != null && response.body().mensagem != null) ? response.body().mensagem : "Erro ao cadastrar usuário.";

@@ -67,7 +67,6 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         String altura = intent.getStringExtra("PRODUTO_ALTURA") != null ? intent.getStringExtra("PRODUTO_ALTURA") : "N/A";
         String comprimento = intent.getStringExtra("PRODUTO_COMPRIMENTO") != null ? intent.getStringExtra("PRODUTO_COMPRIMENTO") : "N/A";
         
-        // Pega o estoque real calculado pelo Worker
         String qtdEstoqueString = intent.getStringExtra("PRODUTO_QTD_REAL") != null ? intent.getStringExtra("PRODUTO_QTD_REAL") : intent.getStringExtra("PRODUTO_QTD");
 
         try { estoqueMaximo = Integer.parseInt(qtdEstoqueString); } catch (Exception e) { estoqueMaximo = 0; }
@@ -83,17 +82,15 @@ public class ProdutoDetalheActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tvUniNatalDetalhe)).setText("Unidade Natal: " + uniNatal);
         ((TextView) findViewById(R.id.tvUnidadeAtualDetalhe)).setText("Unidade Atual: " + unidadeAtual);
         
-        // MOSTRA STATUS E UNIDADES JUNTOS
         TextView tvReserva = findViewById(R.id.PeriodoReserva);
         if (estoqueMaximo > 0) {
             tvReserva.setText("STATUS: DISPONÍVEL (" + estoqueMaximo + " unidades agora)");
-            tvReserva.setTextColor(android.graphics.Color.parseColor("#27ae60")); // Verde
+            tvReserva.setTextColor(android.graphics.Color.parseColor("#27ae60"));
         } else {
             tvReserva.setText("STATUS: INDISPONÍVEL HOJE");
-            tvReserva.setTextColor(android.graphics.Color.parseColor("#e74c3c")); // Vermelho
+            tvReserva.setTextColor(android.graphics.Color.parseColor("#e74c3c"));
         }
 
-        // Mostra o estoque total (fixo do cadastro)
         String estoqueTotal = intent.getStringExtra("PRODUTO_QTD") != null ? intent.getStringExtra("PRODUTO_QTD") : "0";
         ((TextView) findViewById(R.id.tvEstoqueDetalhe)).setText("Estoque total da unidade: " + estoqueTotal);
 

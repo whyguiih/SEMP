@@ -11,7 +11,6 @@ public class TelaPedidoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Precisará de um res/layout/activity_tela_pedido.xml simples (Texto de Sucesso e Botão)
         setContentView(R.layout.activity_tela_pedido); 
 
         TextView tvMensagem = findViewById(R.id.tvMensagemSucesso);

@@ -52,25 +52,18 @@ public class EmprestadosAdapter extends RecyclerView.Adapter<EmprestadosAdapter.
         return new ViewHolder(view);
     }
 
-    // Local: app/src/main/java/com/example/semp/EmprestadosAdapter.java
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PedidosPendentes p = lista.get(position);
 
-        // Produto
         holder.tvProduto.setText(p.nome_produto != null ? p.nome_produto : "Produto N/A");
 
-        // "Emprestado para" (Usando p.nome que é o campo do seu modelo para solicitante)
         holder.tvPara.setText("Emprestado para: " + (p.nome != null ? p.nome : "N/A"));
 
-        // Unidade
         holder.tvUnidade.setText("Unidade: " + (p.unidade != null ? p.unidade : "N/A"));
 
-        // Quantidade (Linkando com o ID tvItemQuant que você criou)
         holder.tvQuant.setText("Quant. Emprestada: " + p.quant);
 
-        // Data
         holder.tvDatas.setText("Reserva: " + (p.periodo_reserva != null ? p.periodo_reserva : "N/A"));
 
         holder.btnRetorno.setOnClickListener(v -> listener.onRetornoClick(p));

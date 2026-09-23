@@ -66,19 +66,16 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
         
         rvPasta.setLayoutManager(new LinearLayoutManager(this));
 
-        // Cliques nas Pastas
         findViewById(R.id.cardAguardando).setOnClickListener(v -> abrirPasta("Aguardando Autorização", listaPendentes, 0));
         findViewById(R.id.cardRetornos).setOnClickListener(v -> abrirPasta("Retornos Solicitados", listaRetornos, 2));
         findViewById(R.id.cardRastreio).setOnClickListener(v -> abrirPasta("Aguardando Rastreio", listaRastreio, 1));
 
-        // Voltar para o Menu
         findViewById(R.id.btnVoltarMenu).setOnClickListener(v -> {
             layoutSubPasta.setVisibility(View.GONE);
             layoutMenuPastas.setVisibility(View.VISIBLE);
             etPesquisaPasta.setText("");
         });
 
-        // Pesquisa dentro da pasta
         etPesquisaPasta.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -103,9 +100,9 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
             if (acao == 99) {
                 ocultarPedidoDaTela(pedido.id_emprestimo);
             } else if (acao == 3) {
-                processarAutorizacao(pedido.id_emprestimo, 4); // Ciente do retorno
+                processarAutorizacao(pedido.id_emprestimo, 4);
             } else {
-                processarAutorizacao(pedido.id_emprestimo, acao); // Autorizar ou Recusar
+                processarAutorizacao(pedido.id_emprestimo, acao);
             }
         });
         rvPasta.setAdapter(adapterAtual);
@@ -142,7 +139,6 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
                     }
                     Collections.sort(listaPendentes, (p1, p2) -> Integer.compare(obterPesoPrioridade(p1.prioridade), obterPesoPrioridade(p2.prioridade)));
                     
-                    // Se estiver com uma pasta aberta, atualiza a lista exibida agora
                     if (layoutSubPasta.getVisibility() == View.VISIBLE && adapterAtual != null) {
                         adapterAtual.notifyDataSetChanged();
                     }
@@ -162,7 +158,6 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
                 String msg = (novoStatus == 1) ? "Aprovado" : (novoStatus == 2) ? "Recusado" : "Confirmado";
                 mostrarAlertaWeb(findViewById(android.R.id.content), "Pedido " + msg + " com sucesso!", "#1a4b9f");
                 buscarPedidos();
-                // Volta para o menu para dar feedback visual de atualização
                 layoutSubPasta.setVisibility(View.GONE);
                 layoutMenuPastas.setVisibility(View.VISIBLE);
             }
@@ -181,7 +176,7 @@ public class AutorizarPedidosActivity extends AppCompatActivity {
 
     private void mostrarAlertaWeb(View view, String mensagem, String corHexa) {
         try {
-            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(view, mensagem, 20000); // 20 segundos
+            com.google.android.material.snackbar.Snackbar snackbar = com.google.android.material.snackbar.Snackbar.make(view, mensagem, 20000);
             snackbar.setAction("FECHAR", v -> snackbar.dismiss());
             snackbar.setActionTextColor(Color.BLACK);
             

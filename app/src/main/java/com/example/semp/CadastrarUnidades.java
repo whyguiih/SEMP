@@ -39,7 +39,6 @@ public class CadastrarUnidades extends AppCompatActivity {
         AutoCompleteTextView actvIdentificacao = findViewById(R.id.identificacao);
         Button btnSalvarUnidade = findViewById(R.id.btnSalvarUnidade);
 
-        // 1. Defina as listas de opções
         String[] listaEstados = {
                 "Rio Grande do Sul", "Santa Catarina", "Paraná", "São Paulo", "Rio de Janeiro",
                 "Espiríto Santo", "Minas Gerais", "Goiás", "Mato Grosso", "Mato Grosso do Sul",
@@ -58,19 +57,15 @@ public class CadastrarUnidades extends AppCompatActivity {
         String[] listaRegioesPadrao = {"Metropolitana"};
         String[] opcoesIdentificacao = {"Unidade", "Adendo"};
 
-        // 2. Crie os Adaptadores
         ArrayAdapter<String> adapterEstados = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, listaEstados);
         ArrayAdapter<String> adapterIdentificacao = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, opcoesIdentificacao);
 
-        // 3. Associe os adaptadores aos campos
         actvEstado.setAdapter(adapterEstados);
         actvIdentificacao.setAdapter(adapterIdentificacao);
 
-        // Inicializa o adapter de região com o padrão
         ArrayAdapter<String> adapterRegioesPadrao = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, listaRegioesPadrao);
         actvRegiao.setAdapter(adapterRegioesPadrao);
 
-        // Listener para atualizar as regiões quando o estado mudar
         actvEstado.setOnItemClickListener((parent, view, position, id) -> {
             String estadoSelecionado = (String) parent.getItemAtPosition(position);
             if ("Rio Grande do Sul".equals(estadoSelecionado)) {
@@ -79,10 +74,9 @@ public class CadastrarUnidades extends AppCompatActivity {
             } else {
                 actvRegiao.setAdapter(adapterRegioesPadrao);
             }
-            actvRegiao.setText(""); // Limpa a região anterior
+            actvRegiao.setText("");
         });
 
-        // Dica: Para abrir a lista assim que o usuário clicar no campo
         actvEstado.setOnClickListener(v -> actvEstado.showDropDown());
         actvRegiao.setOnClickListener(v -> actvRegiao.showDropDown());
         actvIdentificacao.setOnClickListener(v -> actvIdentificacao.showDropDown());
@@ -98,13 +92,11 @@ public class CadastrarUnidades extends AppCompatActivity {
                 return;
             }
 
-            // Bloqueia o botão para evitar duplicação
             btnSalvarUnidade.setEnabled(false);
             btnSalvarUnidade.setText("Salvando...");
 
             UnidadeRequest request = new UnidadeRequest(nome, estado, regiao, identificacao);
 
-            // Chamada REAL para a API
             RetrofitClient.getApi().cadastrarUnidade(request).enqueue(new Callback<GenericResponse>() {
                 @Override
                 public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
@@ -113,7 +105,6 @@ public class CadastrarUnidades extends AppCompatActivity {
 
                     if (response.isSuccessful() && response.body() != null && Boolean.TRUE.equals(response.body().sucesso)) {
                         Toast.makeText(CadastrarUnidades.this, "Unidade cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
-                        // Limpa os campos
                         etNomeUnidade.setText("");
                         actvEstado.setText("");
                         actvRegiao.setText("");
